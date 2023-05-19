@@ -3,7 +3,7 @@ from .create import create
 from .list import list
 from .restore import restore
 
-@click.group()
+@click.group(help="Manage instance snapshots")
 def snapshots():
     pass
 

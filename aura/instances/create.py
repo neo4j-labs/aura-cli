@@ -1,7 +1,7 @@
 import click
 import json
 from aura.api_command import api_command
-from aura.repository import make_api_call
+from aura.api_repository import make_api_call
 
 
 @api_command

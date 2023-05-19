@@ -1,6 +1,6 @@
 import click
 from aura.api_command import api_command
-from aura.repository import make_api_call
+from aura.api_repository import make_api_call
 
 def abort_if_false(ctx, param, value):
     if not value:
