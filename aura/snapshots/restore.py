@@ -2,12 +2,16 @@ import click
 from aura.api_command import api_command
 
 from aura.api_repository import make_api_call
+from aura.util.get_instance_id import get_instance_id
 
 
 @api_command
-@click.option('--instance_id', '-id', prompt=True)
-@click.option('--snapshot_id', '-s', prompt=True)
-def restore(instance_id, snapshot_id):
+@click.option('--instance-id', '-id')
+@click.option('--instance-name', '-n')
+@click.option('--snapshot-id', '-s', prompt=True)
+def restore(instance_id, instance_name, snapshot_id):
+    instance_id = get_instance_id(instance_id, instance_name)
+    
     path = f"/instances/{instance_id}/snapshots/{snapshot_id}/restore"
 
     return make_api_call("POST", path)

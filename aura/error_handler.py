@@ -2,6 +2,9 @@ from requests.exceptions import *
 import click
 
 def handle_api_error(exception):
+    #TODO remove and replace with better error message
+    print(exception)
+
     if isinstance(exception, HTTPError):
         try:
             error_data = exception.response.json()
