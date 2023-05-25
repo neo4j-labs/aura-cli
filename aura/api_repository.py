@@ -22,6 +22,8 @@ def _authenticate():
     # TODO check if valid token exists first
     # If yes use is
     # if not, continue as before and save new token
+    # TODO need to check if token belongs to current credentials? Because after switching the token will be invalid
+    # Or always try old token first and if not working then get new token
 
     client_id, client_secret = _get_credentials()
 

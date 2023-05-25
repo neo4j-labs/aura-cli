@@ -2,6 +2,7 @@ import click
 from pprint import pprint
 from functools import wraps
 from aura.error_handler import handle_api_error
+from aura.format import print_table, print_text
 
 def api_command(func):
     @click.command()
@@ -16,8 +17,11 @@ def api_command(func):
         else:
             if output == "json":
                 pprint(data)
+            elif output == "table":
+                print_table(data)
+            elif output == "text":
+                print_text(data)
             else:
-                # TODO add output formats
-                click.echo(data)
+                raise click.UsageError(f"Unsupported output format {output}")
             click.get_current_context().exit(code=0)
     return wrapper
