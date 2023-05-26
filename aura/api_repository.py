@@ -4,8 +4,8 @@ import os
 
 from aura.config_repository import load_config
 
-DEFAULT_BASE_URL = "https://api-dev.neo4j-dev.io/danrum/v1beta3"
-DEFAULT_AUTH_URL = 'https://api-dev.neo4j-dev.io/danrum-oauth/token'
+DEFAULT_BASE_URL = "https://api-dev.neo4j-dev.io/harsha/v1beta3"
+DEFAULT_AUTH_URL = 'https://api-dev.neo4j-dev.io/harsha-oauth/token'
 
 def _get_credentials():
     client_id = os.environ.get("AURA_CLI_CLIENT_ID")
