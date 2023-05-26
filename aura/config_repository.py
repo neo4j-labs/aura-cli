@@ -30,7 +30,7 @@ def list_credentials():
     config = load_config()
     if config.get("AUTH") and config["AUTH"].get("CREDENTIALS"):
         credentials = config["AUTH"].get("CREDENTIALS")
-        return [(c, credentials[c]["CLIENT_ID"]) for c in credentials.keys()]
+        return [{"Name": c, "ClientId": credentials[c]["CLIENT_ID"]} for c in credentials.keys()]
 
     return []
 

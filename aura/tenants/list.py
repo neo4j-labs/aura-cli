@@ -6,4 +6,4 @@ from aura.api_repository import make_api_call
 def list():
     path = "/tenants"
 
-    return make_api_call("POST", path)
+    return make_api_call("GET", path)

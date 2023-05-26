@@ -17,7 +17,7 @@ def get_instance_id(instance_id, instance_name):
         for instance in instances:
             if instance["name"] == instance_name:
                 return instance["id"]
-        return Exception(f"Error: No instance with name {instance_name} found")
+        raise Exception(f"Error: No instance with name {instance_name} found")
     except:
         raise Exception("An error occurred")
 
