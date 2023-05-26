@@ -1,0 +1,30 @@
+Authentication: Use Client Credentials to get an Auth Token
+
+Example:
+
+curl --request POST 'https://api.neo4j.io/aura-oauth/token' \
+     --user '<credentials>' \
+     --header 'Content-Type: application/x-www-form-urlencoded' \
+     --data-urlencode 'grant_type=client_credentials'
+
+
+
+
+
+Endpoints:
+
+- GET    /instances
+- POST   /instances
+- GET    /instances/{instanceId}
+- DELETE /instances/{instanceId}
+- PATCH  /instances/{instanceId}
+- POST   /instances/{instanceId}/overwrite
+- POST   /instances/{instanceId}/pause
+- POST   /instances/{instanceId}/resume
+
+- POST   /instances/{instanceId}/snapshots/{snapshotId}/restore
+- GET    /instances/{instanceId}/snapshots
+- POST   /instances/{instanceId}/snapshots
+
+- GET    /tenants
+- GET    /tenants/{tenantId}
