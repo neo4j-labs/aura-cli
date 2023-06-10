@@ -1,8 +1,11 @@
 from requests.auth import HTTPBasicAuth
 import requests
 import os
+import json
+from datetime import datetime, timedelta
 
 from aura.config_repository import load_config
+from aura.token_repository import check_existing_token, delete_token_file, save_token
 
 DEFAULT_BASE_URL = "https://api-dev.neo4j-dev.io/harsha/v1beta3"
 DEFAULT_AUTH_URL = 'https://api-dev.neo4j-dev.io/harsha-oauth/token'
@@ -19,11 +22,9 @@ def _get_credentials():
     return client_id, client_secret
 
 def _authenticate():
-    # TODO check if valid token exists first
-    # If yes use is
-    # if not, continue as before and save new token
-    # TODO need to check if token belongs to current credentials? Because after switching the token will be invalid
-    # Or always try old token first and if not working then get new token
+    token = check_existing_token()
+    if token:
+        return token, True
 
     client_id, client_secret = _get_credentials()
 
@@ -38,9 +39,10 @@ def _authenticate():
     response = requests.post(url, headers=headers, data=data, auth=HTTPBasicAuth(client_id, client_secret))
     token, expires_in = response.json()["access_token"], response.json()["expires_in"]
 
-    # TODO save new Token
+    save_token(token, expires_in)
 
-    return token
+    return token, False
+
 
 def _get_headers():
     token = _authenticate()
@@ -53,6 +55,11 @@ def make_api_call(method, path, **kwargs):
     base_url = os.environ.get("AURA_CLI_BASE_URL") or DEFAULT_BASE_URL
 
     response = requests.request(method, base_url+path, headers=headers, **kwargs)
+    # If authentication failed, delete the token file to avoid using same token again
+    if response.status_code == 401:
+        delete_token_file()
+
     response.raise_for_status()
 
     return response.json()
+

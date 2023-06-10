@@ -1,7 +1,7 @@
 import click
 from aura.config_repository import current_credentials
 
-@click.command(help="Print the currently active credentials")
+@click.command(help="Print the currently selected credentials")
 def current():
     name, client_id = current_credentials()
 

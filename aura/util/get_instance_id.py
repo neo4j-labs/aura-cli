@@ -1,7 +1,13 @@
 import click
 from aura.api_repository import make_api_call
 
+
 def get_instance_id(instance_id, instance_name):
+    '''
+    For all commands related to a database instance, either an ID or a name can be provided.
+    This function checks if exaclty one of the 2 options was provided and if it was the instance name,
+    it will try to find the ID from the name
+    '''
     if instance_id is not None and instance_name is not None:
         raise click.UsageError("Only one of the options instance-id and instance-name should be provided")
     

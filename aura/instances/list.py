@@ -3,8 +3,8 @@ from aura.api_command import api_command
 from aura.api_repository import make_api_call
 
 
-@api_command
-@click.option('--tenant_id', '-tid')
+@api_command(help="List all instances in a tenant")
+@click.option('--tenant-id', '-tid', help="The tenant from which you want to list instances")
 def list(tenant_id):
     params=None
     if tenant_id is not None:

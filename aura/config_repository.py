@@ -1,6 +1,8 @@
 import json
 import os
 
+from aura.token_repository import delete_token_file
+
 AURA_CONFIG_PATH = '~/.aura/config.json'
 
 # TODO add exceptions such as CredentialsNotFound, 
@@ -48,6 +50,9 @@ def add_credentials(name, client_id, client_secret):
     
     write_config(config)
 
+    # Delete saved auth token if it exists
+    delete_token_file()
+
 
 def current_credentials():
     config = load_config()
@@ -68,5 +73,8 @@ def use_credentials(name):
     if config.get("AUTH") and config["AUTH"].get("CREDENTIALS") and config["AUTH"]["CREDENTIALS"][name]:
         config["AUTH"]["ACTIVE"] = name
         write_config(config)
+
+        # Delete saved auth token if it exists
+        delete_token_file()
 
 

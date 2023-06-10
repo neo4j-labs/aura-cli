@@ -4,13 +4,13 @@ from aura.api_command import api_command
 from aura.api_repository import make_api_call
 
 
-@api_command
-@click.option('--version', '-v', default="5")
-@click.option('--region', '-r', prompt=True) 
-@click.option('--memory', '-m', default="2")
-@click.option('--name', '-n', default="Instance01")
-@click.option('--type', '-t', prompt=True)
-@click.option('--tenant-id', '-tid', prompt=True)
+@api_command(help="Create a new instance")
+@click.option('--version', '-v', default="5", help="The instance version")
+@click.option('--region', '-r', prompt=True, help="The instance region") 
+@click.option('--memory', '-m', default="2", help="The instance memory size")
+@click.option('--name', '-n', default="Instance01", help="The instance name")
+@click.option('--type', '-t', prompt=True, help="The instance type")
+@click.option('--tenant-id', '-tid', prompt=True, help="The ID of the tenant where you want to create the instance")
 def create(version, region, memory, name, type, tenant_id):
     path = "/instances"
 
