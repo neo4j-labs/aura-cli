@@ -1,6 +1,12 @@
 def print_table(data):
     if not data:
         return print("")
+    if isinstance(data, str):
+        return print(data)
+    
+    # Make sure data is a list
+    if isinstance(data, dict):
+        data = [data]
 
     headers = data[0].keys()
     rows = [list(d.values()) for d in data]
@@ -23,6 +29,12 @@ def print_table(data):
 def print_text(data):
     if not data:
         return print("")
+    if isinstance(data, str):
+        return print(data)
+    
+    # Make sure data is a list
+    if isinstance(data, dict):
+        data = [data]
 
     headers = data[0].keys()
     rows = [list(d.values()) for d in data]

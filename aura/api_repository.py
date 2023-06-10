@@ -1,8 +1,6 @@
 from requests.auth import HTTPBasicAuth
 import requests
 import os
-import json
-from datetime import datetime, timedelta
 
 from aura.config_repository import load_config
 from aura.token_repository import check_existing_token, delete_token_file, save_token

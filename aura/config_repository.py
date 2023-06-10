@@ -8,6 +8,17 @@ AURA_CONFIG_PATH = '~/.aura/config.json'
 # TODO add exceptions such as CredentialsNotFound, 
 # TODO validate config format on every load
 
+# Config schema: 
+#     { "AUTH": 
+#           { "CREDENTIALS" : 
+#                 { "<name1>": 
+#                       { "CLIENT_ID": str , "CLIENT_SECRET": str}, 
+#                   "<name2>": ... 
+#                   }, 
+#              "ACTIVE": "<name1>" 
+#            } 
+#          }
+
 def load_config():
     config_path = os.path.expanduser(AURA_CONFIG_PATH)
 

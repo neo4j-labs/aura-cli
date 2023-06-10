@@ -13,11 +13,14 @@ def api_command(help):
         def wrapper(output, *args, **kwargs):
             try:
                 api_response = func(*args, **kwargs)
-                data = api_response["data"]
+                if "data" in api_response:
+                    data = api_response["data"]
             except Exception as e:
                 handle_api_error(e)
             else:
-                if output == "json":
+                if not data:
+                    print("Operation successful")
+                elif output == "json":
                     pprint(data)
                 elif output == "table":
                     print_table(data)
