@@ -40,6 +40,8 @@ def _authenticate():
 
     url = os.environ.get("AURA_CLI_AUTH_URL") or DEFAULT_AUTH_URL
     response = requests.post(url, headers=headers, data=data, auth=HTTPBasicAuth(client_id, client_secret))
+    response.raise_for_status()
+    
     token, expires_in = response.json()["access_token"], response.json()["expires_in"]
 
     save_token(token, expires_in)

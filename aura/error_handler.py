@@ -10,9 +10,7 @@ def handle_api_error(exception):
             if "error" in error_data:
                 error_message = error_data["error"]
             if "errors" in error_data:
-                error_message = ""
-                for e in error_data["errors"]:
-                    error_message += e["message"] + "\n"
+                error_message = "\n".join([e["message"] for e in error_data["errors"]])
         except ValueError:
             error_message = f"Unknown error (status code {exception.response.status_code})"
     elif isinstance(exception, ClientError):
