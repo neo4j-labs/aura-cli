@@ -6,8 +6,8 @@ from aura.config_repository import load_config
 from aura.error_handler import NoCredentialsConfigured
 from aura.token_repository import check_existing_token, delete_token_file, save_token
 
-DEFAULT_BASE_URL = "https://api-dev.neo4j-dev.io/harsha/v1beta3"
-DEFAULT_AUTH_URL = 'https://api-dev.neo4j-dev.io/harsha-oauth/token'
+DEFAULT_BASE_URL = "https://api.neo4j.io/v1beta3"
+DEFAULT_AUTH_URL = 'https://api.neo4j.io/oauth/token'
 
 def _get_credentials():
     client_id = os.environ.get("AURA_CLI_CLIENT_ID")
@@ -41,7 +41,7 @@ def _authenticate():
     url = os.environ.get("AURA_CLI_AUTH_URL") or DEFAULT_AUTH_URL
     response = requests.post(url, headers=headers, data=data, auth=HTTPBasicAuth(client_id, client_secret))
     response.raise_for_status()
-    
+
     token, expires_in = response.json()["access_token"], response.json()["expires_in"]
 
     save_token(token, expires_in)
