@@ -1,12 +1,10 @@
 import json
 import os
+from aura.error_handler import CredentialsNotFound
 
 from aura.token_repository import delete_token_file
 
 AURA_CONFIG_PATH = '~/.aura/config.json'
-
-# TODO add exceptions such as CredentialsNotFound, 
-# TODO validate config format on every load
 
 # Config schema: 
 #     { "AUTH": 
@@ -18,6 +16,8 @@ AURA_CONFIG_PATH = '~/.aura/config.json'
 #              "ACTIVE": "<name1>" 
 #            } 
 #          }
+
+# TODO create a Config class and do all validations inside the class
 
 def load_config():
     config_path = os.path.expanduser(AURA_CONFIG_PATH)
@@ -77,6 +77,8 @@ def delete_credentials(name):
     if config.get("AUTH") and config["AUTH"].get("CREDENTIALS") and config["AUTH"]["CREDENTIALS"][name]:
         del config["AUTH"]["CREDENTIALS"][name]
         write_config(config)
+    else:
+        raise CredentialsNotFound(f"Credentials {name} not found")
 
 
 def use_credentials(name):
@@ -87,5 +89,7 @@ def use_credentials(name):
 
         # Delete saved auth token if it exists
         delete_token_file()
+    else:
+        raise CredentialsNotFound(f"Credentials {name} not found")
 
 
