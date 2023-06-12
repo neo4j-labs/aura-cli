@@ -13,6 +13,7 @@ def api_command(help):
         def wrapper(output, *args, **kwargs):
             try:
                 api_response = func(*args, **kwargs)
+                data = None
                 if "data" in api_response:
                     data = api_response["data"]
             except Exception as e:

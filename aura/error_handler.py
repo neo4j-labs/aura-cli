@@ -43,5 +43,5 @@ class InstanceIDorNameMissing(ClientError):
 class NoCredentialsConfigured(ClientError):
     pass
 
-class NoCredentialsConfigured(ClientError):
+class CredentialsNotFound(ClientError):
     pass
