@@ -2,7 +2,7 @@ from requests.auth import HTTPBasicAuth
 import requests
 import os
 
-from aura.config_repository import load_config
+from aura.config_repository import CLIConfig
 from aura.error_handler import NoCredentialsConfigured
 from aura.token_repository import check_existing_token, delete_token_file, save_token
 
@@ -13,14 +13,14 @@ def _get_credentials():
     client_id = os.environ.get("AURA_CLI_CLIENT_ID")
     client_secret = os.environ.get("AURA_CLI_CLIENT_SECRET")
     if not client_id or not client_secret:
-        config = load_config()
+        config = CLIConfig()
+        _, current_credentials = config.current_credentials()
         
-        if config.get("AUTH", None) is None or config["AUTH"].get("ACTIVE", None) is None:
-            raise NoCredentialsConfigured("No credentials configured. Either add new credentials or export environment variables.")
-        
-        active_credentials = config["AUTH"]["ACTIVE"]
-        client_id = client_id or config["AUTH"]["CREDENTIALS"][active_credentials]["CLIENT_ID"]
-        client_secret = client_secret or config["AUTH"]["CREDENTIALS"][active_credentials]["CLIENT_SECRET"]
+        client_id = client_id or current_credentials["CLIENT_ID"]
+        client_secret = client_secret or current_credentials["CLIENT_SECRET"]
+
+    if not client_id or not client_secret:
+        raise NoCredentialsConfigured("No credentials are configured. Either add new credentials or export environment variables.")
 
     return client_id, client_secret
 

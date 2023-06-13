@@ -1,9 +1,11 @@
 import click
-from aura.config_repository import current_credentials
+from aura.config_repository import CLIConfig, current_credentials
 
 @click.command(help="Print the currently selected credentials")
 def current():
-    name, client_id = current_credentials()
+    config = CLIConfig()
+    name, creds = config.current_credentials()
+    client_id = creds["CLIENT_ID"]
 
     if name is None:
         return click.echo("No credentials have been added yet.")

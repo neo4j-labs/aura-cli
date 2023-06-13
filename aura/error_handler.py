@@ -43,3 +43,9 @@ class NoCredentialsConfigured(ClientError):
 
 class CredentialsNotFound(ClientError):
     pass
+
+class InvalidConfigFile(ClientError):
+    pass
+
+class CredentialsAlreadyExist(ClientError):
+    pass
