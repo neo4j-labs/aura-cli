@@ -81,7 +81,7 @@ class CLIConfig:
             raise CredentialsNotFound(f"Credentials {name} not found")
         
 
-    def validate_config(config):
+    def validate_config(self, config):
         if not isinstance(config, dict):
             raise InvalidConfigFile("Config file has an invalid type")
 

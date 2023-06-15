@@ -1,5 +1,5 @@
 import click
-from aura.config_repository import CLIConfig, delete_credentials
+from aura.config_repository import CLIConfig
 
 @click.argument('name')
 @click.command(help="Delete OAuth client credentials")

@@ -1,5 +1,5 @@
 import click
-from aura.config_repository import CLIConfig, current_credentials
+from aura.config_repository import CLIConfig
 
 @click.command(help="Print the currently selected credentials")
 def current():

@@ -1,5 +1,5 @@
 import click
-from aura.config_repository import CLIConfig, use_credentials
+from aura.config_repository import CLIConfig
 
 @click.argument("name")
 @click.command(help="Select which OAuth client credentials to use for authentication")

@@ -1,5 +1,5 @@
 import click
-from aura.config_repository import CLIConfig, list_credentials
+from aura.config_repository import CLIConfig
 from aura.format import print_text
 
 @click.command(help="List all configured OAuth client credentials")

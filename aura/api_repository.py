@@ -49,13 +49,13 @@ def _authenticate():
     return token
 
 
-def _get_headers():
+def get_headers():
     token = _authenticate()
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
     return headers
 
 def make_api_call(method, path, **kwargs):
-    headers = _get_headers()
+    headers = get_headers()
     base_url = os.environ.get("AURA_CLI_BASE_URL") or DEFAULT_BASE_URL
 
     response = requests.request(method, base_url+path, headers=headers, **kwargs)

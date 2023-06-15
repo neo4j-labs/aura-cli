@@ -19,7 +19,7 @@ def api_command(help):
             except Exception as e:
                 handle_api_error(e)
             else:
-                if not data:
+                if data is None:
                     print("Operation successful")
                 elif output == "json":
                     pprint(data)
