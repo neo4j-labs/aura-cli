@@ -3,6 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 
 from aura.tenants import get as get_tenant
+from tests.conftest import printed_data
 
 def mock_response():
     mock_res = Mock()
@@ -19,7 +20,7 @@ def test_get_tenant(api_request):
     result = runner.invoke(get_tenant, ["--tenant-id", "123"])
     
     assert result.exit_code == 0
-    assert result.output == "{'id': '123', 'name': 'Personal tenant'}\n"
+    assert result.output == printed_data({'id': '123', 'name': 'Personal tenant'})
 
     api_request.assert_called_once_with(
         "GET", 

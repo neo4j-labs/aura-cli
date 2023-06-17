@@ -3,6 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 
 from aura.snapshots import list as list_snapshots
+from tests.conftest import printed_data
 
 def mock_response():
     mock_res = Mock()
@@ -26,8 +27,7 @@ def test_list_snapshots(api_request):
     result = runner.invoke(list_snapshots, ["--instance-id", "123"])
     
     assert result.exit_code == 0
-    assert result.output == "[{'instance_id': '123',\n  'profile': 'Scheduled',\n  'snapshots_id': '789789',\n  'status': 'Completed',\n  'timestamp': '2023-06-16T07:38:57Z'}]\n"
-
+    assert result.output == printed_data([{ "instance_id": "123", "profile": "Scheduled", "snapshots_id": "789789", "status": "Completed", "timestamp": "2023-06-16T07:38:57Z"}])
     api_request.assert_called_once_with(
         "GET", 
         "https://api.neo4j.io/v1beta3/instances/123/snapshots", 
@@ -45,8 +45,7 @@ def test_list_snapshots_with_name(api_request):
     result = runner.invoke(list_snapshots, ["--instance-name", "Instance01"])
     
     assert result.exit_code == 0
-    assert result.output == "[{'instance_id': '123',\n  'profile': 'Scheduled',\n  'snapshots_id': '789789',\n  'status': 'Completed',\n  'timestamp': '2023-06-16T07:38:57Z'}]\n"
-
+    assert result.output == printed_data([{ "instance_id": "123", "profile": "Scheduled", "snapshots_id": "789789", "status": "Completed", "timestamp": "2023-06-16T07:38:57Z"}])
     api_request.assert_called_with(
         "GET", 
         "https://api.neo4j.io/v1beta3/instances/123/snapshots", 
@@ -64,7 +63,7 @@ def test_list_snapshots_with_date(api_request):
     result = runner.invoke(list_snapshots, ["--instance-id", "123", "--date", "2023-01-01"])
     
     assert result.exit_code == 0
-    assert result.output == "[{'instance_id': '123',\n  'profile': 'Scheduled',\n  'snapshots_id': '789789',\n  'status': 'Completed',\n  'timestamp': '2023-06-16T07:38:57Z'}]\n"
+    assert result.output == printed_data([{ "instance_id": "123", "profile": "Scheduled", "snapshots_id": "789789", "status": "Completed", "timestamp": "2023-06-16T07:38:57Z"}])
 
     api_request.assert_called_with(
         "GET", 

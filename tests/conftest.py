@@ -15,6 +15,6 @@ def api_request():
     with patch('requests.request', new_callable=Mock()) as mocked_request:
         yield mocked_request
 
-
+# Utility function to verify the command output is printed correctly
 def printed_data(data):
     return pprint.pformat(data) + "\n"

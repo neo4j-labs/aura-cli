@@ -88,5 +88,5 @@ def test_update_instance_name_and_memory(api_request):
         "PATCH", 
         "https://api.neo4j.io/v1beta3/instances/123", 
         headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"},
-        data=json.dumps({"memory": "8GB", "name": "InstanceTest" })
+        data=json.dumps({"memory": "8GB", "name": "InstanceTest"})
     )
