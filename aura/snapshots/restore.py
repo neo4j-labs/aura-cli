@@ -4,6 +4,7 @@ from aura.api_command import api_command
 from aura.api_repository import make_api_call
 from aura.util.get_instance_id import get_instance_id
 
+# POST "/instances/:instanceId/snapshots/:snapshotId/restore"
 
 @api_command(help="Restore an instance from a snapshot")
 @click.option('--instance-id', '-id', help="The instance ID")

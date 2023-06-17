@@ -4,6 +4,7 @@ from aura.api_command import api_command
 from aura.api_repository import make_api_call
 from aura.util.get_instance_id import get_instance_id
 
+# PATCH /instances/:instanceId
 
 @api_command(help="Update an instance")
 @click.option('--instance-id', '-id', help="The instance ID")
@@ -15,7 +16,7 @@ def update(instance_id, memory, new_name, name):
     
     data = {}
     if memory:
-        data["memory"] = memory
+        data["memory"] = f"{memory}GB"
     if new_name:
         data["name"] = new_name
     path = f"/instances/{instance_id}"

@@ -3,6 +3,7 @@ import json
 from aura.api_command import api_command
 from aura.api_repository import make_api_call
 
+# POST /instances
 
 @api_command(help="Create a new instance")
 @click.option('--version', '-v', default="5", help="The instance version")

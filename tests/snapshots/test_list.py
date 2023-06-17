@@ -1,0 +1,75 @@
+import pytest
+from click.testing import CliRunner
+from unittest.mock import Mock
+
+from aura.snapshots import list as list_snapshots
+
+def mock_response():
+    mock_res = Mock()
+    mock_res.status_code = 200
+    mock_res.json.return_value = {"data": [{ "instance_id": "123", "profile": "Scheduled", "snapshots_id": "789789", "status": "Completed", "timestamp": "2023-06-16T07:38:57Z"}]}
+    return mock_res
+
+def mock_instances_response():
+    mock = Mock()
+    mock.status_code = 200
+    mock.json.return_value = {"data": [{"name": "Instance01", "id": "123" }]}
+    return mock
+
+
+
+def test_list_snapshots(api_request):
+    runner = CliRunner()
+
+    api_request.return_value = mock_response()
+
+    result = runner.invoke(list_snapshots, ["--instance-id", "123"])
+    
+    assert result.exit_code == 0
+    assert result.output == "[{'instance_id': '123',\n  'profile': 'Scheduled',\n  'snapshots_id': '789789',\n  'status': 'Completed',\n  'timestamp': '2023-06-16T07:38:57Z'}]\n"
+
+    api_request.assert_called_once_with(
+        "GET", 
+        "https://api.neo4j.io/v1beta3/instances/123/snapshots", 
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"},
+        params={}
+    )
+
+
+def test_list_snapshots_with_name(api_request):
+    runner = CliRunner()
+
+    # Mock first call for getting instances and finding the id from the name
+    api_request.side_effect = [mock_instances_response(), mock_response()]
+
+    result = runner.invoke(list_snapshots, ["--instance-name", "Instance01"])
+    
+    assert result.exit_code == 0
+    assert result.output == "[{'instance_id': '123',\n  'profile': 'Scheduled',\n  'snapshots_id': '789789',\n  'status': 'Completed',\n  'timestamp': '2023-06-16T07:38:57Z'}]\n"
+
+    api_request.assert_called_with(
+        "GET", 
+        "https://api.neo4j.io/v1beta3/instances/123/snapshots", 
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"},
+        params={}
+    )
+
+
+def test_list_snapshots_with_date(api_request):
+    runner = CliRunner()
+
+    # Mock first call for getting instances and finding the id from the name
+    api_request.return_value = mock_response()
+
+    result = runner.invoke(list_snapshots, ["--instance-id", "123", "--date", "2023-01-01"])
+    
+    assert result.exit_code == 0
+    assert result.output == "[{'instance_id': '123',\n  'profile': 'Scheduled',\n  'snapshots_id': '789789',\n  'status': 'Completed',\n  'timestamp': '2023-06-16T07:38:57Z'}]\n"
+
+    api_request.assert_called_with(
+        "GET", 
+        "https://api.neo4j.io/v1beta3/instances/123/snapshots", 
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"},
+        params={ "date": "2023-01-01"}
+    )
+

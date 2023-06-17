@@ -1,0 +1,28 @@
+import pytest
+from click.testing import CliRunner
+from unittest.mock import Mock
+
+from aura.tenants import list as list_tenants
+
+def mock_response():
+    mock_res = Mock()
+    mock_res.status_code = 200
+    mock_res.json.return_value = {"data": [{'id': '123', 'name': 'Personal tenant'}]}
+    return mock_res
+
+
+def test_list_tenants(api_request):
+    runner = CliRunner()
+
+    api_request.return_value = mock_response()
+
+    result = runner.invoke(list_tenants, [])
+    
+    assert result.exit_code == 0
+    assert result.output == "[{'id': '123', 'name': 'Personal tenant'}]\n"
+
+    api_request.assert_called_once_with(
+        "GET", 
+        "https://api.neo4j.io/v1beta3/tenants", 
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"}
+    )
