@@ -5,7 +5,6 @@ from .list import list
 from .delete import delete
 from .current import current
 
-
 @click.group(help="Configure OAuth credentials for the Aura API")
 def credentials():
     pass

@@ -1,7 +1,7 @@
 import click
 from pprint import pprint
 from functools import wraps
-from aura.error_handler import handle_api_error
+from aura.error_handler import UnsupportedOutputFormat, handle_error
 from aura.format import print_table, print_text
 
 def api_command(help):
@@ -17,7 +17,7 @@ def api_command(help):
                 if "data" in api_response:
                     data = api_response["data"]
             except Exception as e:
-                handle_api_error(e)
+                handle_error(e)
             else:
                 if data is None:
                     print("Operation successful")
@@ -28,7 +28,7 @@ def api_command(help):
                 elif output == "text":
                     print_text(data)
                 else:
-                    raise click.UsageError(f"Unsupported output format {output}")
+                    raise UnsupportedOutputFormat(f"Unsupported output format {output}")
                 click.get_current_context().exit(code=0)
         return wrapper
     

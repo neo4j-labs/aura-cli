@@ -1,7 +1,7 @@
 from requests.exceptions import *
 import click
 
-def handle_api_error(exception):
+def handle_error(exception):
 
     if isinstance(exception, HTTPError):
         try:
@@ -48,4 +48,7 @@ class InvalidConfigFile(ClientError):
     pass
 
 class CredentialsAlreadyExist(ClientError):
+    pass
+
+class UnsupportedOutputFormat(ClientError):
     pass

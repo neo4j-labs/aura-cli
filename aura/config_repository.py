@@ -4,13 +4,12 @@ from aura.error_handler import CredentialsAlreadyExist, CredentialsNotFound, Inv
 
 from aura.token_repository import delete_token_file
 
-AURA_CONFIG_PATH = '~/.aura/config.json'
-
 
 class CLIConfig:
+    AURA_CONFIG_PATH = '~/.aura/config.json'
 
     def __init__(self):
-        self.config_path = os.path.expanduser(AURA_CONFIG_PATH)
+        self.config_path = os.path.expanduser(self.AURA_CONFIG_PATH)
         self.config = self.load_config()
 
 
@@ -18,11 +17,12 @@ class CLIConfig:
         try:
             with open(self.config_path, 'r') as configfile:
                 config = json.load(configfile)
-            self.validate_config(config)
-            return config
         except FileNotFoundError:
             default_config = {"AUTH": { "CREDENTIALS": {}, "ACTIVE": None } }
             return self.write_config(default_config)
+        else:
+            self.validate_config(config)
+            return config
 
 
     def write_config(self, config):
@@ -55,7 +55,7 @@ class CLIConfig:
     def current_credentials(self):
         active = self.config["AUTH"].get("ACTIVE")
         if active is None:
-            return
+            return None, None
         
         return active, self.config["AUTH"]["CREDENTIALS"][active]
 
@@ -104,10 +104,7 @@ class CLIConfig:
                 raise InvalidConfigFile("Malformed config file")
 
         active = auth.get("ACTIVE")
-        if not isinstance(active, str):
-            raise InvalidConfigFile("Malformed config file")
-
-        if active not in credentials:
+        if active is not None and (not isinstance(active, str) or active not in credentials):
             raise InvalidConfigFile("Malformed config file")
 
 

@@ -1,5 +1,6 @@
 import click
 from aura.config_repository import CLIConfig
+from aura.error_handler import handle_error
 
 @click.option('--name', '-n', help="Name for the credentials")
 @click.option('--client-id', '-id', help="The client ID")
@@ -7,16 +8,19 @@ from aura.config_repository import CLIConfig
 @click.command(help="Add new OAuth client credentials")
 def add(name, client_id, client_secret):
     if not name:
-        name =  click.prompt('Credentials Name:')
+        name =  click.prompt('Credentials Name')
     if not client_id:
-        client_id =  click.prompt('Client ID:')
+        client_id =  click.prompt('Client ID')
     if not client_secret:
-        client_secret =  click.prompt('Client Secret:')
+        client_secret =  click.prompt('Client Secret')
 
-
-    config = CLIConfig()
-    config.add_credentials(name, client_id, client_secret)
+    
+    try:
+        config = CLIConfig()
+        config.add_credentials(name, client_id, client_secret)
+    except Exception as e:
+        handle_error(e)
 
     click.echo("")
-    click.echo(f"Credentials {name} successfully saved. Now using {name} as credentials.")
+    click.echo(f"Credentials \"{name}\" successfully saved. Now using \"{name}\" as credentials.")
     
