@@ -52,3 +52,6 @@ class CredentialsAlreadyExist(ClientError):
 
 class UnsupportedOutputFormat(ClientError):
     pass
+
+class DatabaseNameNotUnique(ClientError):
+    pass

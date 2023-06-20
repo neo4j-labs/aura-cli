@@ -1,5 +1,5 @@
 from aura.api_repository import make_api_call
-from aura.error_handler import InstanceIDAndNameBothProvided, InstanceIDorNameMissing, InstanceNameNotFound
+from aura.error_handler import DatabaseNameNotUnique, InstanceIDAndNameBothProvided, InstanceIDorNameMissing, InstanceNameNotFound
 
 
 def get_instance_id(instance_id, instance_name):
@@ -20,9 +20,12 @@ def get_instance_id(instance_id, instance_name):
     
     instances = make_api_call("GET", "/instances")["data"]
 
+    id = None
     for instance in instances:
         if instance["name"] == instance_name:
-            return instance["id"]
+            if id is not None:
+                raise DatabaseNameNotUnique("There is more than one instance with the provided name. Please use the id instead.")
+            id = instance["id"]
         
     raise InstanceNameNotFound(f"Error: No instance with name {instance_name} found")
     

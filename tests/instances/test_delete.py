@@ -1,8 +1,8 @@
 import pytest
 from click.testing import CliRunner
 from unittest.mock import Mock
-
 from aura.instances import delete as delete_instance
+
 
 def mock_response():
     mock_res = Mock()
