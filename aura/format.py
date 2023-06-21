@@ -1,4 +1,4 @@
-def print_table(data):
+def format_table_output(data, printing=True):
     if not data:
         return print("")
     if isinstance(data, str):
@@ -26,7 +26,7 @@ def print_table(data):
         print(format_spec.format(*row))
 
 
-def print_text(data):
+def format_text_output(data, printing=True):
     if not data:
         return print("")
     if isinstance(data, str):
@@ -47,8 +47,13 @@ def print_text(data):
 
     # Create a format specifier for each column width
     format_spec = ' \t '.join(['{{:{}}}'.format(w) for w in col_widths])
-
-    print(format_spec.format(*headers))
+    
+    res = format_spec.format(*headers)
     for row in rows:
-        print(format_spec.format(*row))
+        res += "\n" + format_spec.format(*row)
+    
+    if printing:
+        print(res)
+    else:
+        return res
 

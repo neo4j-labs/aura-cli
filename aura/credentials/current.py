@@ -1,12 +1,12 @@
 import click
-from aura.config_repository import CLIConfig
 from aura.error_handler import handle_error
+from aura.decorators import pass_config
 
 @click.command(help="Print the currently selected credentials")
-def current():
+@pass_config
+def current(config):
     
     try:
-        config = CLIConfig()
         name, creds = config.current_credentials()
     except Exception as e:
         handle_error(e)

@@ -1,8 +1,8 @@
+import click
 from requests.auth import HTTPBasicAuth
 import requests
 import os
 
-from aura.config_repository import CLIConfig
 from aura.error_handler import NoCredentialsConfigured
 from aura.token_repository import check_existing_token, delete_token_file, save_token
 
@@ -13,7 +13,8 @@ def _get_credentials():
     client_id = os.environ.get("AURA_CLI_CLIENT_ID")
     client_secret = os.environ.get("AURA_CLI_CLIENT_SECRET")
     if not client_id or not client_secret:
-        config = CLIConfig()
+        ctx = click.get_current_context()
+        config = ctx.obj
         _, current_credentials = config.current_credentials()
         
         client_id = client_id or current_credentials["CLIENT_ID"]

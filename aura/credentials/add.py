@@ -1,12 +1,13 @@
 import click
-from aura.config_repository import CLIConfig
 from aura.error_handler import handle_error
+from aura.decorators import pass_config
 
 @click.option('--name', '-n', help="Name for the credentials")
 @click.option('--client-id', '-id', help="The client ID")
 @click.option('--client-secret', '-s', help="The client secret")
 @click.command(help="Add new OAuth client credentials")
-def add(name, client_id, client_secret):
+@pass_config
+def add(config, name, client_id, client_secret):
     if not name:
         name =  click.prompt('Credentials Name')
     if not client_id:
@@ -16,7 +17,6 @@ def add(name, client_id, client_secret):
 
     
     try:
-        config = CLIConfig()
         config.add_credentials(name, client_id, client_secret)
     except Exception as e:
         handle_error(e)

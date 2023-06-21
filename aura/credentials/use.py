@@ -1,13 +1,13 @@
 import click
-from aura.config_repository import CLIConfig
+from aura.decorators import pass_config
 from aura.error_handler import handle_error
 
 @click.argument("name")
 @click.command(help="Select which OAuth client credentials to use for authentication")
-def use(name):
+@pass_config
+def use(config, name):
 
     try:
-        config = CLIConfig()
         config.use_credentials(name)
     except Exception as e:
         handle_error(e)

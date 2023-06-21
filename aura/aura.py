@@ -1,12 +1,14 @@
 import click
+from aura.config_repository import CLIConfig
 from aura.instances import instances
 from aura.credentials import credentials
 from aura.snapshots import snapshots
 from aura.tenants import tenants
 
 @click.group()
-def cli():
-    pass
+@click.pass_context
+def cli(ctx):
+    ctx.obj = CLIConfig()
 
 
 cli.add_command(credentials)

@@ -18,13 +18,3 @@ def api_request():
 # Utility function to verify the command output is printed correctly
 def printed_data(data):
     return pprint.pformat(data) + "\n"
-
-@pytest.fixture()
-def mock_config():
-    with patch('aura.credentials.CLIConfig', autospec=True) as mocked_config:
-        yield mocked_config
-
-@pytest.fixture()
-def mock_delete_token_file():
-    with patch('aura.token_repository', new=Mock()):
-        yield

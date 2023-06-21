@@ -26,6 +26,9 @@ def get_instance_id(instance_id, instance_name):
             if id is not None:
                 raise DatabaseNameNotUnique("There is more than one instance with the provided name. Please use the id instead.")
             id = instance["id"]
+
+    if id is not None:
+        return id
         
     raise InstanceNameNotFound(f"Error: No instance with name {instance_name} found")
     
