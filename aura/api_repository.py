@@ -16,6 +16,10 @@ def _get_credentials():
         ctx = click.get_current_context()
         config = ctx.obj
         _, current_credentials = config.current_credentials()
+
+        if current_credentials is None:
+            raise NoCredentialsConfigured("No credentials are configured. Either add new credentials or export environment variables.")
+
         
         client_id = client_id or current_credentials["CLIENT_ID"]
         client_secret = client_secret or current_credentials["CLIENT_SECRET"]
@@ -66,5 +70,5 @@ def make_api_call(method, path, **kwargs):
 
     response.raise_for_status()
 
-    return response.json()
+    return response
 

@@ -4,8 +4,10 @@ from aura.instances import instances
 from aura.credentials import credentials
 from aura.snapshots import snapshots
 from aura.tenants import tenants
+from aura.config import config
 
 @click.group()
+@click.version_option()
 @click.pass_context
 def cli(ctx):
     ctx.obj = CLIConfig()
@@ -15,3 +17,4 @@ cli.add_command(credentials)
 cli.add_command(instances)
 cli.add_command(snapshots)
 cli.add_command(tenants)
+cli.add_command(config)

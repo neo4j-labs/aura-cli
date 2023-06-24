@@ -7,6 +7,7 @@ from aura.token_repository import delete_token_file
 
 class CLIConfig:
     AURA_CONFIG_PATH = '~/.aura/config.json'
+    DEFAULT_CONFIG = {"AUTH": { "CREDENTIALS": {}, "ACTIVE": None }, "DEFAULTS": {} }
 
     def __init__(self):
         self.config_path = os.path.expanduser(self.AURA_CONFIG_PATH)
@@ -18,8 +19,7 @@ class CLIConfig:
             with open(self.config_path, 'r') as configfile:
                 config = json.load(configfile)
         except FileNotFoundError:
-            default_config = {"AUTH": { "CREDENTIALS": {}, "ACTIVE": None } }
-            return self.write_config(default_config)
+            return self.write_config(self.DEFAULT_CONFIG)
         else:
             self.validate_config(config)
             return config
@@ -85,6 +85,7 @@ class CLIConfig:
         if not isinstance(config, dict):
             raise InvalidConfigFile("Config file has an invalid type")
 
+        # Validate Auth section
         auth = config.get("AUTH")
         if not isinstance(auth, dict):
             raise InvalidConfigFile("Malformed config file")
@@ -106,6 +107,42 @@ class CLIConfig:
         active = auth.get("ACTIVE")
         if active is not None and (not isinstance(active, str) or active not in credentials):
             raise InvalidConfigFile("Malformed config file")
+        
+
+        # Validate Defaults section
+        defaults = config.get("DEFAULTS")
+        if not isinstance(defaults, dict):
+                raise InvalidConfigFile("Malformed config file")
+        
+        for option, default in defaults.items():
+            if not isinstance(option, str):
+                raise InvalidConfigFile("Malformed config file")
+            
+            if not isinstance(default, str):
+                raise InvalidConfigFile("Malformed config file")
+        
+
+    def set_option(self, name, value):
+        self.config["DEFAULTS"][name] = value
+        self.write_config(self.config)
 
 
+    def unset_option(self, name):
+        if self.config["DEFAULTS"].get(name):
+            del self.config["DEFAULTS"][name]
+
+        self.write_config(self.config)
+
+    def get_option(self, name):
+        if value := self.config["DEFAULTS"].get(name):
+            return value
+        
+    def list_options(self):
+        values = []
+        defaults = self.config["DEFAULTS"]
+        for option in defaults:
+            values.append({"Option": option, "Value": defaults[option]})
+
+        return values
+        
 

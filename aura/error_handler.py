@@ -55,3 +55,12 @@ class UnsupportedOutputFormat(ClientError):
 
 class DatabaseNameNotUnique(ClientError):
     pass
+
+class InvalidConfigOption(ClientError):
+    pass
+
+class InvalidConfigOptionValue(ClientError):
+    pass
+
+class NoTenantProvided(ClientError):
+    pass

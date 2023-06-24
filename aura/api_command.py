@@ -8,17 +8,27 @@ def api_command(help):
 
     def api_command_decorator(func):
         @click.command(help=help)
-        @click.option("--output", default="json", help='Set the output format of a command')
+        @click.option("--output", help='Set the output format of a command')
+        @click.option("--include", "-i", is_flag=True, default=False, help='Display Headers of the API response')
         @wraps(func)
-        def wrapper(output, *args, **kwargs):
+        def wrapper(output, include, *args, **kwargs):
             try:
                 api_response = func(*args, **kwargs)
+
+                response_data = api_response.json()
                 data = None
-                if "data" in api_response:
-                    data = api_response["data"]
+                if "data" in response_data:
+                    data = response_data["data"]
             except Exception as e:
                 handle_error(e)
             else:
+                if include:
+                    print(api_response.headers, "\n")
+
+                ctx = click.get_current_context()
+                config = ctx.obj
+                output = output or config.get_option("default-output") or "json"
+                
                 if data is None:
                     print("Operation successful")
                 elif output == "json":
