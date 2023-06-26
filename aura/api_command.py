@@ -10,8 +10,9 @@ def api_command(help):
         @click.command(help=help)
         @click.option("--output", help='Set the output format of a command')
         @click.option("--include", "-i", is_flag=True, default=False, help='Display Headers of the API response')
+        @click.option("--raw", "-i", is_flag=True, default=False, help='Display the raw API response body')
         @wraps(func)
-        def wrapper(output, include, *args, **kwargs):
+        def wrapper(output, include, raw, *args, **kwargs):
             try:
                 api_response = func(*args, **kwargs)
 
@@ -24,6 +25,10 @@ def api_command(help):
             else:
                 if include:
                     print(api_response.headers, "\n")
+                
+                if raw:
+                    print(response_data)
+                    return click.get_current_context().exit(code=0)
 
                 ctx = click.get_current_context()
                 config = ctx.obj
