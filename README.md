@@ -31,6 +31,20 @@ Aura API credentials need to be created in the console. These can then be added 
 
 Configured credentials will be overriden if environment variables for the Client ID or Client Secret are set.
 
+### Config
+
+The `aura config` commands allows to set configurations and default values. Currently there are 2 options which can be set with the `aura config set` command:
+
+- `default-tenant` - the default tenant which to use for commands like `aura instances create` (where a tenant-id is required)
+- `default-output` - the default output format for API commands (json, text or table)
+
+List of all config commands:
+
+- `aura config get`
+- `aura config list`
+- `aura config set`
+- `aura config unset`
+
 ### API Commands
 
 API commands are divided into 3 resources: `instance`, `tenants` and `snapshots`.
@@ -48,3 +62,10 @@ Example commands:
 By default the output format is json. Using the `output` option the format can be changed to `table` or `text`, e.g.
 
 `aura instances list --output table`
+
+### Useful flags
+
+All API commands have the following two flags:
+
+- `--include, -i` : Print the API response headers
+- `--raw` : Print the raw API response body
