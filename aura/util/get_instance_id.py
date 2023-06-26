@@ -18,7 +18,9 @@ def get_instance_id(instance_id, instance_name):
         raise InstanceIDorNameMissing("You need to provide either an instance-id or an instance-name")
     
     
-    instances = make_api_call("GET", "/instances")["data"]
+    response = make_api_call("GET", "/instances")
+
+    instances = response.json()["data"]
 
     id = None
     for instance in instances:

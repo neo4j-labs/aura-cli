@@ -16,6 +16,6 @@ def get(config, name):
         handle_error(e)
 
     if value is None:
-        print(f"No value for option {name} set")
+        return print(f"No value for {name} set")
 
     print(f"Config option {name} is set to \"{value}\"")
