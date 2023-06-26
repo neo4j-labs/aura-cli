@@ -111,15 +111,19 @@ class CLIConfig:
 
         # Validate Defaults section
         defaults = config.get("DEFAULTS")
-        if not isinstance(defaults, dict):
-                raise InvalidConfigFile("Malformed config file")
-        
-        for option, default in defaults.items():
-            if not isinstance(option, str):
-                raise InvalidConfigFile("Malformed config file")
+        if defaults is None:
+            self.config["DEFAULTS"] = {}
+            self.write_config(self.config)
+        else:
+            if not isinstance(defaults, dict):
+                    raise InvalidConfigFile("Malformed config file")
             
-            if not isinstance(default, str):
-                raise InvalidConfigFile("Malformed config file")
+            for option, default in defaults.items():
+                if not isinstance(option, str):
+                    raise InvalidConfigFile("Malformed config file")
+                
+                if not isinstance(default, str):
+                    raise InvalidConfigFile("Malformed config file")
         
 
     def set_option(self, name, value):
