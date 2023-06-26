@@ -13,7 +13,7 @@ def get(config, tenant_id):
     if tenant_id is None:
         tenant_id = config.get_option("default-tenant")
     if tenant_id is None:
-        raise NoTenantProvided("You need to provide a tenant ID for this command. Either add an option or set a default tenant through the \`aura config\` command.")
+        click.prompt("Tenant ID")
 
     path = f"/tenants/{tenant_id}"
 

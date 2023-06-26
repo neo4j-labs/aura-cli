@@ -27,18 +27,18 @@ def api_command(help):
 
                 ctx = click.get_current_context()
                 config = ctx.obj
-                output = output or config.get_option("default-output") or "json"
+                output_format = output or config.get_option("default-output") or "json"
                 
                 if data is None:
                     print("Operation successful")
-                elif output == "json":
+                elif output_format == "json":
                     pprint(data)
-                elif output == "table":
+                elif output_format == "table":
                     format_table_output(data)
-                elif output == "text":
+                elif output_format == "text":
                     format_text_output(data)
                 else:
-                    raise UnsupportedOutputFormat(f"Unsupported output format {output}")
+                    raise UnsupportedOutputFormat(f"Unsupported output format {output_format}")
                 click.get_current_context().exit(code=0)
         return wrapper
     

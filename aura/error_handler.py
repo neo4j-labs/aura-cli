@@ -2,7 +2,6 @@ from requests.exceptions import *
 import click
 
 def handle_error(exception):
-    print(exception)
 
     if isinstance(exception, HTTPError):
         try:
