@@ -9,7 +9,7 @@ from aura.util.get_instance_id import get_instance_id
 
 @api_command(help="Overwrite an instance")
 @click.option('--instance-id', '-id', help="The instance ID")
-@click.option('--source-instance', '-s', prompt=True, help="The source instance ID from which to overwrite the target")
+@click.option('--source-instance', '-s', prompt=True, help="The source instance ID")
 @click.option('--name', '-n', help="The instance name")
 def overwrite(instance_id, source_instance, name):
     instance_id = get_instance_id(instance_id, name)

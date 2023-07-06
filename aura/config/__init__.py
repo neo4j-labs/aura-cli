@@ -4,7 +4,19 @@ from .unset import unset
 from .get import get
 from .list import list
 
-@click.group(help="Manage different configurations and set default values\n\nValid options:\n\n\tdefault-tenant\n\n\tdefault-output")
+help_text = """
+Manage different configurations and set default values
+
+Valid options:\n
+    • default-tenant\n
+    • default-output
+
+Example usage:\n
+aura config set default-tenant <my-tenant-id>\n
+aura config unset default-output
+"""
+
+@click.group(help=help_text)
 def config():
     pass
 

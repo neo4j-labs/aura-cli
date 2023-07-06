@@ -9,7 +9,7 @@ def format_table_output(data, printing=True):
         data = [data]
 
     headers = data[0].keys()
-    rows = [list(d.values()) for d in data]
+    rows = [[str(val) for val in list(d.values())] for d in data]
 
     # Find max length in each column
     col_widths = [
@@ -37,7 +37,7 @@ def format_text_output(data, printing=True):
         data = [data]
 
     headers = data[0].keys()
-    rows = [list(d.values()) for d in data]
+    rows = [[str(val) for val in list(d.values())] for d in data]
 
     # Find max length in each column
     col_widths = [
