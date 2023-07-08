@@ -1,10 +1,16 @@
 import click
 from aura.decorators import pass_config
-from aura.error_handler import InvalidConfigOption, handle_error
+from aura.error_handler import handle_error
 from aura.format import format_text_output
-from .valid_options import VALID_OPTIONS
 
-@click.command(help="Print a config option value")
+help_text = """
+List all configured config options
+
+Example usage:\n
+aura config list
+"""
+
+@click.command(help=help_text)
 @pass_config
 def list(config):
     try:

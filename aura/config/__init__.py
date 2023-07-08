@@ -7,7 +7,7 @@ from .list import list
 help_text = """
 Manage different configurations and set default values
 
-Valid options:\n
+Valid config options:\n
     • default-tenant\n
     • default-output
 

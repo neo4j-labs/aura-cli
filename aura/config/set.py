@@ -3,7 +3,19 @@ from .valid_options import VALID_OPTIONS
 from aura.decorators import pass_config
 from aura.error_handler import InvalidConfigOption, InvalidConfigOptionValue, handle_error
 
-@click.command(help="Set a config option to a new value\n\nValid options:\n\n\tdefault-tenant\n\n\tdefault-output")
+help_text = """
+Set a config option to a new value
+
+Valid config options:\n
+    • default-tenant\n
+    • default-output
+
+Example usage:\n
+aura config set default-tenant my-tenant-id\n
+aura config set default-output table
+"""
+
+@click.command(help=help_text)
 @click.argument("name")
 @click.argument("value")
 @pass_config
