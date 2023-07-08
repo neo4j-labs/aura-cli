@@ -19,38 +19,38 @@ def mock_instances_response():
     return mock
 
 
-def test_overwrite_instance(api_request):
+def test_overwrite_instance(api_request, mock_config):
     runner = CliRunner()
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(overwrite_instance, ["--instance-id", "123", "--source-instance", "456"])
+    result = runner.invoke(overwrite_instance, ["--instance-id", "123", "--source-instance", "456"], obj=mock_config)
     
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
 
     api_request.assert_called_once_with(
         "POST", 
-        "https://api.neo4j.io/v1beta3/instances/123/overwrite", 
+        "https://api.neo4j.io/v1beta4/instances/123/overwrite", 
         headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"},
         data=json.dumps({"source_instance_id": "456"})
     )
 
 
-def test_overwrite_instance_with_name(api_request):
+def test_overwrite_instance_with_name(api_request, mock_config):
     runner = CliRunner()
 
     # Mock first call for getting instances and finding the id from the name
     api_request.side_effect = [mock_instances_response(), mock_response()]
 
-    result = runner.invoke(overwrite_instance, ["--name", "Instance01", "--source-instance", "456"])
+    result = runner.invoke(overwrite_instance, ["--name", "Instance01", "--source-instance", "456"], obj=mock_config)
     
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
 
     api_request.assert_called_with(
         "POST", 
-        "https://api.neo4j.io/v1beta3/instances/123/overwrite", 
+        "https://api.neo4j.io/v1beta4/instances/123/overwrite", 
         headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"},
         data=json.dumps({"source_instance_id": "456"})
     )

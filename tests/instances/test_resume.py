@@ -19,36 +19,36 @@ def mock_instances_response():
     return mock
 
 
-def test_resume_instance(api_request):
+def test_resume_instance(api_request, mock_config):
     runner = CliRunner()
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(resume_instance, ["--instance-id", "123"])
+    result = runner.invoke(resume_instance, ["--instance-id", "123"], obj=mock_config)
     
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
 
     api_request.assert_called_once_with(
         "POST", 
-        "https://api.neo4j.io/v1beta3/instances/123/resume", 
+        "https://api.neo4j.io/v1beta4/instances/123/resume", 
         headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"}
     )
 
 
-def test_resume_instance_with_name(api_request):
+def test_resume_instance_with_name(api_request, mock_config):
     runner = CliRunner()
 
     # Mock first call for getting instances and finding the id from the name
     api_request.side_effect = [mock_instances_response(), mock_response()]
 
-    result = runner.invoke(resume_instance, ["--name", "Instance01"])
+    result = runner.invoke(resume_instance, ["--name", "Instance01"], obj=mock_config)
     
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
 
     api_request.assert_called_with(
         "POST", 
-        "https://api.neo4j.io/v1beta3/instances/123/resume", 
+        "https://api.neo4j.io/v1beta4/instances/123/resume", 
         headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"}
     )

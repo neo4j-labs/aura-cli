@@ -1,5 +1,6 @@
+from aura.config_repository import CLIConfig
 import pytest
-from unittest.mock import patch, Mock
+from unittest.mock import MagicMock, patch, Mock
 import pprint
 
 def mock_headers():
@@ -18,3 +19,9 @@ def api_request():
 # Utility function to verify the command output is printed correctly
 def printed_data(data):
     return pprint.pformat(data) + "\n"
+
+@pytest.fixture()
+def mock_config():
+    mock_config = MagicMock(spec=CLIConfig)
+    mock_config.get_option.return_value = None
+    yield mock_config

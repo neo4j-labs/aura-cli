@@ -12,18 +12,18 @@ def mock_response():
     return mock_res
 
 
-def test_list_tenants(api_request):
+def test_list_tenants(api_request, mock_config):
     runner = CliRunner()
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(list_tenants, [])
+    result = runner.invoke(list_tenants, [], obj=mock_config)
     
     assert result.exit_code == 0
     assert result.output == printed_data([{'id': '123', 'name': 'Personal tenant'}])
 
     api_request.assert_called_once_with(
         "GET", 
-        "https://api.neo4j.io/v1beta3/tenants", 
+        "https://api.neo4j.io/v1beta4/tenants", 
         headers={"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"}
     )
