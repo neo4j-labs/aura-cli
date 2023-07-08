@@ -6,7 +6,7 @@ import os
 from aura.error_handler import NoCredentialsConfigured
 from aura.token_repository import check_existing_token, delete_token_file, save_token
 
-DEFAULT_BASE_URL = "https://api.neo4j.io/v1beta3"
+DEFAULT_BASE_URL = "https://api.neo4j.io/v1beta4"
 DEFAULT_AUTH_URL = 'https://api.neo4j.io/oauth/token'
 
 def _get_credentials():
@@ -67,8 +67,6 @@ def make_api_call(method, path, **kwargs):
     # If authentication failed, delete the token file to avoid using same token again
     if response.status_code  in [401, 403]:
         delete_token_file()
-
-    response.raise_for_status()
 
     return response
 

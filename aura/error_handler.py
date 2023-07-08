@@ -9,8 +9,10 @@ def handle_error(exception):
             error_message = "Unknown Error"
             if "error" in error_data:
                 error_message = error_data["error"]
-            if "errors" in error_data:
+            elif "errors" in error_data:
                 error_message = "\n".join([e["message"] for e in error_data["errors"]])
+            elif exception.response.status_code == 404:
+                error_message = str(exception)
         except ValueError:
             error_message = f"Unknown error (status code {exception.response.status_code})"
     elif isinstance(exception, ClientError):
