@@ -15,6 +15,8 @@ def api_command(help):
         def wrapper(output, include, raw, *args, **kwargs):
             try:
                 api_response = func(*args, **kwargs)
+                if not raw:
+                    api_response.raise_for_status()
 
                 response_data = api_response.json()
                 data = None
