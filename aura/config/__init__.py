@@ -5,7 +5,7 @@ from .get import get
 from .list import list
 
 help_text = """
-Manage different configurations and set default values
+Manage configurations and set default values
 
 Valid config options:\n
     • default-tenant\n

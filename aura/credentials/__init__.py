@@ -5,7 +5,16 @@ from .list import list
 from .delete import delete
 from .current import current
 
-@click.group(help="Configure OAuth credentials for the Aura API")
+help_text = """
+Configure and manage OAuth credentials
+
+Example usage:\n
+aura credentials add --name prod --client-id <id> --client-secret <secret>\n
+aura credentials use\n
+aura credentials list
+"""
+
+@click.group(help=help_text)
 def credentials():
     pass
 
