@@ -38,7 +38,7 @@ def _authenticate():
 
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'AuraCLI/0.2.2',
+        'User-Agent': 'AuraCLI/0.2.3',
     }
     data = {
         'grant_type': 'client_credentials'
@@ -57,7 +57,7 @@ def _authenticate():
 
 def get_headers():
     token = _authenticate()
-    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}", 'User-Agent': 'AuraCLI/0.2.2',}
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}", 'User-Agent': 'AuraCLI/0.2.3',}
     return headers
 
 def make_api_call(method, path, **kwargs):
