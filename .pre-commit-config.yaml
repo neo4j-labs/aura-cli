@@ -4,4 +4,4 @@ repos:
     hooks:
     - id: black
       files: ^aura/|^tests/
-      args: [--line-length=100]
+      args: [--line-length=100, --experimental-string-processing]
