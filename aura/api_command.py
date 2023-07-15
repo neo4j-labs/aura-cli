@@ -56,9 +56,7 @@ def api_command(help):
                 elif output_format == "text":
                     format_text_output(data)
                 else:
-                    raise UnsupportedOutputFormat(
-                        f"Unsupported output format {output_format}"
-                    )
+                    raise UnsupportedOutputFormat(f"Unsupported output format {output_format}")
                 click.get_current_context().exit(code=0)
 
         return wrapper

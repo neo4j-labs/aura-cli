@@ -14,9 +14,7 @@ def handle_error(exception):
             elif exception.response.status_code == 404:
                 error_message = str(exception)
         except ValueError:
-            error_message = (
-                f"Unknown error (status code {exception.response.status_code})"
-            )
+            error_message = f"Unknown error (status code {exception.response.status_code})"
     elif isinstance(exception, ClientError):
         error_message = exception.message
     elif isinstance(exception, Timeout):

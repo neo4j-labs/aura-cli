@@ -22,6 +22,4 @@ def add(config, name, client_id, client_secret):
         handle_error(e)
 
     click.echo("")
-    click.echo(
-        f'Credentials "{name}" successfully saved. Now using "{name}" as credentials.'
-    )
+    click.echo(f'Credentials "{name}" successfully saved. Now using "{name}" as credentials.')

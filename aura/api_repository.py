@@ -20,7 +20,8 @@ def _get_credentials():
 
         if current_credentials is None:
             raise NoCredentialsConfigured(
-                "No credentials are configured. Either add new credentials or export environment variables."
+                "No credentials are configured. Either add new credentials or export environment"
+                " variables."
             )
 
         client_id = client_id or current_credentials["CLIENT_ID"]
@@ -28,7 +29,8 @@ def _get_credentials():
 
     if not client_id or not client_secret:
         raise NoCredentialsConfigured(
-            "No credentials are configured. Either add new credentials or export environment variables."
+            "No credentials are configured. Either add new credentials or export environment"
+            " variables."
         )
 
     return client_id, client_secret

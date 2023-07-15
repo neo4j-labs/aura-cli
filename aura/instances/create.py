@@ -11,9 +11,7 @@ from aura.error_handler import NoTenantProvided
 @api_command(help="Create a new instance")
 @click.option("--version", "-v", default="5", help="The instance version")
 @click.option("--type", "-t", prompt=True, help="The instance type")
-@click.option(
-    "--cloud-provider", "-cp", prompt=True, help="The cloud provider for the instance"
-)
+@click.option("--cloud-provider", "-cp", prompt=True, help="The cloud provider for the instance")
 @click.option("--region", "-r", prompt=True, help="The instance region")
 @click.option("--memory", "-m", default="2", help="The instance memory size")
 @click.option("--name", "-n", default="Instance01", help="The instance name")

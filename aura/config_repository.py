@@ -37,16 +37,11 @@ class CLIConfig:
 
     def list_credentials(self):
         credentials = self.config["AUTH"].get("CREDENTIALS")
-        return [
-            {"Name": c, "ClientId": credentials[c]["CLIENT_ID"]}
-            for c in credentials.keys()
-        ]
+        return [{"Name": c, "ClientId": credentials[c]["CLIENT_ID"]} for c in credentials.keys()]
 
     def add_credentials(self, name, client_id, client_secret):
         if self.config["AUTH"]["CREDENTIALS"].get(name, None) is not None:
-            raise CredentialsAlreadyExist(
-                f"Credentials with name {name} already exist."
-            )
+            raise CredentialsAlreadyExist(f"Credentials with name {name} already exist.")
 
         self.config["AUTH"]["CREDENTIALS"][name] = {
             "CLIENT_ID": client_id,
@@ -105,15 +100,11 @@ class CLIConfig:
             if "CLIENT_ID" not in cred or not isinstance(cred["CLIENT_ID"], str):
                 raise InvalidConfigFile("Malformed config file")
 
-            if "CLIENT_SECRET" not in cred or not isinstance(
-                cred["CLIENT_SECRET"], str
-            ):
+            if "CLIENT_SECRET" not in cred or not isinstance(cred["CLIENT_SECRET"], str):
                 raise InvalidConfigFile("Malformed config file")
 
         active = auth.get("ACTIVE")
-        if active is not None and (
-            not isinstance(active, str) or active not in credentials
-        ):
+        if active is not None and (not isinstance(active, str) or active not in credentials):
             raise InvalidConfigFile("Malformed config file")
 
         # Validate Defaults section

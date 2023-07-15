@@ -29,9 +29,7 @@ def set(config, name, value):
         if name not in VALID_OPTIONS:
             raise InvalidConfigOption(f"No config option {name} exists")
         if value is None:
-            raise InvalidConfigOptionValue(
-                f"Please add a valid value for option {name}"
-            )
+            raise InvalidConfigOptionValue(f"Please add a valid value for option {name}")
 
         config.set_option(name, value)
     except Exception as e:
