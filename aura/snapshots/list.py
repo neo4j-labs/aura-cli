@@ -6,10 +6,11 @@ from aura.util.get_instance_id import get_instance_id
 
 # GET /instances/:instanceId/snapshots
 
+
 @api_command(help="List all snapshots for an instance")
-@click.option('--instance-id', '-id', help="The instance ID")
-@click.option('--instance-name', '-n', help="The instance name")
-@click.option('--date', '-d', help="Optional snapshot date")
+@click.option("--instance-id", "-id", help="The instance ID")
+@click.option("--instance-name", "-n", help="The instance name")
+@click.option("--date", "-d", help="Optional snapshot date")
 def list(instance_id, instance_name, date):
     instance_id = get_instance_id(instance_id, instance_name)
 
@@ -17,6 +18,6 @@ def list(instance_id, instance_name, date):
 
     params = {}
     if date:
-        params={"date": date}
+        params = {"date": date}
 
     return make_api_call("GET", path, params=params)

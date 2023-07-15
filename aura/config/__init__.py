@@ -16,9 +16,11 @@ aura config set default-tenant <my-tenant-id>\n
 aura config unset default-output
 """
 
+
 @click.group(help=help_text)
 def config():
     pass
+
 
 config.add_command(set)
 config.add_command(unset)

@@ -1,8 +1,8 @@
 from requests.exceptions import *
 import click
 
-def handle_error(exception):
 
+def handle_error(exception):
     if isinstance(exception, HTTPError):
         try:
             error_data = exception.response.json()
@@ -14,10 +14,12 @@ def handle_error(exception):
             elif exception.response.status_code == 404:
                 error_message = str(exception)
         except ValueError:
-            error_message = f"Unknown error (status code {exception.response.status_code})"
+            error_message = (
+                f"Unknown error (status code {exception.response.status_code})"
+            )
     elif isinstance(exception, ClientError):
         error_message = exception.message
-    elif isinstance(exception,  Timeout):
+    elif isinstance(exception, Timeout):
         error_message = "Request timed out"
     elif isinstance(exception, ConnectionError):
         error_message = "Connection error"
@@ -27,42 +29,55 @@ def handle_error(exception):
     click.echo(f"Error: {error_message}", err=True)
     click.get_current_context().exit(code=1)
 
+
 class ClientError(Exception):
     def __init__(self, message):
         self.message = message
 
+
 class InstanceNameNotFound(ClientError):
     pass
+
 
 class InstanceIDAndNameBothProvided(ClientError):
     pass
 
+
 class InstanceIDorNameMissing(ClientError):
     pass
+
 
 class NoCredentialsConfigured(ClientError):
     pass
 
+
 class CredentialsNotFound(ClientError):
     pass
+
 
 class InvalidConfigFile(ClientError):
     pass
 
+
 class CredentialsAlreadyExist(ClientError):
     pass
+
 
 class UnsupportedOutputFormat(ClientError):
     pass
 
+
 class DatabaseNameNotUnique(ClientError):
     pass
+
 
 class InvalidConfigOption(ClientError):
     pass
 
+
 class InvalidConfigOptionValue(ClientError):
     pass
+
 
 class NoTenantProvided(ClientError):
     pass

@@ -14,9 +14,11 @@ aura credentials use\n
 aura credentials list
 """
 
+
 @click.group(help=help_text)
 def credentials():
     pass
+
 
 credentials.add_command(add)
 credentials.add_command(use)

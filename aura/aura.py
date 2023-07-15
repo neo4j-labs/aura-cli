@@ -6,8 +6,12 @@ from aura.snapshots import snapshots
 from aura.tenants import tenants
 from aura.config import config
 
+
 @click.group()
-@click.version_option(message="Aura CLI: version 0.2.3, Aura API: version v1beta4", package_name="aura-cli")
+@click.version_option(
+    message="Aura CLI: version 0.2.3, Aura API: version v1beta4",
+    package_name="aura-cli",
+)
 @click.pass_context
 def cli(ctx):
     ctx.obj = CLIConfig()

@@ -10,6 +10,7 @@ Example usage:\n
 aura config list
 """
 
+
 @click.command(help=help_text)
 @pass_config
 def list(config):

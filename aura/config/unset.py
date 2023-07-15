@@ -15,6 +15,7 @@ aura config unset default-tenant\n
 aura config unset default-output
 """
 
+
 @click.argument("name")
 @click.command(help=help_text)
 @pass_config
@@ -22,7 +23,7 @@ def unset(config, name):
     try:
         if name not in VALID_OPTIONS:
             raise InvalidConfigOption(f"No config option {name} exists")
-        
+
         config.unset_option(name)
     except Exception as e:
         handle_error(e)

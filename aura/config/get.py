@@ -15,6 +15,7 @@ aura config get default-tenant\n
 aura config get default-output
 """
 
+
 @click.argument("name")
 @click.command(help=help_text)
 @pass_config
@@ -22,7 +23,7 @@ def get(config, name):
     try:
         if name not in VALID_OPTIONS:
             raise InvalidConfigOption(f"No config option {name} exists")
-    
+
         value = config.get_option(name)
     except Exception as e:
         handle_error(e)
@@ -30,4 +31,4 @@ def get(config, name):
     if value is None:
         return print(f"No value for {name} set")
 
-    print(f"Config option {name} is set to \"{value}\"")
+    print(f'Config option {name} is set to "{value}"')

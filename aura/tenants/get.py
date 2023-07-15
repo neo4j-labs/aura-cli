@@ -6,8 +6,9 @@ from aura.error_handler import NoTenantProvided
 
 # GET /tenants/:tenantId
 
+
 @api_command(help="Get details for a tenant")
-@click.option('--tenant-id', '-id', help="The ID of the tenant")
+@click.option("--tenant-id", "-id", help="The ID of the tenant")
 @pass_config
 def get(config, tenant_id):
     if tenant_id is None:

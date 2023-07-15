@@ -8,9 +8,11 @@ from .pause import pause
 from .resume import resume
 from .overwrite import overwrite
 
+
 @click.group(help="Manage your Aura instances")
 def instances():
     pass
+
 
 instances.add_command(create)
 instances.add_command(get)
