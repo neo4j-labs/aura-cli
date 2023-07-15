@@ -73,7 +73,6 @@ def get_headers():
 
 def make_api_call(method, path, **kwargs):
     headers = get_headers()
-    print(headers)
     base_url = os.environ.get("AURA_CLI_BASE_URL") or DEFAULT_BASE_URL
 
     response = requests.request(method, base_url + path, headers=headers, **kwargs)

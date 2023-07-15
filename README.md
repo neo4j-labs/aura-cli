@@ -8,6 +8,13 @@ When finished, run `deactivate` to deactivate the venv.
 
 To run the unit tests, run `pytest tests/`.
 
+For development you will need the following packages:
+- `pytest`
+- `black`
+- `pylint`
+- `pre-commit`
+- `pytest-cov`
+
 ### Environment Variables
 
 There are 4 environment variables that can be set for use in the CLI:

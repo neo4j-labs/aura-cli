@@ -5,3 +5,12 @@ repos:
     - id: black
       files: ^aura/|^tests/
       args: [--line-length=100, --experimental-string-processing]
+# To enable pylint, uncomment the lines below:
+#  - repo: local
+#    hooks:
+#    - id: pylint
+#      name: pylint
+#      entry: pylint
+#      language: system
+#      types: [python]
+#      files: ^aura/|^tests/
