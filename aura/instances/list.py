@@ -15,7 +15,8 @@ def list(config, tenant_id):
 
     params = {}
     if tenant_id is not None:
-        params = {"tenant_id": tenant_id}
-    path = "/instances"
-
+        #params = {"tenant_id": tenant_id}
+        path = f"/instances?tenantId={tenant_id}"
+    else:
+        path = "/instances"
     return make_api_call("GET", path, params=params)
