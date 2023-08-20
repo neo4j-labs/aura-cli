@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 import json
 
-from aura.instances import create as create_instance
+from aura.instances import create_instance
 from tests.conftest import printed_data
 
 
@@ -75,6 +75,7 @@ def test_create_instance(api_request, mock_config):
                 "cloud_provider": "gcp",
             }
         ),
+        timeout=10,
     )
 
 
@@ -132,6 +133,7 @@ def test_create_instance_with_memory(api_request, mock_config):
                 "cloud_provider": "gcp",
             }
         ),
+        timeout=10,
     )
 
 
@@ -189,4 +191,5 @@ def test_create_instance_with_version(api_request, mock_config):
                 "cloud_provider": "gcp",
             }
         ),
+        timeout=10,
     )

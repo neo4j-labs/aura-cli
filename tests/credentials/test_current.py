@@ -3,7 +3,7 @@ import pytest
 from click.testing import CliRunner
 from unittest.mock import MagicMock
 
-from aura.credentials import current as current_credentials
+from aura.credentials import current_credentials
 
 
 def test_current_credentials():
@@ -18,9 +18,7 @@ def test_current_credentials():
     result = runner.invoke(current_credentials, [], obj=mock_config)
 
     assert result.exit_code == 0
-    assert (
-        result.output == f"Current credentials:\nName:\t\ttest\nClient ID:\ttest-id\n"
-    )
+    assert result.output == f"Current credentials:\nName:\t\ttest\nClient ID:\ttest-id\n"
 
     mock_config.current_credentials.assert_called_once()
 

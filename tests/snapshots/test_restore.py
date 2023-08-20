@@ -3,7 +3,7 @@ import pytest
 from click.testing import CliRunner
 from unittest.mock import MagicMock, Mock
 
-from aura.snapshots import restore as restore_snapshot
+from aura.snapshots import restore_snapshot
 
 
 def mock_response():
@@ -43,6 +43,7 @@ def test_restore_snapshot(api_request, mock_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
+        timeout=10,
     )
 
 
@@ -68,4 +69,5 @@ def test_restore_snapshot_with_name(api_request, mock_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
+        timeout=10,
     )

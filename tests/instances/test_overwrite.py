@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 import json
 
-from aura.instances import overwrite as overwrite_instance
+from aura.instances import overwrite_instance
 
 
 def mock_response():
@@ -42,6 +42,7 @@ def test_overwrite_instance(api_request, mock_config):
             "Authorization": f"Bearer dummy-token",
         },
         data=json.dumps({"source_instance_id": "456"}),
+        timeout=10,
     )
 
 
@@ -68,4 +69,5 @@ def test_overwrite_instance_with_name(api_request, mock_config):
             "Authorization": f"Bearer dummy-token",
         },
         data=json.dumps({"source_instance_id": "456"}),
+        timeout=10,
     )

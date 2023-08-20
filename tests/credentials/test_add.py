@@ -3,7 +3,7 @@ import pytest
 from click.testing import CliRunner
 from unittest.mock import MagicMock
 
-from aura.credentials import add as add_credentials
+from aura.credentials import add_credentials
 
 
 def test_add_credentials():
@@ -30,6 +30,4 @@ def test_add_credentials():
         == f'\nCredentials "test" successfully saved. Now using "test" as credentials.\n'
     )
 
-    mock_config.add_credentials.assert_called_once_with(
-        "test", "client-123", "super-secret"
-    )
+    mock_config.add_credentials.assert_called_once_with("test", "client-123", "super-secret")

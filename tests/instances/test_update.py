@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 import json
 
-from aura.instances import update as update_instance
+from aura.instances import update_instance
 
 
 def mock_response():
@@ -42,6 +42,7 @@ def test_update_instance_name(api_request, mock_config):
             "Authorization": f"Bearer dummy-token",
         },
         data=json.dumps({"name": "InstanceTest"}),
+        timeout=10,
     )
 
 
@@ -68,6 +69,7 @@ def test_update_instance_name_with_name(api_request, mock_config):
             "Authorization": f"Bearer dummy-token",
         },
         data=json.dumps({"name": "InstanceTest"}),
+        timeout=10,
     )
 
 
@@ -93,6 +95,7 @@ def test_update_instance_memory(api_request, mock_config):
             "Authorization": f"Bearer dummy-token",
         },
         data=json.dumps({"memory": "8GB"}),
+        timeout=10,
     )
 
 
@@ -118,4 +121,5 @@ def test_update_instance_name_and_memory(api_request, mock_config):
             "Authorization": f"Bearer dummy-token",
         },
         data=json.dumps({"memory": "8GB", "name": "InstanceTest"}),
+        timeout=10,
     )

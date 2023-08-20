@@ -4,7 +4,7 @@ import pytest
 from click.testing import CliRunner
 from unittest.mock import MagicMock
 
-from aura.credentials import use as use_credentials
+from aura.credentials import use_credentials
 
 
 def test_use_credentials():

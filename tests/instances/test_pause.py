@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 import json
 
-from aura.instances import pause as pause_instance
+from aura.instances import pause_instance
 
 
 def mock_response():
@@ -25,9 +25,7 @@ def test_pause_instance(api_request, mock_config):
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(
-        pause_instance, ["--instance-id", "123"], obj=mock_config
-    )
+    result = runner.invoke(pause_instance, ["--instance-id", "123"], obj=mock_config)
 
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
@@ -39,6 +37,7 @@ def test_pause_instance(api_request, mock_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
+        timeout=10,
     )
 
 
@@ -48,9 +47,7 @@ def test_pause_instance_with_name(api_request, mock_config):
     # Mock first call for getting instances and finding the id from the name
     api_request.side_effect = [mock_instances_response(), mock_response()]
 
-    result = runner.invoke(
-        pause_instance, ["--name", "Instance01"], obj=mock_config
-    )
+    result = runner.invoke(pause_instance, ["--name", "Instance01"], obj=mock_config)
 
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
@@ -62,4 +59,5 @@ def test_pause_instance_with_name(api_request, mock_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
+        timeout=10,
     )
