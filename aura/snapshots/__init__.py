@@ -1,8 +1,8 @@
 import click
-from .create import create
-from .list import list
-from .restore import restore
-from .get import get
+from .create import create_snapshot
+from .list import list_snapshots
+from .restore import restore_snapshot
+from .get import get_snapshot
 
 
 @click.group(help="Manage instance snapshots")
@@ -10,7 +10,7 @@ def snapshots():
     pass
 
 
-snapshots.add_command(create)
-snapshots.add_command(list)
-snapshots.add_command(restore)
-snapshots.add_command(get)
+snapshots.add_command(create_snapshot)
+snapshots.add_command(list_snapshots)
+snapshots.add_command(restore_snapshot)
+snapshots.add_command(get_snapshot)

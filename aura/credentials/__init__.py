@@ -1,11 +1,11 @@
 import click
-from .add import add
-from .use import use
-from .list import list
-from .delete import delete
-from .current import current
+from .add import add_credentials
+from .use import use_credentials
+from .list import list_credentials
+from .delete import delete_credentials
+from .current import current_credentials
 
-help_text = """
+HELP_TEXT = """
 Configure and manage OAuth credentials
 
 Example usage:\n
@@ -15,13 +15,13 @@ aura credentials list
 """
 
 
-@click.group(help=help_text)
+@click.group(help=HELP_TEXT)
 def credentials():
     pass
 
 
-credentials.add_command(add)
-credentials.add_command(use)
-credentials.add_command(list)
-credentials.add_command(delete)
-credentials.add_command(current)
+credentials.add_command(add_credentials)
+credentials.add_command(use_credentials)
+credentials.add_command(list_credentials)
+credentials.add_command(delete_credentials)
+credentials.add_command(current_credentials)

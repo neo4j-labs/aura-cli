@@ -1,9 +1,10 @@
 import click
+from aura.config_repository import CLIConfig
 from aura.decorators import pass_config
 from aura.error_handler import InvalidConfigOption, handle_error
 from .valid_options import VALID_OPTIONS
 
-help_text = """
+HELP_TEXT = """
 Unset a config option value
 
 Valid config options:\n
@@ -17,15 +18,18 @@ aura config unset default-output
 
 
 @click.argument("name")
-@click.command(help=help_text)
+@click.command(name="unset", help=HELP_TEXT)
 @pass_config
-def unset(config, name):
+def unset_option(config: CLIConfig, name: str):
+    """
+    Delete a config value
+    """
     try:
         if name not in VALID_OPTIONS:
             raise InvalidConfigOption(f"No config option {name} exists")
 
         config.unset_option(name)
-    except Exception as e:
-        handle_error(e)
+    except Exception as exception:
+        handle_error(exception)
 
     print(f"Config option {name} unset")

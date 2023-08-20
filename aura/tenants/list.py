@@ -1,11 +1,15 @@
 from aura.api_command import api_command
 from aura.api_repository import make_api_call
 
-# GET /tenants
 
+@api_command(name="list", help_text="List all tenants for current user")
+def list_tenants():
+    """
+    List tenants a user belongs to.
 
-@api_command(help_text="List all tenants for current user")
-def list():
+    Makes "GET /tenants" API request.
+    """
+
     path = "/tenants"
 
     return make_api_call("GET", path)

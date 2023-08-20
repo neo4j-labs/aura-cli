@@ -10,6 +10,12 @@ from aura.token_repository import delete_token_file
 
 
 class CLIConfig:
+    """
+    Class which handles configurations of the CLI.
+    The CLI's configuration is saved locally as a json file.
+    This class handles loading, validatinf and updating this config.
+    """
+
     AURA_CONFIG_PATH = "~/.aura/config.json"
     DEFAULT_CONFIG = {
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
@@ -40,16 +46,11 @@ class CLIConfig:
 
     def list_credentials(self):
         credentials = self.config["AUTH"].get("CREDENTIALS")
-        return [
-            {"Name": c, "ClientId": credentials[c]["CLIENT_ID"]}
-            for c in credentials.keys()
-        ]
+        return [{"Name": c, "ClientId": credentials[c]["CLIENT_ID"]} for c in credentials.keys()]
 
     def add_credentials(self, name: str, client_id: str, client_secret: str):
         if self.config["AUTH"]["CREDENTIALS"].get(name, None) is not None:
-            raise CredentialsAlreadyExist(
-                f"Credentials with name {name} already exist."
-            )
+            raise CredentialsAlreadyExist(f"Credentials with name {name} already exist.")
 
         self.config["AUTH"]["CREDENTIALS"][name] = {
             "CLIENT_ID": client_id,
@@ -105,20 +106,14 @@ class CLIConfig:
             if not isinstance(cred, dict):
                 raise InvalidConfigFile("Malformed config file")
 
-            if "CLIENT_ID" not in cred or not isinstance(
-                cred["CLIENT_ID"], str
-            ):
+            if "CLIENT_ID" not in cred or not isinstance(cred["CLIENT_ID"], str):
                 raise InvalidConfigFile("Malformed config file")
 
-            if "CLIENT_SECRET" not in cred or not isinstance(
-                cred["CLIENT_SECRET"], str
-            ):
+            if "CLIENT_SECRET" not in cred or not isinstance(cred["CLIENT_SECRET"], str):
                 raise InvalidConfigFile("Malformed config file")
 
         active = auth.get("ACTIVE")
-        if active is not None and (
-            not isinstance(active, str) or active not in credentials
-        ):
+        if active is not None and (not isinstance(active, str) or active not in credentials):
             raise InvalidConfigFile("Malformed config file")
 
         # Validate Defaults section

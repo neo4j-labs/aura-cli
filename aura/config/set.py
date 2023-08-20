@@ -1,5 +1,6 @@
 import click
-from .valid_options import VALID_OPTIONS
+from aura.config_repository import CLIConfig
+from aura.config.valid_options import VALID_OPTIONS
 from aura.decorators import pass_config
 from aura.error_handler import (
     InvalidConfigOption,
@@ -7,7 +8,7 @@ from aura.error_handler import (
     handle_error,
 )
 
-help_text = """
+HELP_TEXT = """
 Set a config option to a new value
 
 Valid config options:\n
@@ -20,11 +21,14 @@ aura config set default-output table
 """
 
 
-@click.command(help=help_text)
+@click.command(name="set", help=HELP_TEXT)
 @click.argument("name")
 @click.argument("value")
 @pass_config
-def set(config, name, value):
+def set_option(config: CLIConfig, name: str, value: str):
+    """
+    Set a config option to specified value
+    """
     try:
         if name not in VALID_OPTIONS:
             raise InvalidConfigOption(f"No config option {name} exists")
@@ -32,7 +36,7 @@ def set(config, name, value):
             raise InvalidConfigOptionValue(f"Please add a valid value for option {name}")
 
         config.set_option(name, value)
-    except Exception as e:
-        handle_error(e)
+    except Exception as exception:
+        handle_error(exception)
 
     print(f'Config option {name} set to "{value}"')

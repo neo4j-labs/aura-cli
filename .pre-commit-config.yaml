@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: black
         files: ^aura/|^tests/
-        args: [--line-length=80, --experimental-string-processing]
+        args: [--line-length=100, --experimental-string-processing]
 # To enable pylint, uncomment the lines below:
 #  - repo: local
 #    hooks:

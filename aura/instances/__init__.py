@@ -1,12 +1,12 @@
 import click
-from .create import create
-from .get import get
-from .list import list
-from .update import update
-from .delete import delete
-from .pause import pause
-from .resume import resume
-from .overwrite import overwrite
+from .create import create_instance
+from .get import get_instance
+from .list import list_instances
+from .update import update_instance
+from .delete import delete_instance
+from .pause import pause_instance
+from .resume import resume_instance
+from .overwrite import overwrite_instance
 
 
 @click.group(help="Manage your Aura instances")
@@ -14,11 +14,11 @@ def instances():
     pass
 
 
-instances.add_command(create)
-instances.add_command(get)
-instances.add_command(list)
-instances.add_command(update)
-instances.add_command(delete)
-instances.add_command(pause)
-instances.add_command(resume)
-instances.add_command(overwrite)
+instances.add_command(create_instance)
+instances.add_command(get_instance)
+instances.add_command(list_instances)
+instances.add_command(update_instance)
+instances.add_command(delete_instance)
+instances.add_command(pause_instance)
+instances.add_command(resume_instance)
+instances.add_command(overwrite_instance)

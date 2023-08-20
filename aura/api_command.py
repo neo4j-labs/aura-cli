@@ -6,7 +6,7 @@ from aura.error_handler import UnsupportedOutputFormat, handle_error
 from aura.format import format_table_output, format_text_output
 
 
-def api_command(help_text: str):
+def api_command(name: str, help_text: str):
     """
     Decorator for all API CLI commands.
 
@@ -16,7 +16,7 @@ def api_command(help_text: str):
     """
 
     def api_command_decorator(func):
-        @click.command(help=help_text)
+        @click.command(name=name, help=help_text)
         @click.option("--output", help="Set the output format of a command")
         @click.option(
             "--include",
@@ -55,9 +55,7 @@ def api_command(help_text: str):
 
                 ctx = click.get_current_context()
                 config = ctx.obj
-                output_format = (
-                    output or config.get_option("default-output") or "json"
-                )
+                output_format = output or config.get_option("default-output") or "json"
 
                 if data is None:
                     print("Operation successful")
@@ -70,9 +68,7 @@ def api_command(help_text: str):
                     out = format_text_output(data)
                     print(out)
                 else:
-                    raise UnsupportedOutputFormat(
-                        f"Unsupported output format {output_format}"
-                    )
+                    raise UnsupportedOutputFormat(f"Unsupported output format {output_format}")
 
                 return click.get_current_context().exit(code=0)
 

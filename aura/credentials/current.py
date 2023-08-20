@@ -1,15 +1,19 @@
 import click
+from aura.config_repository import CLIConfig
 from aura.error_handler import handle_error
 from aura.decorators import pass_config
 
 
-@click.command(help="Print the currently selected credentials")
+@click.command(name="current", help="Print the currently selected credentials")
 @pass_config
-def current(config):
+def current_credentials(config: CLIConfig):
+    """
+    Print the credentials currently in use
+    """
     try:
         name, creds = config.current_credentials()
-    except Exception as e:
-        handle_error(e)
+    except Exception as exception:
+        handle_error(exception)
 
     if name is None:
         return click.echo("No credentials have been selected.")
