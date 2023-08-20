@@ -9,7 +9,7 @@ from aura.config import config
 
 @click.group()
 @click.version_option(
-    message="Aura CLI: version 0.2.3, Aura API: version v1beta4",
+    message="Aura CLI: version 0.2.3, Aura API: version v1",
     package_name="aura-cli",
 )
 @click.pass_context

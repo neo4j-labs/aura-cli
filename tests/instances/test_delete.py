@@ -32,7 +32,7 @@ def test_delete_instance(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "DELETE",
-        "https://api.neo4j.io/v1beta4/instances/123",
+        "https://api.neo4j.io/v1/instances/123",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -55,7 +55,7 @@ def test_delete_instance_with_name(api_request, mock_config):
 
     api_request.assert_called_with(
         "DELETE",
-        "https://api.neo4j.io/v1beta4/instances/123",
+        "https://api.neo4j.io/v1/instances/123",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",

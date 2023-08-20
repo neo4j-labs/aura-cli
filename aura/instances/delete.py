@@ -11,7 +11,7 @@ def abort_if_false(ctx, param, value):
         ctx.abort()
 
 
-@api_command(help="Delete an instance")
+@api_command(help_text="Delete an instance")
 @click.option("--instance-id", "-id", help="The instance ID")
 @click.option(
     "--yes",

@@ -2,9 +2,9 @@ repos:
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:
-    - id: black
-      files: ^aura/|^tests/
-      args: [--line-length=100, --experimental-string-processing]
+      - id: black
+        files: ^aura/|^tests/
+        args: [--line-length=80, --experimental-string-processing]
 # To enable pylint, uncomment the lines below:
 #  - repo: local
 #    hooks:

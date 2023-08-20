@@ -24,10 +24,13 @@ def test_list_credentials():
         result.output
         == format_text_output(
             [
-                {"Name": "prod", "ClientId": "e3jso20fnak29sk", "Current": "   X   "},
+                {
+                    "Name": "prod",
+                    "ClientId": "e3jso20fnak29sk",
+                    "Current": "   X   ",
+                },
                 {"Name": "dev", "ClientId": "j3n3dmksd03isi8", "Current": ""},
-            ],
-            printing=False,
+            ]
         )
         + "\n"
     )

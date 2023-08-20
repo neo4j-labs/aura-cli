@@ -6,7 +6,7 @@ from aura.util.get_instance_id import get_instance_id
 # GET /instances/:instanceId
 
 
-@api_command(help="Get details for an instance")
+@api_command(help_text="Get details for an instance")
 @click.option("--instance-id", "-id", help="The instance ID")
 @click.option("--name", "-n", help="The instance name")
 def get(instance_id, name):

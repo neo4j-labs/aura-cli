@@ -24,14 +24,16 @@ def test_create_snapshot(api_request, mock_config):
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(create_snapshot, ["--instance-id", "123"], obj=mock_config)
+    result = runner.invoke(
+        create_snapshot, ["--instance-id", "123"], obj=mock_config
+    )
 
     assert result.exit_code == 0
     assert result.output == "Operation successful\n"
 
     api_request.assert_called_once_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances/123/snapshots",
+        "https://api.neo4j.io/v1/instances/123/snapshots",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -54,7 +56,7 @@ def test_create_snapshot_with_name(api_request, mock_config):
 
     api_request.assert_called_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances/123/snapshots",
+        "https://api.neo4j.io/v1/instances/123/snapshots",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",

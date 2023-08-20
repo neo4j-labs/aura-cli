@@ -27,7 +27,9 @@ def test_get_instance(api_request, mock_config):
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(get_instance, ["--instance-id", "123"], obj=mock_config)
+    result = runner.invoke(
+        get_instance, ["--instance-id", "123"], obj=mock_config
+    )
 
     assert result.exit_code == 0
     assert result.output == printed_data(
@@ -36,7 +38,7 @@ def test_get_instance(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "GET",
-        "https://api.neo4j.io/v1beta4/instances/123",
+        "https://api.neo4j.io/v1/instances/123",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -50,7 +52,9 @@ def test_get_instance_with_name(api_request, mock_config):
     # Mock first call for getting instances and finding the id from the name
     api_request.side_effect = [mock_instances_response(), mock_response()]
 
-    result = runner.invoke(get_instance, ["--name", "Instance01"], obj=mock_config)
+    result = runner.invoke(
+        get_instance, ["--name", "Instance01"], obj=mock_config
+    )
 
     assert result.exit_code == 0
     assert result.output == printed_data(
@@ -59,7 +63,7 @@ def test_get_instance_with_name(api_request, mock_config):
 
     api_request.assert_called_with(
         "GET",
-        "https://api.neo4j.io/v1beta4/instances/123",
+        "https://api.neo4j.io/v1/instances/123",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",

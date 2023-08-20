@@ -38,7 +38,7 @@ def test_restore_snapshot(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances/123/snapshots/789789/restore",
+        "https://api.neo4j.io/v1/instances/123/snapshots/789789/restore",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -63,7 +63,7 @@ def test_restore_snapshot_with_name(api_request, mock_config):
 
     api_request.assert_called_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances/123/snapshots/789789/restore",
+        "https://api.neo4j.io/v1/instances/123/snapshots/789789/restore",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",

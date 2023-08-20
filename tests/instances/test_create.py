@@ -59,7 +59,7 @@ def test_create_instance(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances",
+        "https://api.neo4j.io/v1/instances",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -116,7 +116,7 @@ def test_create_instance_with_memory(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances",
+        "https://api.neo4j.io/v1/instances",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -173,7 +173,7 @@ def test_create_instance_with_version(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "POST",
-        "https://api.neo4j.io/v1beta4/instances",
+        "https://api.neo4j.io/v1/instances",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",

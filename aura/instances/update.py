@@ -7,9 +7,11 @@ from aura.util.get_instance_id import get_instance_id
 # PATCH /instances/:instanceId
 
 
-@api_command(help="Update an instance")
+@api_command(help_text="Update an instance")
 @click.option("--instance-id", "-id", help="The instance ID")
-@click.option("--memory", "-m", help="A new instance memory size (for resizing)")
+@click.option(
+    "--memory", "-m", help="A new instance memory size (for resizing)"
+)
 @click.option("--new-name", help="A new instance name (for renaming)")
 @click.option("--name", "-n", help="The instance name")
 def update(instance_id, memory, new_name, name):

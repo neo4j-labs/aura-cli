@@ -29,7 +29,7 @@ def test_list_instances(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "GET",
-        "https://api.neo4j.io/v1beta4/instances",
+        "https://api.neo4j.io/v1/instances",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
@@ -43,7 +43,9 @@ def test_list_instances_with_tenant_id(api_request, mock_config):
 
     api_request.return_value = mock_response()
 
-    result = runner.invoke(list_instances, ["--tenant-id", "qwe123"], obj=mock_config)
+    result = runner.invoke(
+        list_instances, ["--tenant-id", "qwe123"], obj=mock_config
+    )
 
     assert result.exit_code == 0
     assert result.output == printed_data(
@@ -52,7 +54,7 @@ def test_list_instances_with_tenant_id(api_request, mock_config):
 
     api_request.assert_called_once_with(
         "GET",
-        "https://api.neo4j.io/v1beta4/instances",
+        "https://api.neo4j.io/v1/instances",
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",

@@ -21,7 +21,7 @@ def test_list_config_options():
     assert (
         result.output
         == format_text_output(
-            [{"Option": "default-tenant", "Value": "my-tenant-id"}], printing=False
+            [{"Option": "default-tenant", "Value": "my-tenant-id"}]
         )
         + "\n"
     )
