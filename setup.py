@@ -8,7 +8,7 @@ with open("test-requirements.txt") as f:
 
 # Load the version
 version = {}
-with open("path/to/version.py") as f:
+with open("aura/version.py") as f:
     exec(f.read(), version)
 
 setup(
