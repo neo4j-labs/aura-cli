@@ -3,13 +3,17 @@ from setuptools import find_packages, setup
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
-
 with open("test-requirements.txt") as f:
     test_requirements = f.read().splitlines()
 
+# Load the version
+version = {}
+with open("path/to/version.py") as f:
+    exec(f.read(), version)
+
 setup(
     name="aura-cli",
-    version="0.2.3",
+    version=version['__version__'],
     packages=find_packages(),
     include_package_data=True,
     install_requires=requirements,

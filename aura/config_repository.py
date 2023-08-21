@@ -7,6 +7,7 @@ from aura.error_handler import (
     InvalidConfigFile,
 )
 from aura.token_repository import delete_token_file
+from aura.version import __version__
 
 
 class CLIConfig:
@@ -18,6 +19,7 @@ class CLIConfig:
 
     AURA_CONFIG_PATH = "~/.aura/config.json"
     DEFAULT_CONFIG = {
+        "VERSION": __version__,
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
         "DEFAULTS": {},
     }
@@ -31,7 +33,8 @@ class CLIConfig:
             with open(self.config_path, "r", encoding="utf-8") as configfile:
                 config = json.load(configfile)
         except FileNotFoundError:
-            return self.write_config(self.DEFAULT_CONFIG)
+            config = self.write_config(self.DEFAULT_CONFIG)
+            return config
 
         self.validate_config(config)
         return config

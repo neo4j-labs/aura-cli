@@ -4,6 +4,7 @@ import click
 from requests.auth import HTTPBasicAuth
 import requests
 
+from aura.version import __version__
 from aura.error_handler import NoCredentialsConfigured
 from aura.token_repository import (
     check_existing_token,
@@ -50,7 +51,7 @@ def _authenticate():
 
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "AuraCLI/0.2.3",
+        "User-Agent": f"AuraCLI/{__version__}",
     }
     data = {"grant_type": "client_credentials"}
 
@@ -80,7 +81,7 @@ def get_headers():
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}",
-        "User-Agent": "AuraCLI/0.2.3",
+        "User-Agent": f"AuraCLI/{__version__}",
     }
     return headers
 
@@ -91,9 +92,7 @@ def make_api_call(method: str, path: str, **kwargs):
     headers = get_headers()
     base_url = os.environ.get("AURA_CLI_BASE_URL") or DEFAULT_BASE_URL
 
-    response = requests.request(
-        method, base_url + path, headers=headers, timeout=10, **kwargs
-    )
+    response = requests.request(method, base_url + path, headers=headers, timeout=10, **kwargs)
     # If authentication failed, delete the token file to avoid using same token again
     if response.status_code in [401, 403]:
         delete_token_file()

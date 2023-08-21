@@ -5,11 +5,12 @@ from aura.credentials import credentials
 from aura.snapshots import snapshots
 from aura.tenants import tenants
 from aura.config import config
+from aura.version import __version__
 
 
 @click.group()
 @click.version_option(
-    message="Aura CLI: version 0.2.3, Aura API: version v1",
+    message=f"Aura CLI: version {__version__}, Aura API: version v1",
     package_name="aura-cli",
 )
 @click.pass_context
