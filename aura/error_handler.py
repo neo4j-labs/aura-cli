@@ -19,19 +19,15 @@ def handle_error(exception: Exception):
             error_data = exception.response.json()
             error_message = "Unknown Error"
 
+            if exception.response.status_code in [403, 404]:
+                error_message = str(exception)
             # Most errors returned by the API will have a error/errors field with the error message
-            if "error" in error_data:
+            elif "error" in error_data:
                 error_message = error_data["error"]
             elif "errors" in error_data:
-                error_message = "\n".join(
-                    [e["message"] for e in error_data["errors"]]
-                )
-            elif exception.response.status_code == 404:
-                error_message = str(exception)
+                error_message = "\n".join([e["message"] for e in error_data["errors"]])
         except ValueError:
-            error_message = (
-                f"Unknown error (status code {exception.response.status_code})"
-            )
+            error_message = f"Unknown error (status code {exception.response.status_code})"
 
     elif isinstance(exception, ClientError):
         error_message = exception.message
