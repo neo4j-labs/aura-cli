@@ -5,7 +5,7 @@ from aura.config_repository import CLIConfig
 from aura.decorators import pass_config
 
 
-@api_command(name="get", help_text="Get details for a tenant")
+@api_command(name="get", help_text="Get details for a tenant", fixed_cmd_output="json")
 @click.option("--tenant-id", "-id", help="The ID of the tenant")
 @pass_config
 def get_tenant(config: CLIConfig, tenant_id: str):
@@ -13,6 +13,9 @@ def get_tenant(config: CLIConfig, tenant_id: str):
     Get details of a tenant.
 
     Makes "GET /tenants/:tenantId" API request.
+
+    fixed_cmd_output is set to json because its a nested object that can not be
+    displayed in table or text.
     """
 
     if tenant_id is None:
