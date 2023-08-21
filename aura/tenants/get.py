@@ -18,7 +18,7 @@ def get_tenant(config: CLIConfig, tenant_id: str):
     if tenant_id is None:
         tenant_id = config.get_option("default-tenant")
     if tenant_id is None:
-        click.prompt("Tenant ID")
+        tenant_id = click.prompt("Tenant ID")
 
     path = f"/tenants/{tenant_id}"
 
