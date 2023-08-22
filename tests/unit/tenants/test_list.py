@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 
 from aura.tenants import list_tenants
-from tests.conftest import printed_data
+from unit.conftest import printed_data
 
 
 def mock_response():

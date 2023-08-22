@@ -3,7 +3,7 @@ from click.testing import CliRunner
 from unittest.mock import Mock
 
 from aura.instances import list_instances
-from tests.conftest import printed_data
+from unit.conftest import printed_data
 
 
 def mock_response():

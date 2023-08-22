@@ -56,7 +56,8 @@ def _authenticate():
     data = {"grant_type": "client_credentials"}
 
     url = os.environ.get("AURA_CLI_AUTH_URL") or DEFAULT_AUTH_URL
-    response = requests.post(
+    response = requests.request(
+        "POST",
         url,
         headers=headers,
         data=data,
