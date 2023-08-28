@@ -53,7 +53,7 @@ class CLIConfig:
 
     def add_credentials(self, name: str, client_id: str, client_secret: str):
         if self.config["AUTH"]["CREDENTIALS"].get(name, None) is not None:
-            raise CredentialsAlreadyExist(f"Credentials with name {name} already exist.")
+            raise CredentialsAlreadyExist(name)
 
         self.config["AUTH"]["CREDENTIALS"][name] = {
             "CLIENT_ID": client_id,
@@ -80,7 +80,7 @@ class CLIConfig:
                 self.config["AUTH"]["ACTIVE"] = None
             self.write_config(self.config)
         else:
-            raise CredentialsNotFound(f"Credentials {name} not found")
+            raise CredentialsNotFound(name)
 
     def use_credentials(self, name: str):
         if name in self.config["AUTH"]["CREDENTIALS"]:
@@ -90,34 +90,34 @@ class CLIConfig:
             # Delete saved auth token if it exists
             delete_token_file()
         else:
-            raise CredentialsNotFound(f"Credentials {name} not found")
+            raise CredentialsNotFound(name)
 
     def validate_config(self, config: dict):
         if not isinstance(config, dict):
-            raise InvalidConfigFile("Config file has an invalid type")
+            raise InvalidConfigFile()
 
         # Validate Auth section
         auth = config.get("AUTH")
         if not isinstance(auth, dict):
-            raise InvalidConfigFile("Malformed config file")
+            raise InvalidConfigFile()
 
         credentials = auth.get("CREDENTIALS")
         if not isinstance(credentials, dict):
-            raise InvalidConfigFile("Malformed config file")
+            raise InvalidConfigFile()
 
         for _, cred in credentials.items():
             if not isinstance(cred, dict):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
             if "CLIENT_ID" not in cred or not isinstance(cred["CLIENT_ID"], str):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
             if "CLIENT_SECRET" not in cred or not isinstance(cred["CLIENT_SECRET"], str):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
         active = auth.get("ACTIVE")
         if active is not None and (not isinstance(active, str) or active not in credentials):
-            raise InvalidConfigFile("Malformed config file")
+            raise InvalidConfigFile()
 
         # Validate Defaults section
         defaults = config.get("DEFAULTS")
@@ -126,14 +126,14 @@ class CLIConfig:
             self.write_config(self.config)
         else:
             if not isinstance(defaults, dict):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
             for option, default in defaults.items():
                 if not isinstance(option, str):
-                    raise InvalidConfigFile("Malformed config file")
+                    raise InvalidConfigFile()
 
                 if not isinstance(default, str):
-                    raise InvalidConfigFile("Malformed config file")
+                    raise InvalidConfigFile()
 
     def set_option(self, name: str, value: str):
         self.config["DEFAULTS"][name] = value

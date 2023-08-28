@@ -24,9 +24,7 @@ def test_use_credentials_not_found():
     runner = CliRunner()
 
     mock_config = MagicMock(spec=CLIConfig)
-    mock_config.use_credentials.side_effect = CredentialsNotFound(
-        "Credentials test-creds not found"
-    )
+    mock_config.use_credentials.side_effect = CredentialsNotFound("test-creds")
 
     result = runner.invoke(use_credentials, ["test-creds"], obj=mock_config)
 

@@ -31,9 +31,9 @@ def set_option(config: CLIConfig, name: str, value: str):
     """
     try:
         if name not in VALID_OPTIONS:
-            raise InvalidConfigOption(f"No config option {name} exists")
+            raise InvalidConfigOption(name)
         if value is None:
-            raise InvalidConfigOptionValue(f"Please add a valid value for option {name}")
+            raise InvalidConfigOptionValue(name)
 
         config.set_option(name, value)
     except Exception as exception:

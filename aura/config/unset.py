@@ -26,7 +26,7 @@ def unset_option(config: CLIConfig, name: str):
     """
     try:
         if name not in VALID_OPTIONS:
-            raise InvalidConfigOption(f"No config option {name} exists")
+            raise InvalidConfigOption(name)
 
         config.unset_option(name)
     except Exception as exception:

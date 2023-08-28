@@ -70,7 +70,7 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                     out = format_text_output(data)
                     print(out)
                 else:
-                    raise UnsupportedOutputFormat(f"Unsupported output format {output_format}")
+                    raise UnsupportedOutputFormat(output_format)
 
                 return click.get_current_context().exit(code=0)
 
