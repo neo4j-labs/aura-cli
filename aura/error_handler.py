@@ -139,7 +139,7 @@ class InvalidConfigOptionValue(ClientError):
 
 
 class UnsupportedConfigFileVersion(ClientError):
-    """Exception raised when setting a config option with an invalid value"""
+    """Exception raised when version of the config file is too outdated"""
 
     def __init__(self, path):
         super().__init__(

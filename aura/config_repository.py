@@ -6,6 +6,7 @@ from aura.error_handler import (
     CredentialsNotFound,
     InvalidConfigFile,
     UnsupportedConfigFileVersion,
+    handle_error,
 )
 from aura.token_repository import delete_token_file
 from aura.version import __version__
@@ -37,7 +38,11 @@ class CLIConfig:
             config = self.write_config(self.DEFAULT_CONFIG)
             return config
 
-        self.validate_config(config)
+        try:
+            self.validate_config(config)
+        except Exception as e:
+            handle_error(e)
+
         return config
 
     def write_config(self, config: dict):

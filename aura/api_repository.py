@@ -4,6 +4,7 @@ import click
 from requests.auth import HTTPBasicAuth
 import requests
 
+from aura.config_repository import CLIConfig
 from aura.version import __version__
 from aura.error_handler import NoCredentialsConfigured
 from aura.token_repository import (
@@ -49,7 +50,11 @@ def _authenticate():
     }
     data = {"grant_type": "client_credentials"}
 
-    url = os.environ.get("AURA_CLI_AUTH_URL") or DEFAULT_AUTH_URL
+    ctx = click.get_current_context()
+    config: CLIConfig = ctx.obj
+    # Get url by priority: First by env var, then by config setting, then by default url
+    url = os.environ.get("AURA_CLI_AUTH_URL") or config.get_option("auth-url") or DEFAULT_AUTH_URL
+
     response = requests.request(
         "POST",
         url,
@@ -84,8 +89,15 @@ def get_headers():
 def make_api_call(method: str, path: str, **kwargs):
     """Make a HTTP request to the Aura API"""
 
+    ctx = click.get_current_context()
+    config: CLIConfig = ctx.obj
+
     headers = get_headers()
-    base_url = os.environ.get("AURA_CLI_BASE_URL") or DEFAULT_BASE_URL
+
+    # Get url by priority: First by env var, then by config setting, then by default url
+    base_url = (
+        os.environ.get("AURA_CLI_BASE_URL") or config.get_option("base-url") or DEFAULT_BASE_URL
+    )
 
     response = requests.request(method, base_url + path, headers=headers, timeout=10, **kwargs)
     # If authentication failed, delete the token file to avoid using same token again
