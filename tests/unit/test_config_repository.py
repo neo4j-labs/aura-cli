@@ -35,7 +35,7 @@ def test_load_valid_config():
             },
             "ACTIVE": "example",
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     with patch("os.path.expanduser") as mock_expanduser, patch(
@@ -53,7 +53,7 @@ def test_write_config():
 
 
 def test_add_credentials(mock_cli_config):
-    initial_config = {"AUTH": {"CREDENTIALS": {}, "ACTIVE": None}, "DEFAULTS": {}}
+    initial_config = {"AUTH": {"CREDENTIALS": {}, "ACTIVE": None}, "OPTIONS": {}}
 
     with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
         "aura.config_repository.delete_token_file"
@@ -69,7 +69,7 @@ def test_add_credentials(mock_cli_config):
                 },
                 "ACTIVE": "test_name",
             },
-            "DEFAULTS": {},
+            "OPTIONS": {},
         }
         mock_write_config.assert_called_once_with(expected_config)
         mock_delete_token.assert_called_once()
@@ -86,7 +86,7 @@ def test_list_credentials(mock_cli_config):
             },
             "ACTIVE": "example1",
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     result = mock_cli_config.list_credentials()
@@ -107,7 +107,7 @@ def test_current_credentials(mock_cli_config):
             },
             "ACTIVE": "example1",
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     name, credentials = mock_cli_config.current_credentials()
@@ -122,7 +122,7 @@ def test_current_credentials_none(mock_cli_config):
             "CREDENTIALS": {},
             "ACTIVE": None,
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     name, credentials = mock_cli_config.current_credentials()
@@ -140,7 +140,7 @@ def test_delete_credentials(mock_cli_config):
             },
             "ACTIVE": "example1",
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
@@ -156,7 +156,7 @@ def test_delete_credentials(mock_cli_config):
                 },
                 "ACTIVE": None,
             },
-            "DEFAULTS": {},
+            "OPTIONS": {},
         }
 
         mock_write_config.assert_called_once_with(expected_config)
@@ -170,7 +170,7 @@ def test_delete_credentials_not_found(mock_cli_config):
             "CREDENTIALS": {},
             "ACTIVE": None,
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     with pytest.raises(CredentialsNotFound):
@@ -187,7 +187,7 @@ def test_use_credentials(mock_cli_config):
             },
             "ACTIVE": "example1",
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
@@ -204,7 +204,7 @@ def test_use_credentials(mock_cli_config):
                 },
                 "ACTIVE": "example2",
             },
-            "DEFAULTS": {},
+            "OPTIONS": {},
         }
 
         mock_write_config.assert_called_once_with(expected_config)
@@ -218,7 +218,7 @@ def test_use_credentials_not_found(mock_cli_config):
             "CREDENTIALS": {},
             "ACTIVE": None,
         },
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     with pytest.raises(CredentialsNotFound):
@@ -229,13 +229,13 @@ def test_set_option(mock_cli_config):
     mock_cli_config.config = {
         "VERSION": "1.0",
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     with patch.object(mock_cli_config, "write_config", return_value=None) as mock_write:
         mock_cli_config.set_option("default-output", "table")
 
-        assert mock_cli_config.config["DEFAULTS"]["default-output"] == "table"
+        assert mock_cli_config.config["OPTIONS"]["default-output"] == "table"
         mock_write.assert_called_once()
 
 
@@ -243,13 +243,13 @@ def test_unset_option(mock_cli_config):
     mock_cli_config.config = {
         "VERSION": "1.0",
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "DEFAULTS": {"default-output": "table"},
+        "OPTIONS": {"default-output": "table"},
     }
 
     with patch.object(mock_cli_config, "write_config", return_value=None) as mock_write:
         mock_cli_config.unset_option("default-output")
 
-        assert "default-output" not in mock_cli_config.config["DEFAULTS"]
+        assert "default-output" not in mock_cli_config.config["OPTIONS"]
         mock_write.assert_called_once()
 
 
@@ -257,7 +257,7 @@ def test_get_option(mock_cli_config):
     mock_cli_config.config = {
         "VERSION": "1.0",
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "DEFAULTS": {"default-output": "text"},
+        "OPTIONS": {"default-output": "text"},
     }
 
     assert mock_cli_config.get_option("default-output") == "text"
@@ -267,7 +267,7 @@ def test_list_options(mock_cli_config):
     mock_cli_config.config = {
         "VERSION": "1.0",
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "DEFAULTS": {"default-output": "text", "default-tenant": "my-tenant-123"},
+        "OPTIONS": {"default-output": "text", "default-tenant": "my-tenant-123"},
     }
 
     assert mock_cli_config.list_options() == [
@@ -284,7 +284,7 @@ def test_validate_config_valid(mock_cli_config):
             },
             "ACTIVE": "user1",
         },
-        "DEFAULTS": {"option1": "value1"},
+        "OPTIONS": {"option1": "value1"},
     }
 
     mock_cli_config.validate_config(valid_config)

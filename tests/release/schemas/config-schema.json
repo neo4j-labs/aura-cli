@@ -30,9 +30,9 @@
       },
       "required": ["CREDENTIALS", "ACTIVE"]
     },
-    "DEFAULTS": {
+    "OPTIONS": {
       "type": "object"
     }
   },
-  "required": ["VERSION", "AUTH", "DEFAULTS"]
+  "required": ["VERSION", "AUTH", "OPTIONS"]
 }

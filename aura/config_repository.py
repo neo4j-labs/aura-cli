@@ -21,7 +21,7 @@ class CLIConfig:
     DEFAULT_CONFIG = {
         "VERSION": __version__,
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     def __init__(self):
@@ -121,9 +121,9 @@ class CLIConfig:
             raise InvalidConfigFile()
 
         # Validate Defaults section
-        defaults = config.get("DEFAULTS")
+        defaults = config.get("OPTIONS")
         if defaults is None:
-            self.config["DEFAULTS"] = {}
+            self.config["OPTIONS"] = {}
             self.write_config(self.config)
         else:
             if not isinstance(defaults, dict):
@@ -137,21 +137,21 @@ class CLIConfig:
                     raise InvalidConfigFile()
 
     def set_option(self, name: str, value: str):
-        self.config["DEFAULTS"][name] = value
+        self.config["OPTIONS"][name] = value
         self.write_config(self.config)
 
     def unset_option(self, name: str):
-        if self.config["DEFAULTS"].get(name):
-            del self.config["DEFAULTS"][name]
+        if self.config["OPTIONS"].get(name):
+            del self.config["OPTIONS"][name]
 
         self.write_config(self.config)
 
     def get_option(self, name: str):
-        return self.config["DEFAULTS"].get(name)
+        return self.config["OPTIONS"].get(name)
 
     def list_options(self):
         values = []
-        defaults = self.config["DEFAULTS"]
+        defaults = self.config["OPTIONS"]
         for option in defaults:
             values.append({"Option": option, "Value": defaults[option]})
 

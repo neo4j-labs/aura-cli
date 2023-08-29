@@ -89,8 +89,8 @@ def validate_config_file(client_id, client_secret, base_url, auth_url):
         assert config["AUTH"]["ACTIVE"] == CREDENTIALS_NAME
         assert config["AUTH"]["CREDENTIALS"][CREDENTIALS_NAME]["CLIENT_ID"] == client_id
         assert config["AUTH"]["CREDENTIALS"][CREDENTIALS_NAME]["CLIENT_SECRET"] == client_secret
-        assert config["DEFAULTS"]["BASE_URL"] == base_url
-        assert config["DEFAULTS"]["AUTH_URL"] == auth_url
+        assert config["OPTIONS"]["BASE_URL"] == base_url
+        assert config["OPTIONS"]["AUTH_URL"] == auth_url
 
 
 # Test tenants commands
