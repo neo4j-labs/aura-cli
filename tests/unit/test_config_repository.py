@@ -1,8 +1,16 @@
 import json
 from unittest.mock import patch, mock_open, MagicMock
+from aura.error_handler import CredentialsNotFound
 import pytest
 
 from aura.config_repository import CLIConfig
+
+
+@pytest.fixture
+def mock_cli_config():
+    with patch.object(CLIConfig, "load_config", return_value=None):
+        cli_config = CLIConfig()
+    return cli_config
 
 
 def test_initialization_load_default_config():
@@ -44,16 +52,15 @@ def test_write_config():
     pass  # TODO
 
 
-def test_add_credentials():
+def test_add_credentials(mock_cli_config):
     initial_config = {"AUTH": {"CREDENTIALS": {}, "ACTIVE": None}, "DEFAULTS": {}}
 
     with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
         "aura.config_repository.delete_token_file"
     ) as mock_delete_token:
-        cli_config = CLIConfig()
-        cli_config.config = initial_config
+        mock_cli_config.config = initial_config
 
-        cli_config.add_credentials("test_name", "test_id", "test_secret")
+        mock_cli_config.add_credentials("test_name", "test_id", "test_secret")
 
         expected_config = {
             "AUTH": {
@@ -66,40 +73,218 @@ def test_add_credentials():
         }
         mock_write_config.assert_called_once_with(expected_config)
         mock_delete_token.assert_called_once()
-        assert cli_config.config == expected_config
+        assert mock_cli_config.config == expected_config
 
 
-def test_list_credentials():
-    pass  # TODO
+def test_list_credentials(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {
+                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
+                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+            },
+            "ACTIVE": "example1",
+        },
+        "DEFAULTS": {},
+    }
+
+    result = mock_cli_config.list_credentials()
+    expected = [
+        {"Name": "example1", "ClientId": "example_id_1"},
+        {"Name": "example2", "ClientId": "example_id_2"},
+    ]
+    assert result == expected
 
 
-def test_current_credentials():
-    pass  # TODO
+def test_current_credentials(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {
+                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
+                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+            },
+            "ACTIVE": "example1",
+        },
+        "DEFAULTS": {},
+    }
+
+    name, credentials = mock_cli_config.current_credentials()
+    assert name == "example1"
+    assert credentials == {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"}
 
 
-def test_delete_credentials():
-    pass  # TODO
+def test_current_credentials_none(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {},
+            "ACTIVE": None,
+        },
+        "DEFAULTS": {},
+    }
+
+    name, credentials = mock_cli_config.current_credentials()
+    assert name is None
+    assert credentials is None
 
 
-def test_use_credentials():
-    pass  # TODO
+def test_delete_credentials(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {
+                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
+                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+            },
+            "ACTIVE": "example1",
+        },
+        "DEFAULTS": {},
+    }
+
+    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
+        "aura.config_repository.delete_token_file"
+    ) as mock_delete_token:
+        mock_cli_config.delete_credentials("example1")
+
+        expected_config = {
+            "VERSION": "1.0",
+            "AUTH": {
+                "CREDENTIALS": {
+                    "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"}
+                },
+                "ACTIVE": None,
+            },
+            "DEFAULTS": {},
+        }
+
+        mock_write_config.assert_called_once_with(expected_config)
+        mock_delete_token.assert_called_once()
 
 
-def test_set_option():
-    pass  # TODO
+def test_delete_credentials_not_found(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {},
+            "ACTIVE": None,
+        },
+        "DEFAULTS": {},
+    }
+
+    with pytest.raises(CredentialsNotFound):
+        mock_cli_config.delete_credentials("test")
 
 
-def test_unset_option():
-    pass  # TODO
+def test_use_credentials(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {
+                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
+                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+            },
+            "ACTIVE": "example1",
+        },
+        "DEFAULTS": {},
+    }
+
+    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
+        "aura.config_repository.delete_token_file"
+    ) as mock_delete_token:
+        mock_cli_config.use_credentials("example2")
+
+        expected_config = {
+            "VERSION": "1.0",
+            "AUTH": {
+                "CREDENTIALS": {
+                    "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
+                    "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+                },
+                "ACTIVE": "example2",
+            },
+            "DEFAULTS": {},
+        }
+
+        mock_write_config.assert_called_once_with(expected_config)
+        mock_delete_token.assert_called_once()
 
 
-def test_get_option():
-    pass  # TODO
+def test_use_credentials_not_found(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {
+            "CREDENTIALS": {},
+            "ACTIVE": None,
+        },
+        "DEFAULTS": {},
+    }
+
+    with pytest.raises(CredentialsNotFound):
+        mock_cli_config.use_credentials("test")
 
 
-def test_list_options():
-    pass  # TODO
+def test_set_option(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
+        "DEFAULTS": {},
+    }
+
+    with patch.object(mock_cli_config, "write_config", return_value=None) as mock_write:
+        mock_cli_config.set_option("default-output", "table")
+
+        assert mock_cli_config.config["DEFAULTS"]["default-output"] == "table"
+        mock_write.assert_called_once()
 
 
-def test_validate_config():
-    pass  # TODO
+def test_unset_option(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
+        "DEFAULTS": {"default-output": "table"},
+    }
+
+    with patch.object(mock_cli_config, "write_config", return_value=None) as mock_write:
+        mock_cli_config.unset_option("default-output")
+
+        assert "default-output" not in mock_cli_config.config["DEFAULTS"]
+        mock_write.assert_called_once()
+
+
+def test_get_option(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
+        "DEFAULTS": {"default-output": "text"},
+    }
+
+    assert mock_cli_config.get_option("default-output") == "text"
+
+
+def test_list_options(mock_cli_config):
+    mock_cli_config.config = {
+        "VERSION": "1.0",
+        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
+        "DEFAULTS": {"default-output": "text", "default-tenant": "my-tenant-123"},
+    }
+
+    assert mock_cli_config.list_options() == [
+        {"Option": "default-output", "Value": "text"},
+        {"Option": "default-tenant", "Value": "my-tenant-123"},
+    ]
+
+
+def test_validate_config_valid(mock_cli_config):
+    valid_config = {
+        "AUTH": {
+            "CREDENTIALS": {
+                "user1": {"CLIENT_ID": "client_id_1", "CLIENT_SECRET": "client_secret_1"}
+            },
+            "ACTIVE": "user1",
+        },
+        "DEFAULTS": {"option1": "value1"},
+    }
+
+    mock_cli_config.validate_config(valid_config)

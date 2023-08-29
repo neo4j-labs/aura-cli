@@ -78,6 +78,7 @@ class CLIConfig:
             del self.config["AUTH"]["CREDENTIALS"][name]
             if self.config["AUTH"]["ACTIVE"] == name:
                 self.config["AUTH"]["ACTIVE"] = None
+                delete_token_file()
             self.write_config(self.config)
         else:
             raise CredentialsNotFound(name)
