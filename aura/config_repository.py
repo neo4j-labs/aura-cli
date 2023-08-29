@@ -5,6 +5,7 @@ from aura.error_handler import (
     CredentialsAlreadyExist,
     CredentialsNotFound,
     InvalidConfigFile,
+    UnsupportedConfigFileVersion,
 )
 from aura.token_repository import delete_token_file
 from aura.version import __version__
@@ -96,6 +97,16 @@ class CLIConfig:
     def validate_config(self, config: dict):
         if not isinstance(config, dict):
             raise InvalidConfigFile()
+
+        # For outdated config files we will throw an error
+        # Throwing such an error is bad user experience and should absolutely be avoided,
+        # however we will keep the option for now, while backward compatibility is not required.
+        # The current threshold is version 0.4.0
+        if not "VERSION" in config:
+            raise UnsupportedConfigFileVersion(self.config_path)
+        version_list = config["VERSION"].split(".")
+        if int(version_list[0]) == 0 and int(version_list[1]) < 4:
+            raise UnsupportedConfigFileVersion(self.config_path)
 
         # Validate Auth section
         auth = config.get("AUTH")

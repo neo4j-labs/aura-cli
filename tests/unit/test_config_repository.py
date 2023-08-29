@@ -29,6 +29,7 @@ def test_initialization_load_default_config():
 
 def test_load_valid_config():
     valid_config = {
+        "VERSION": "1.0.0",
         "AUTH": {
             "CREDENTIALS": {
                 "example": {"CLIENT_ID": "example_id", "CLIENT_SECRET": "example_secret"}
@@ -48,12 +49,12 @@ def test_load_valid_config():
         assert cli_config.config == valid_config
 
 
-def test_write_config():
-    pass  # TODO
-
-
 def test_add_credentials(mock_cli_config):
-    initial_config = {"AUTH": {"CREDENTIALS": {}, "ACTIVE": None}, "OPTIONS": {}}
+    initial_config = {
+        "VERSION": "1.0.0",
+        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
+        "OPTIONS": {},
+    }
 
     with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
         "aura.config_repository.delete_token_file"
@@ -63,6 +64,7 @@ def test_add_credentials(mock_cli_config):
         mock_cli_config.add_credentials("test_name", "test_id", "test_secret")
 
         expected_config = {
+            "VERSION": "1.0.0",
             "AUTH": {
                 "CREDENTIALS": {
                     "test_name": {"CLIENT_ID": "test_id", "CLIENT_SECRET": "test_secret"}
@@ -278,6 +280,7 @@ def test_list_options(mock_cli_config):
 
 def test_validate_config_valid(mock_cli_config):
     valid_config = {
+        "VERSION": "1.0.0",
         "AUTH": {
             "CREDENTIALS": {
                 "user1": {"CLIENT_ID": "client_id_1", "CLIENT_SECRET": "client_secret_1"}

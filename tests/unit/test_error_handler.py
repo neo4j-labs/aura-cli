@@ -15,6 +15,7 @@ from aura.error_handler import (
     InstanceNameNotUnique,
     InvalidConfigOption,
     InvalidConfigOptionValue,
+    UnsupportedConfigFileVersion,
 )
 
 
@@ -84,6 +85,13 @@ class MockHTTPError(HTTPError):
                 },
             ),
             "Error: First error\nSecond error",
+        ),
+        (
+            UnsupportedConfigFileVersion("test-path/config.json"),
+            (
+                "Error: The version of your CLI config file is not supported. Please delete the"
+                " file at: test-path/config.json"
+            ),
         ),
     ],
 )

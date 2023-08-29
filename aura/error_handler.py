@@ -136,3 +136,13 @@ class InvalidConfigOptionValue(ClientError):
 
     def __init__(self, option):
         super().__init__(f"Please add a valid value for option {option}")
+
+
+class UnsupportedConfigFileVersion(ClientError):
+    """Exception raised when setting a config option with an invalid value"""
+
+    def __init__(self, path):
+        super().__init__(
+            "The version of your CLI config file is not supported. Please delete the file at:"
+            f" {path}"
+        )
