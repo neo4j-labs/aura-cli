@@ -13,19 +13,22 @@ HELP_TEXT = """
 Set a config option to a new value
 
 Valid config options:\n
-    • default-tenant\n
-    • default-output
+    • default_tenant\n
+    • output\n
+    • auth_url\n
+    • base_url
+
 
 Example usage:\n
-aura config set default-tenant my-tenant-id\n
-aura config set default-output table
+aura config set default_tenant my-tenant-id\n
+aura config set output table
 """
 
 
+@click.command(name="set", help=HELP_TEXT)
 @click.argument("name")
 @click.argument("value")
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
-@click.command(name="set", help=HELP_TEXT)
 @pass_config
 def set_option(config: CLIConfig, name: str, value: str, verbose: bool):
     """

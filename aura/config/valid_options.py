@@ -1,6 +1,6 @@
-DEFAULT_TENANT_OPTION = "default-tenant"
-DEFAULT_OUTPUT = "default-output"
-AUTH_URL = "auth-url"
-BASE_URL = "base-url"
+DEFAULT_TENANT_OPTION = "default_tenant"
+DEFAULT_OUTPUT = "output"
+AUTH_URL = "auth_url"
+BASE_URL = "base_url"
 
 VALID_OPTIONS = [DEFAULT_TENANT_OPTION, DEFAULT_OUTPUT, AUTH_URL, BASE_URL]
