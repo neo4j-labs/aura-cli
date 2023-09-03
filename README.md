@@ -76,3 +76,4 @@ All API commands have the following two flags:
 
 - `--include, -i` : Print the API response headers
 - `--raw` : Print the raw API response body
+- `--verbose` : Print verbose output
