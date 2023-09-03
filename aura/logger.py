@@ -10,6 +10,9 @@ def setup_logger(is_verbose=False):
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG if is_verbose else logging.CRITICAL)
 
+    # Make sure .aura directory and log file exists
+    os.makedirs(os.path.dirname(os.path.expanduser("~/.aura/auracli.log")), exist_ok=True)
+
     log_file_path = os.path.expanduser("~/.aura/auracli.log")
     file_handler = logging.FileHandler(log_file_path)
     file_handler.setLevel(logging.DEBUG)

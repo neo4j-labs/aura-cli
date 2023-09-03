@@ -45,7 +45,7 @@ def handle_error(exception: Exception):
     config = ctx.obj
 
     if config.env.get("VERBOSE"):
-        logger.warning(f"{error_message}")
+        logger.warning(f"Error: {error_message}")
         logger.warning("Exiting CLI with exit code 1.")
     else:
         click.echo(f"Error: {error_message}", err=True)

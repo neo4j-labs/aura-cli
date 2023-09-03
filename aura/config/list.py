@@ -29,7 +29,7 @@ def list_options(config: CLIConfig, verbose: bool):
 
     if values is None or len(values) == 0:
         logger.info(f"No config options set.")
-        if not not config.env["VERBOSE"]:
+        if not config.env["VERBOSE"]:
             print("No config options set.")
     else:
         logger.info(f"Config options: {values}")
