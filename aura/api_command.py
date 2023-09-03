@@ -59,9 +59,12 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
             except Exception as exception:
                 handle_error(exception)
             else:
+                logger.debug("API request successful.")
+
                 # For verbose output we don't additionaly format or print the result
                 if config.env["VERBOSE"]:
                     logger.info("Received API response: " + json.dumps(data))
+                    logger.debug("CLI command completed successfully.")
                     return click.get_current_context().exit(code=0)
 
                 if include:
@@ -88,6 +91,7 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                 else:
                     raise UnsupportedOutputFormat(output_format)
 
+                logger.debug("CLI command completed successfully.")
                 return click.get_current_context().exit(code=0)
 
         return wrapper
