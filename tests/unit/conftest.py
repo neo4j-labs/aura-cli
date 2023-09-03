@@ -5,7 +5,7 @@ import pprint
 
 
 def mock_headers():
-    return {"Content-Type": "application/json", "Authorization": f"Bearer dummy-token"}
+    return {"Content-Type": "application/json", "Authorization": "Bearer dummy-token"}
 
 
 @pytest.fixture(autouse=True)
@@ -28,5 +28,12 @@ def printed_data(data):
 @pytest.fixture()
 def mock_config():
     mock_config = MagicMock(spec=CLIConfig)
+    mock_config.env = {"VERBOSE": False}
     mock_config.get_option.return_value = None
     yield mock_config
+
+
+@pytest.fixture()
+def mock_version():
+    with patch("aura.api_repository.__version__", new="1.0.0") as mocked_version:
+        yield mocked_version

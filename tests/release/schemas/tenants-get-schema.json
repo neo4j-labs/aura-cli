@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["data"],
+  "properties": {
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "instance_configurations"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "instance_configurations": {
+          "type": "array",
+          "minItems": 1,
+          "items": [
+            {
+              "type": "object",
+              "required": [
+                "region",
+                "region_name",
+                "type",
+                "version",
+                "memory",
+                "cloud_provider"
+              ],
+              "properties": {
+                "region": {
+                  "type": "string"
+                },
+                "region_name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "free-db",
+                    "professional-db",
+                    "professional-ds",
+                    "enterprise-db",
+                    "enterprise-ds"
+                  ]
+                },
+                "version": {
+                  "type": "string",
+                  "enum": ["4", "5"]
+                },
+                "memory": {
+                  "type": "string",
+                  "regex": "[0-9]+GB"
+                },
+                "cloud_provider": {
+                  "type": "string",
+                  "enum": ["gcp", "aws", "azure"]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

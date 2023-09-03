@@ -1,9 +1,12 @@
 from pprint import pprint
 from functools import wraps
+import json
 import click
 
+from aura.config_repository import CLIConfig
 from aura.error_handler import UnsupportedOutputFormat, handle_error
 from aura.format import format_table_output, format_text_output
+from aura.logger import get_logger
 
 
 def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
@@ -31,8 +34,18 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
             default=False,
             help="Display the raw API response body",
         )
+        @click.option(
+            "--verbose",
+            is_flag=True,
+            default=False,
+            help="Print verbose output",
+        )
         @wraps(func)
-        def wrapper(output: str, include: bool, raw: bool, *args, **kwargs):
+        def wrapper(output: str, include: bool, raw: bool, verbose: bool, *args, **kwargs):
+            ctx = click.get_current_context()
+            config: CLIConfig = ctx.obj
+            logger = get_logger()
+
             try:
                 api_response = func(*args, **kwargs)
                 if not raw:
@@ -46,6 +59,14 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
             except Exception as exception:
                 handle_error(exception)
             else:
+                logger.debug("API request successful.")
+
+                # For verbose output we don't additionaly format or print the result
+                if config.env["VERBOSE"]:
+                    logger.info("Received API response: " + json.dumps(data))
+                    logger.debug("CLI command completed successfully.")
+                    return click.get_current_context().exit(code=0)
+
                 if include:
                     print(api_response.headers, "\n")
 
@@ -53,8 +74,6 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                     print(response_data)
                     return click.get_current_context().exit(code=0)
 
-                ctx = click.get_current_context()
-                config = ctx.obj
                 output_format = (
                     fixed_cmd_output or output or config.get_option("default-output") or "json"
                 )
@@ -70,8 +89,9 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                     out = format_text_output(data)
                     print(out)
                 else:
-                    raise UnsupportedOutputFormat(f"Unsupported output format {output_format}")
+                    raise UnsupportedOutputFormat(output_format)
 
+                logger.debug("CLI command completed successfully.")
                 return click.get_current_context().exit(code=0)
 
         return wrapper

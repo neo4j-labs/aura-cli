@@ -5,7 +5,10 @@ from aura.error_handler import (
     CredentialsAlreadyExist,
     CredentialsNotFound,
     InvalidConfigFile,
+    UnsupportedConfigFileVersion,
+    handle_error,
 )
+from aura.logger import get_logger
 from aura.token_repository import delete_token_file
 from aura.version import __version__
 
@@ -21,12 +24,16 @@ class CLIConfig:
     DEFAULT_CONFIG = {
         "VERSION": __version__,
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "DEFAULTS": {},
+        "OPTIONS": {},
     }
 
     def __init__(self):
+        self.env = {}
+        self.logger = get_logger()
+        self.logger.debug("Loading user configuration from " + self.AURA_CONFIG_PATH)
         self.config_path = os.path.expanduser(self.AURA_CONFIG_PATH)
         self.config = self.load_config()
+        self.logger.debug("User configuration loaded successfully.")
 
     def load_config(self) -> dict:
         try:
@@ -36,10 +43,16 @@ class CLIConfig:
             config = self.write_config(self.DEFAULT_CONFIG)
             return config
 
-        self.validate_config(config)
+        try:
+            self.validate_config(config)
+        except Exception as e:
+            handle_error(e)
+
         return config
 
     def write_config(self, config: dict):
+        self.logger.debug("Updating user configuration at " + self.AURA_CONFIG_PATH)
+
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
 
         with open(self.config_path, "w", encoding="utf-8") as configfile:
@@ -53,7 +66,7 @@ class CLIConfig:
 
     def add_credentials(self, name: str, client_id: str, client_secret: str):
         if self.config["AUTH"]["CREDENTIALS"].get(name, None) is not None:
-            raise CredentialsAlreadyExist(f"Credentials with name {name} already exist.")
+            raise CredentialsAlreadyExist(name)
 
         self.config["AUTH"]["CREDENTIALS"][name] = {
             "CLIENT_ID": client_id,
@@ -78,9 +91,10 @@ class CLIConfig:
             del self.config["AUTH"]["CREDENTIALS"][name]
             if self.config["AUTH"]["ACTIVE"] == name:
                 self.config["AUTH"]["ACTIVE"] = None
+                delete_token_file()
             self.write_config(self.config)
         else:
-            raise CredentialsNotFound(f"Credentials {name} not found")
+            raise CredentialsNotFound(name)
 
     def use_credentials(self, name: str):
         if name in self.config["AUTH"]["CREDENTIALS"]:
@@ -90,67 +104,77 @@ class CLIConfig:
             # Delete saved auth token if it exists
             delete_token_file()
         else:
-            raise CredentialsNotFound(f"Credentials {name} not found")
+            raise CredentialsNotFound(name)
 
     def validate_config(self, config: dict):
         if not isinstance(config, dict):
-            raise InvalidConfigFile("Config file has an invalid type")
+            raise InvalidConfigFile()
+
+        # For outdated config files we will throw an error
+        # Throwing such an error is bad user experience and should absolutely be avoided,
+        # however we will keep the option for now, while backward compatibility is not required.
+        # The current threshold is version 0.4.0
+        if not "VERSION" in config:
+            raise UnsupportedConfigFileVersion(self.config_path)
+        version_list = config["VERSION"].split(".")
+        if int(version_list[0]) == 0 and int(version_list[1]) < 4:
+            raise UnsupportedConfigFileVersion(self.config_path)
 
         # Validate Auth section
         auth = config.get("AUTH")
         if not isinstance(auth, dict):
-            raise InvalidConfigFile("Malformed config file")
+            raise InvalidConfigFile()
 
         credentials = auth.get("CREDENTIALS")
         if not isinstance(credentials, dict):
-            raise InvalidConfigFile("Malformed config file")
+            raise InvalidConfigFile()
 
         for _, cred in credentials.items():
             if not isinstance(cred, dict):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
             if "CLIENT_ID" not in cred or not isinstance(cred["CLIENT_ID"], str):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
             if "CLIENT_SECRET" not in cred or not isinstance(cred["CLIENT_SECRET"], str):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
         active = auth.get("ACTIVE")
         if active is not None and (not isinstance(active, str) or active not in credentials):
-            raise InvalidConfigFile("Malformed config file")
+            raise InvalidConfigFile()
 
         # Validate Defaults section
-        defaults = config.get("DEFAULTS")
+        defaults = config.get("OPTIONS")
         if defaults is None:
-            self.config["DEFAULTS"] = {}
+            self.config["OPTIONS"] = {}
             self.write_config(self.config)
         else:
             if not isinstance(defaults, dict):
-                raise InvalidConfigFile("Malformed config file")
+                raise InvalidConfigFile()
 
             for option, default in defaults.items():
                 if not isinstance(option, str):
-                    raise InvalidConfigFile("Malformed config file")
+                    raise InvalidConfigFile()
 
                 if not isinstance(default, str):
-                    raise InvalidConfigFile("Malformed config file")
+                    raise InvalidConfigFile()
 
     def set_option(self, name: str, value: str):
-        self.config["DEFAULTS"][name] = value
+        self.config["OPTIONS"][name] = value
         self.write_config(self.config)
 
     def unset_option(self, name: str):
-        if self.config["DEFAULTS"].get(name):
-            del self.config["DEFAULTS"][name]
+        if self.config["OPTIONS"].get(name):
+            del self.config["OPTIONS"][name]
 
         self.write_config(self.config)
 
     def get_option(self, name: str):
-        return self.config["DEFAULTS"].get(name)
+        return self.config["OPTIONS"].get(name)
 
     def list_options(self):
         values = []
-        defaults = self.config["DEFAULTS"]
+        defaults = self.config["OPTIONS"]
         for option in defaults:
             values.append({"Option": option, "Value": defaults[option]})
 

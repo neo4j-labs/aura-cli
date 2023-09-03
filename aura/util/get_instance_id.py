@@ -14,17 +14,13 @@ def get_instance_id(instance_id, instance_name):
     instance name, it will try to find the ID from the name
     """
     if instance_id is not None and instance_name is not None:
-        raise InstanceIDAndNameBothProvided(
-            "Only one of the options instance-id and instance-name should be provided"
-        )
+        raise InstanceIDAndNameBothProvided()
 
     if instance_id is not None:
         return instance_id
 
     if instance_name is None:
-        raise InstanceIDorNameMissing(
-            "You need to provide either an instance-id or an instance-name"
-        )
+        raise InstanceIDorNameMissing()
 
     response = make_api_call("GET", "/instances")
 
@@ -34,13 +30,10 @@ def get_instance_id(instance_id, instance_name):
     for instance in instances:
         if instance["name"] == instance_name:
             if instance_id is not None:
-                raise InstanceNameNotUnique(
-                    "There is more than one instance with the provided name."
-                    " Please use the id instead."
-                )
+                raise InstanceNameNotUnique()
             instance_id = instance["id"]
 
     if instance_id is not None:
         return instance_id
 
-    raise InstanceNameNotFound(f"Error: No instance with name {instance_name} found")
+    raise InstanceNameNotFound(instance_name)

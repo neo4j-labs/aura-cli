@@ -5,10 +5,8 @@ def format_table_output(data: dict):
     """
     Function to format the data in a dictionary into a table.
     """
-    if not data:
-        return print("")
-    if isinstance(data, str):
-        return print(data)
+    if not data or isinstance(data, str):
+        return data
 
     # Make sure data is a list
     if isinstance(data, dict):
@@ -18,9 +16,7 @@ def format_table_output(data: dict):
     rows = [[str(val) for val in list(d.values())] for d in data]
 
     # Find max length in each column
-    col_widths = [
-        max(len(str(x)) for x in col) for col in zip(*([headers] + rows))
-    ]
+    col_widths = [max(len(str(x)) for x in col) for col in zip(*([headers] + rows))]
 
     # Create a format specifier for each column width
     format_spec = " | ".join(["{{:{}}}".format(w) for w in col_widths])
@@ -37,10 +33,8 @@ def format_text_output(data: dict):
     """
     Function to format the data in a dictionary into lines of tab-seperated text.
     """
-    if not data:
-        return print("")
-    if isinstance(data, str):
-        return print(data)
+    if not data or isinstance(data, str):
+        return data
 
     # Make sure data is a list
     if isinstance(data, dict):
@@ -50,9 +44,7 @@ def format_text_output(data: dict):
     rows = [[str(val) for val in list(d.values())] for d in data]
 
     # Find max length in each column
-    col_widths = [
-        max(len(str(x)) for x in col) for col in zip(*([headers] + rows))
-    ]
+    col_widths = [max(len(str(x)) for x in col) for col in zip(*([headers] + rows))]
 
     # Create a format specifier for each column width
     format_spec = " \t ".join(["{{:{}}}".format(w) for w in col_widths])

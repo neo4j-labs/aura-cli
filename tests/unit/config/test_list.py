@@ -7,10 +7,9 @@ from unittest.mock import MagicMock
 from aura.config import list_options
 
 
-def test_list_config_options():
+def test_list_config_options(mock_config):
     runner = CliRunner()
 
-    mock_config = MagicMock(spec=CLIConfig)
     mock_config.list_options.return_value = [{"Option": "default-tenant", "Value": "my-tenant-id"}]
 
     result = runner.invoke(list_options, [], obj=mock_config)

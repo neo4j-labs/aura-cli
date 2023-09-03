@@ -2,19 +2,26 @@ import click
 from aura.config_repository import CLIConfig
 from aura.error_handler import handle_error
 from aura.decorators import pass_config
+from aura.logger import get_logger
 
 
 @click.argument("name")
+@click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="delete", help="Delete OAuth client credentials")
 @pass_config
-def delete_credentials(config: CLIConfig, name: str):
+def delete_credentials(config: CLIConfig, name: str, verbose: bool):
     """
     Deletes the specified credentials
     """
+    logger = get_logger("auracli")
+
     try:
         config.delete_credentials(name)
     except Exception as exception:
         handle_error(exception)
 
-    click.echo("")
-    click.echo(f"Credentials {name} successfully deleted")
+    logger.info(f"Credentials {name} successfully deleted")
+    if not config.env["VERBOSE"]:
+        print(f"Credentials {name} successfully deleted")
+
+    logger.debug("CLI command completed successfully.")

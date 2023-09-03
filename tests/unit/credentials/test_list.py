@@ -2,15 +2,13 @@ from aura.config_repository import CLIConfig
 from aura.format import format_text_output
 import pytest
 from click.testing import CliRunner
-from unittest.mock import MagicMock
 
 from aura.credentials import list_credentials
 
 
-def test_list_credentials():
+def test_list_credentials(mock_config):
     runner = CliRunner()
 
-    mock_config = MagicMock(spec=CLIConfig)
     mock_config.list_credentials.return_value = [
         {"Name": "prod", "ClientId": "e3jso20fnak29sk"},
         {"Name": "dev", "ClientId": "j3n3dmksd03isi8"},
