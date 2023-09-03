@@ -8,6 +8,7 @@ from aura.error_handler import (
     UnsupportedConfigFileVersion,
     handle_error,
 )
+from aura.logger import get_logger
 from aura.token_repository import delete_token_file
 from aura.version import __version__
 
@@ -27,8 +28,12 @@ class CLIConfig:
     }
 
     def __init__(self):
+        self.env = {}
+        self.logger = get_logger()
+        self.logger.debug("Loading user configuration from " + self.AURA_CONFIG_PATH)
         self.config_path = os.path.expanduser(self.AURA_CONFIG_PATH)
         self.config = self.load_config()
+        self.logger.debug("User configuration loaded successfully.")
 
     def load_config(self) -> dict:
         try:
@@ -46,6 +51,8 @@ class CLIConfig:
         return config
 
     def write_config(self, config: dict):
+        self.logger.debug("Updating user configuration at " + self.AURA_CONFIG_PATH)
+
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
 
         with open(self.config_path, "w", encoding="utf-8") as configfile:

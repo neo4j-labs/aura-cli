@@ -5,6 +5,16 @@ from aura.api_repository import get_headers, _get_credentials, make_api_call, _a
 from aura.error_handler import NoCredentialsConfigured
 
 
+@pytest.fixture
+def mock_context():
+    mock_context = MagicMock()
+    mock_config = MagicMock()
+    mock_config.get_option.return_value = None
+    mock_context.obj = mock_config
+    with patch("click.get_current_context", return_value=mock_context):
+        yield
+
+
 def test_get_headers(mock_version):
     with patch("aura.api_repository._authenticate", return_value="mock_token"):
         headers = get_headers()
@@ -16,7 +26,7 @@ def test_get_headers(mock_version):
         assert headers == expected_headers
 
 
-def test_make_api_call(api_request, get_headers):
+def test_make_api_call(api_request, get_headers, mock_context):
     mock_response = MagicMock()
     mock_response.status_code = 200
     api_request.return_value = mock_response
@@ -34,7 +44,7 @@ def test_make_api_call(api_request, get_headers):
     )
 
 
-def test_make_api_call_with_url_env_var(monkeypatch, api_request, get_headers):
+def test_make_api_call_with_url_env_var(monkeypatch, api_request, get_headers, mock_context):
     monkeypatch.setenv("AURA_CLI_BASE_URL", "https://test-url.neo4j.io/v2")
 
     mock_response = MagicMock()
@@ -54,7 +64,7 @@ def test_make_api_call_with_url_env_var(monkeypatch, api_request, get_headers):
     )
 
 
-def test_make_api_call_failed_auth(api_request, get_headers):
+def test_make_api_call_failed_auth(api_request, get_headers, mock_context):
     mock_response = MagicMock()
     mock_response.status_code = 403
     api_request.return_value = mock_response
@@ -111,7 +121,7 @@ def test_get_credentials_not_found():
             _get_credentials()
 
 
-def test_authenticate(api_request):
+def test_authenticate(api_request, mock_context):
     with patch("aura.api_repository.check_existing_token", return_value=None), patch(
         "aura.api_repository._get_credentials", return_value=("mock_id", "mock_secret")
     ), patch("aura.api_repository.save_token") as mock_save_token:
@@ -133,7 +143,7 @@ def test_authenticate_with_existing_token():
     assert token == "mock_token"
 
 
-def test_authenticate_failure(api_request):
+def test_authenticate_failure(api_request, mock_context):
     api_request.side_effect = requests.exceptions.HTTPError("Forbidden")
 
     with patch("aura.api_repository.check_existing_token", return_value=None), patch(

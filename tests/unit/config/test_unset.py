@@ -6,10 +6,8 @@ from unittest.mock import MagicMock
 from aura.config import unset_option
 
 
-def test_unset_config_option():
+def test_unset_config_option(mock_config):
     runner = CliRunner()
-
-    mock_config = MagicMock(spec=CLIConfig)
 
     result = runner.invoke(unset_option, ["default-tenant"], obj=mock_config)
 
@@ -19,10 +17,9 @@ def test_unset_config_option():
     mock_config.unset_option.assert_called_once_with("default-tenant")
 
 
-def test_unset_config_option_invalid_option():
+def test_unset_config_option_invalid_option(mock_config):
     runner = CliRunner()
 
-    mock_config = MagicMock(spec=CLIConfig)
     mock_config.get_option.return_value = None
 
     result = runner.invoke(unset_option, ["invalid-value"], obj=mock_config)

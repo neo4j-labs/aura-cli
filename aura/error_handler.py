@@ -2,6 +2,8 @@
 from requests.exceptions import HTTPError, Timeout, ConnectionError as ConnError
 import click
 
+from aura.logger import get_logger
+
 
 def handle_error(exception: Exception):
     """
@@ -13,6 +15,7 @@ def handle_error(exception: Exception):
     Output:
     Prints an appropriate error message based on the exception type.
     """
+    logger = get_logger()
 
     if isinstance(exception, HTTPError):
         try:
@@ -38,7 +41,15 @@ def handle_error(exception: Exception):
     else:
         error_message = "An unexpected error occurred"
 
-    click.echo(f"Error: {error_message}", err=True)
+    ctx = click.get_current_context()
+    config = ctx.obj
+
+    if config.env.get("VERBOSE"):
+        logger.warning(f"{error_message}")
+        logger.warning("Exiting CLI with exit code 1.")
+    else:
+        click.echo(f"Error: {error_message}", err=True)
+
     click.get_current_context().exit(code=1)
 
 

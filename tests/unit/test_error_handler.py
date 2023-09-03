@@ -1,4 +1,4 @@
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, MagicMock
 
 import pytest
 from requests.exceptions import Timeout, ConnectionError, HTTPError
@@ -95,7 +95,11 @@ class MockHTTPError(HTTPError):
         ),
     ],
 )
-def test_handle_error(error, expected_message, mock_echo, mock_get_context):
+def test_handle_error(error, expected_message, mock_echo, mock_get_context, mock_config):
+    mock_ctx = MagicMock()
+    mock_ctx.obj = mock_config
+    mock_get_context.return_value = mock_ctx
+
     handle_error(error)
 
     mock_echo.assert_called_once_with(expected_message, err=True)

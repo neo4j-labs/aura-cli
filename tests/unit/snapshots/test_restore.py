@@ -22,8 +22,6 @@ def mock_instances_response():
 
 def test_restore_snapshot(api_request, mock_config):
     runner = CliRunner()
-    mock_config = MagicMock(spec=CLIConfig)
-    mock_config.get_option.return_value = None
 
     api_request.return_value = mock_response()
 

@@ -28,6 +28,7 @@ def printed_data(data):
 @pytest.fixture()
 def mock_config():
     mock_config = MagicMock(spec=CLIConfig)
+    mock_config.env = {"VERBOSE": False}
     mock_config.get_option.return_value = None
     yield mock_config
 

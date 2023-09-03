@@ -6,10 +6,8 @@ from unittest.mock import MagicMock
 from aura.config import set_option
 
 
-def test_set_config_option():
+def test_set_config_option(mock_config):
     runner = CliRunner()
-
-    mock_config = MagicMock(spec=CLIConfig)
 
     result = runner.invoke(set_option, ["default-tenant", "my-tenant-id"], obj=mock_config)
 
@@ -19,10 +17,9 @@ def test_set_config_option():
     mock_config.set_option.assert_called_once_with("default-tenant", "my-tenant-id")
 
 
-def test_set_config_option_invalid_option():
+def test_set_config_option_invalid_option(mock_config):
     runner = CliRunner()
 
-    mock_config = MagicMock(spec=CLIConfig)
     mock_config.get_option.return_value = None
 
     result = runner.invoke(set_option, ["invalid-value", "no"], obj=mock_config)

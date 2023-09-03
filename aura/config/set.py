@@ -7,6 +7,7 @@ from aura.error_handler import (
     InvalidConfigOptionValue,
     handle_error,
 )
+from aura.logger import get_logger
 
 HELP_TEXT = """
 Set a config option to a new value
@@ -21,14 +22,17 @@ aura config set default-output table
 """
 
 
-@click.command(name="set", help=HELP_TEXT)
 @click.argument("name")
 @click.argument("value")
+@click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
+@click.command(name="set", help=HELP_TEXT)
 @pass_config
-def set_option(config: CLIConfig, name: str, value: str):
+def set_option(config: CLIConfig, name: str, value: str, verbose: bool):
     """
     Set a config option to specified value
     """
+    logger = get_logger("auracli")
+
     try:
         if name not in VALID_OPTIONS:
             raise InvalidConfigOption(name)
@@ -39,4 +43,8 @@ def set_option(config: CLIConfig, name: str, value: str):
     except Exception as exception:
         handle_error(exception)
 
-    print(f'Config option {name} set to "{value}"')
+    logger.info(f'Config option {name} set to "{value}"')
+    if not config.env["VERBOSE"]:
+        print(f'Config option {name} set to "{value}"')
+
+    logger.debug("CLI command completed successfully.")

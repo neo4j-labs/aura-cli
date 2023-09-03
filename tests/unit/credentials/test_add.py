@@ -1,15 +1,12 @@
 from aura.config_repository import CLIConfig
 import pytest
 from click.testing import CliRunner
-from unittest.mock import MagicMock
 
 from aura.credentials import add_credentials
 
 
-def test_add_credentials():
+def test_add_credentials(mock_config):
     runner = CliRunner()
-
-    mock_config = MagicMock(spec=CLIConfig)
 
     result = runner.invoke(
         add_credentials,
@@ -27,7 +24,7 @@ def test_add_credentials():
     assert result.exit_code == 0
     assert (
         result.output
-        == f'\nCredentials "test" successfully saved. Now using "test" as credentials.\n'
+        == f'Credentials "test" successfully saved. Now using "test" as credentials.\n'
     )
 
     mock_config.add_credentials.assert_called_once_with("test", "client-123", "super-secret")
