@@ -1,4 +1,10 @@
+### Installing
+
+For a usage-only installation, you can run `pip install aura-cli` to install the CLI from PyPI.
+
 ### How to run
+
+For installing the CLI for developement, do the following:
 
 In the root directory run `. venv/bin/activate` to active the virtual environment.
 
