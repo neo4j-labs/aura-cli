@@ -44,10 +44,10 @@ def handle_error(exception: Exception):
     ctx = click.get_current_context()
     config = ctx.obj
 
-    if config.env.get("VERBOSE"):
-        logger.warning(f"Error: {error_message}")
-        logger.warning("Exiting CLI with exit code 1.")
-    else:
+    logger.warning(f"Error: {error_message}")
+    logger.warning("Exiting CLI with exit code 1.")
+
+    if not config.env.get("VERBOSE"):
         click.echo(f"Error: {error_message}", err=True)
 
     click.get_current_context().exit(code=1)
@@ -82,7 +82,10 @@ class InstanceIDorNameMissing(ClientError):
     """
 
     def __init__(self):
-        super().__init__("You need to provide either an instance-id or an instance-name")
+        super().__init__(
+            "You need to provide either an --instance-id <instance-id> or --name <instance-name>"
+            " option"
+        )
 
 
 class NoCredentialsConfigured(ClientError):

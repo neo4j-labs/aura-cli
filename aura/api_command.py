@@ -1,6 +1,7 @@
 from pprint import pprint
 from functools import wraps
 import json
+import yaml
 import click
 
 from aura.config_repository import CLIConfig
@@ -88,6 +89,8 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                 elif output_format == "text":
                     out = format_text_output(data)
                     print(out)
+                elif output_format == "yaml":
+                    print(yaml.dump(data))
                 else:
                     raise UnsupportedOutputFormat(output_format)
 

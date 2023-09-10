@@ -52,7 +52,10 @@ class MockHTTPError(HTTPError):
         ),
         (
             InstanceIDorNameMissing(),
-            "Error: You need to provide either an instance-id or an instance-name",
+            (
+                "Error: You need to provide either an --instance-id <instance-id> or --name"
+                " <instance-name> option"
+            ),
         ),
         (
             NoCredentialsConfigured(),

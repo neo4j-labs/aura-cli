@@ -64,7 +64,7 @@ class CLIConfig:
         credentials = self.config["AUTH"].get("CREDENTIALS")
         return [{"Name": c, "ClientId": credentials[c]["CLIENT_ID"]} for c in credentials.keys()]
 
-    def add_credentials(self, name: str, client_id: str, client_secret: str):
+    def add_credentials(self, name: str, client_id: str, client_secret: str, use: bool):
         if self.config["AUTH"]["CREDENTIALS"].get(name, None) is not None:
             raise CredentialsAlreadyExist(name)
 
@@ -72,12 +72,13 @@ class CLIConfig:
             "CLIENT_ID": client_id,
             "CLIENT_SECRET": client_secret,
         }
-        self.config["AUTH"]["ACTIVE"] = name
+
+        if use:
+            self.config["AUTH"]["ACTIVE"] = name
+            # Delete saved auth token if it exists
+            delete_token_file()
 
         self.write_config(self.config)
-
-        # Delete saved auth token if it exists
-        delete_token_file()
 
     def current_credentials(self):
         active = self.config["AUTH"].get("ACTIVE")

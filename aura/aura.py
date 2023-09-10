@@ -1,9 +1,10 @@
+from functools import wraps
 import click
 import sys
 from aura.config_repository import CLIConfig
 from aura.instances import instances
 from aura.credentials import credentials
-from aura.logger import setup_logger
+from aura.logger import get_logger, setup_logger
 from aura.snapshots import snapshots
 from aura.tenants import tenants
 from aura.config import config
@@ -39,3 +40,18 @@ cli.add_command(instances)
 cli.add_command(snapshots)
 cli.add_command(tenants)
 cli.add_command(config)
+
+
+def log_usage_errors(func):
+    @wraps(func)
+    def log_decorator(*args, **kwargs):
+        logger = get_logger()
+        logger.debug("Error: " + str(args[0]))
+        logger.debug("CLI usage error. Exiting with status code 1.")
+        func(*args, **kwargs)
+
+    return log_decorator
+
+
+# Update Usage Error handler
+click.exceptions.UsageError.show = log_usage_errors(click.exceptions.UsageError.show)

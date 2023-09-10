@@ -8,11 +8,12 @@ from aura.logger import get_logger
 @click.option("--name", "-n", help="Name for the credentials")
 @click.option("--client-id", "-id", help="The client ID")
 @click.option("--client-secret", "-s", help="The client secret")
+@click.option("--use", "-u", is_flag=True, default=False, help="Use the credentials")
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="add", help="Add new OAuth client credentials")
 @pass_config
 def add_credentials(
-    config: CLIConfig, name: str, client_id: str, client_secret: str, verbose: bool
+    config: CLIConfig, name: str, client_id: str, client_secret: str, use: bool, verbose: bool
 ):
     """
     Add a new set of credentials
@@ -27,12 +28,16 @@ def add_credentials(
         client_secret = click.prompt("Client Secret")
 
     try:
-        config.add_credentials(name, client_id, client_secret)
+        config.add_credentials(name, client_id, client_secret, use)
     except Exception as exception:
         handle_error(exception)
 
-    logger.info(f'Credentials "{name}" successfully saved. Now using "{name}" as credentials.')
+    msg = f'Credentials "{name}" successfully saved.'
+    if use:
+        msg += f' Now using "{name}" as credentials.'
+
+    logger.info(msg)
     if not config.env["VERBOSE"]:
-        print(f'Credentials "{name}" successfully saved. Now using "{name}" as credentials.')
+        print(msg)
 
     logger.debug("CLI command completed successfully.")
