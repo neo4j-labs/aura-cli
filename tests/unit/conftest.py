@@ -28,7 +28,15 @@ def printed_data(data):
 @pytest.fixture()
 def mock_config():
     mock_config = MagicMock(spec=CLIConfig)
-    mock_config.env = {"VERBOSE": False}
+    mock_config.env = {
+        "verbose": False,
+        "output": "json",
+        "default_tenant": None,
+        "auth_url": "https://api.neo4j.io/oauth/token",
+        "base_url": "https://api.neo4j.io/v1",
+        "save_logs": False,
+        "log_file_path": None,
+    }
     mock_config.get_option.return_value = None
     yield mock_config
 

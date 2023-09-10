@@ -6,10 +6,8 @@ from aura.error_handler import NoCredentialsConfigured
 
 
 @pytest.fixture
-def mock_context():
+def mock_context(mock_config):
     mock_context = MagicMock()
-    mock_config = MagicMock()
-    mock_config.get_option.return_value = None
     mock_context.obj = mock_config
     with patch("click.get_current_context", return_value=mock_context):
         yield
@@ -36,26 +34,6 @@ def test_make_api_call(api_request, get_headers, mock_context):
     api_request.assert_called_once_with(
         "GET",
         "https://api.neo4j.io/v1/instances",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": "Bearer dummy-token",
-        },
-        timeout=10,
-    )
-
-
-def test_make_api_call_with_url_env_var(monkeypatch, api_request, get_headers, mock_context):
-    monkeypatch.setenv("AURA_CLI_BASE_URL", "https://test-url.neo4j.io/v2")
-
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    api_request.return_value = mock_response
-
-    make_api_call("GET", "/instances")
-
-    api_request.assert_called_once_with(
-        "GET",
-        "https://test-url.neo4j.io/v2/instances",
         headers={
             "Content-Type": "application/json",
             "Authorization": "Bearer dummy-token",

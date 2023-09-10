@@ -31,12 +31,11 @@ class CLIConfig:
     DEFAULT_AUTH_URL = "https://api.neo4j.io/oauth/token"
 
     def __init__(self):
-        self.env = {}
         self.config_path = os.environ.get("AURA_CLI_CONFIG_PATH", None) or os.path.expanduser(
             self.DEFAULT_AURA_CONFIG_PATH
         )
         self.config = self.load_config()
-        self.load_env()
+        self.env = self.load_env()
 
         self.logger = setup_logger(
             self.env["verbose"], self.env["save_logs"], self.env["log_file_path"]

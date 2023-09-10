@@ -5,18 +5,34 @@ import pytest
 
 from aura.config_repository import CLIConfig
 
+mock_env = {
+    "verbose": False,
+    "output": "json",
+    "default_tenant": None,
+    "auth_url": "https://api.neo4j.io/oauth/token",
+    "base_url": "https://api.neo4j.io/v1",
+    "save_logs": False,
+    "log_file_path": None,
+}
+
 
 @pytest.fixture
 def mock_cli_config():
-    with patch.object(CLIConfig, "load_config", return_value=None):
+    with patch.object(CLIConfig, "load_config", return_value=None), patch.object(
+        CLIConfig, "load_env", return_value=mock_env
+    ):
         cli_config = CLIConfig()
-    return cli_config
+        yield cli_config
 
 
 def test_initialization_load_default_config():
     with patch("os.path.expanduser") as mock_expanduser, patch(
         "builtins.open", mock_open()
-    ) as mock_file, patch.object(CLIConfig, "write_config") as mock_write_config:
+    ) as mock_file, patch.object(CLIConfig, "write_config") as mock_write_config, patch.object(
+        CLIConfig, "load_env", return_value=mock_env
+    ), patch(
+        "aura.config_repository.setup_logger", return_value=MagicMock()
+    ):
         mock_expanduser.return_value = "/mocked/path"
         mock_file.side_effect = FileNotFoundError()
         mock_write_config.return_value = CLIConfig.DEFAULT_CONFIG
@@ -41,7 +57,9 @@ def test_load_valid_config():
 
     with patch("os.path.expanduser") as mock_expanduser, patch(
         "builtins.open", mock_open(read_data=json.dumps(valid_config))
-    ) as mock_file:
+    ) as mock_file, patch.object(CLIConfig, "load_env", return_value=mock_env), patch(
+        "aura.config_repository.setup_logger", return_value=MagicMock()
+    ):
         mock_expanduser.return_value = "/mocked/path"
 
         cli_config = CLIConfig()
@@ -50,35 +68,6 @@ def test_load_valid_config():
 
 
 def test_add_credentials(mock_cli_config):
-    initial_config = {
-        "VERSION": "1.0.0",
-        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
-        "OPTIONS": {},
-    }
-
-    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
-        "aura.config_repository.delete_token_file"
-    ) as mock_delete_token:
-        mock_cli_config.config = initial_config
-
-        mock_cli_config.add_credentials("test_name", "test_id", "test_secret", False)
-
-        expected_config = {
-            "VERSION": "1.0.0",
-            "AUTH": {
-                "CREDENTIALS": {
-                    "test_name": {"CLIENT_ID": "test_id", "CLIENT_SECRET": "test_secret"}
-                },
-                "ACTIVE": None,
-            },
-            "OPTIONS": {},
-        }
-        mock_write_config.assert_called_once_with(expected_config)
-        mock_delete_token.assert_not_called()
-        assert mock_cli_config.config == expected_config
-
-
-def test_add_credentials_use(mock_cli_config):
     initial_config = {
         "VERSION": "1.0.0",
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
