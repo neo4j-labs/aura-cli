@@ -102,7 +102,7 @@ Next, run `pip install --editable .` to install the dependencies. Then you can r
 
 When finished, run `deactivate` to deactivate the venv.
 
-To run the unit tests, run `pytest tests/`.
+To run the unit tests, run `pytest tests/unit`.
 
 For development you will need the following Python libraries installed:
 
