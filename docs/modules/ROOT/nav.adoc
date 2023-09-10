@@ -1,3 +1,4 @@
 * xref:index.adoc[Introduction]
 * xref:quickstart.adoc[Quickstart]
+* xref:cheatsheet.adoc[Cheatsheet]
 * xref:developer-guide.adoc[Developer Guide]

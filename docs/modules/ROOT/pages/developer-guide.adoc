@@ -1,4 +1,4 @@
-= Development
+= Developmer Guide
 
 To install the CLI for development, do the following:
 
