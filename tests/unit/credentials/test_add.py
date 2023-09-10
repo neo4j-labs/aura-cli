@@ -22,9 +22,24 @@ def test_add_credentials(mock_config):
     )
 
     assert result.exit_code == 0
+    assert result.output == f'Credentials "test" successfully saved.\n'
+
+    mock_config.add_credentials.assert_called_once_with("test", "client-123", "super-secret", False)
+
+
+def test_add_credentials_use(mock_config):
+    runner = CliRunner()
+
+    result = runner.invoke(
+        add_credentials,
+        ["--name", "test", "--client-id", "client-123", "--client-secret", "super-secret", "--use"],
+        obj=mock_config,
+    )
+
+    assert result.exit_code == 0
     assert (
         result.output
         == f'Credentials "test" successfully saved. Now using "test" as credentials.\n'
     )
 
-    mock_config.add_credentials.assert_called_once_with("test", "client-123", "super-secret")
+    mock_config.add_credentials.assert_called_once_with("test", "client-123", "super-secret", True)

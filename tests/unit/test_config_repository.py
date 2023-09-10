@@ -61,7 +61,36 @@ def test_add_credentials(mock_cli_config):
     ) as mock_delete_token:
         mock_cli_config.config = initial_config
 
-        mock_cli_config.add_credentials("test_name", "test_id", "test_secret")
+        mock_cli_config.add_credentials("test_name", "test_id", "test_secret", False)
+
+        expected_config = {
+            "VERSION": "1.0.0",
+            "AUTH": {
+                "CREDENTIALS": {
+                    "test_name": {"CLIENT_ID": "test_id", "CLIENT_SECRET": "test_secret"}
+                },
+                "ACTIVE": None,
+            },
+            "OPTIONS": {},
+        }
+        mock_write_config.assert_called_once_with(expected_config)
+        mock_delete_token.assert_not_called()
+        assert mock_cli_config.config == expected_config
+
+
+def test_add_credentials_use(mock_cli_config):
+    initial_config = {
+        "VERSION": "1.0.0",
+        "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
+        "OPTIONS": {},
+    }
+
+    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
+        "aura.config_repository.delete_token_file"
+    ) as mock_delete_token:
+        mock_cli_config.config = initial_config
+
+        mock_cli_config.add_credentials("test_name", "test_id", "test_secret", True)
 
         expected_config = {
             "VERSION": "1.0.0",
