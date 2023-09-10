@@ -37,7 +37,7 @@ def add_credentials(
         msg += f' Now using "{name}" as credentials.'
 
     logger.info(msg)
-    if not config.env["VERBOSE"]:
+    if not config.env["verbose"]:
         print(msg)
 
     logger.debug("CLI command completed successfully.")

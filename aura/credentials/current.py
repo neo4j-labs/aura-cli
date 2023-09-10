@@ -21,12 +21,12 @@ def current_credentials(config: CLIConfig, verbose: bool):
 
     if name is None:
         logger.info("No credentials have been selected.")
-        if not config.env["VERBOSE"]:
+        if not config.env["verbose"]:
             print("No credentials have been selected.")
     else:
         client_id = creds["CLIENT_ID"]
         logger.info(f"Current credentials: Name={name} ClientId={client_id}")
-        if not config.env["VERBOSE"]:
+        if not config.env["verbose"]:
             print("Current credentials:")
             print(f"Name:\t\t{name}")
             print(f"Client ID:\t{client_id}")

@@ -47,7 +47,7 @@ def set_option(config: CLIConfig, name: str, value: str, verbose: bool):
         handle_error(exception)
 
     logger.info(f'Config option {name} set to "{value}"')
-    if not config.env["VERBOSE"]:
+    if not config.env["verbose"]:
         print(f'Config option {name} set to "{value}"')
 
     logger.debug("CLI command completed successfully.")

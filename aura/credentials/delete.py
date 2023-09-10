@@ -21,7 +21,7 @@ def delete_credentials(config: CLIConfig, name: str, verbose: bool):
         handle_error(exception)
 
     logger.info(f"Credentials {name} successfully deleted")
-    if not config.env["VERBOSE"]:
+    if not config.env["verbose"]:
         print(f"Credentials {name} successfully deleted")
 
     logger.debug("CLI command completed successfully.")

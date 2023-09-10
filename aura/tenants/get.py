@@ -19,7 +19,7 @@ def get_tenant(config: CLIConfig, tenant_id: str):
     """
 
     if tenant_id is None:
-        tenant_id = config.get_option("default-tenant")
+        tenant_id = config.env["default_tenant"]
     if tenant_id is None:
         tenant_id = click.prompt("Tenant ID")
 

@@ -2,7 +2,7 @@ import logging
 import os
 
 
-def setup_logger(is_verbose=False):
+def setup_logger(is_verbose, save_logs, log_file_path):
     logger = logging.getLogger("auracli")
     logger.setLevel(logging.DEBUG)
 
@@ -10,21 +10,24 @@ def setup_logger(is_verbose=False):
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG if is_verbose else logging.CRITICAL)
 
-    # Make sure .aura directory and log file exists
-    os.makedirs(os.path.dirname(os.path.expanduser("~/.aura/auracli.log")), exist_ok=True)
-
-    log_file_path = os.path.expanduser("~/.aura/auracli.log")
-    file_handler = logging.FileHandler(log_file_path)
-    file_handler.setLevel(logging.DEBUG)
+    # Read environment variables for log convigurations
+    collect_logs = os.environ.get("AURA_CLI_SAVE_LOGS", "").lower() in {"yes", "y", "true", "1"}
+    logfile_path = os.environ.get("AURA_CLI_LOGS_PATH") or os.path.expanduser("~/.aura/auracli.log")
 
     # Formatter
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     console_handler.setFormatter(formatter)
-    file_handler.setFormatter(formatter)
 
     # Add handlers to the logger
     logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
+
+    if collect_logs:
+        # Make sure .aura directory and log file exists
+        os.makedirs(os.path.dirname(logfile_path), exist_ok=True)
+        file_handler = logging.FileHandler(logfile_path)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
 
     return logger
 

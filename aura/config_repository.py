@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 from aura.error_handler import (
     CredentialsAlreadyExist,
@@ -8,7 +9,7 @@ from aura.error_handler import (
     UnsupportedConfigFileVersion,
     handle_error,
 )
-from aura.logger import get_logger
+from aura.logger import get_logger, setup_logger
 from aura.token_repository import delete_token_file
 from aura.version import __version__
 
@@ -20,20 +21,62 @@ class CLIConfig:
     This class handles loading, validatinf and updating this config.
     """
 
-    AURA_CONFIG_PATH = "~/.aura/config.json"
+    DEFAULT_AURA_CONFIG_PATH = "~/.aura/config.json"
     DEFAULT_CONFIG = {
         "VERSION": __version__,
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
         "OPTIONS": {},
     }
+    DEFAULT_BASE_URL = "https://api.neo4j.io/v1"
+    DEFAULT_AUTH_URL = "https://api.neo4j.io/oauth/token"
 
     def __init__(self):
         self.env = {}
-        self.logger = get_logger()
-        self.logger.debug("Loading user configuration from " + self.AURA_CONFIG_PATH)
-        self.config_path = os.path.expanduser(self.AURA_CONFIG_PATH)
+        self.config_path = os.environ.get("AURA_CLI_CONFIG_PATH", None) or os.path.expanduser(
+            self.DEFAULT_AURA_CONFIG_PATH
+        )
         self.config = self.load_config()
-        self.logger.debug("User configuration loaded successfully.")
+        self.load_env()
+
+        self.logger = setup_logger(
+            self.env["verbose"], self.env["save_logs"], self.env["log_file_path"]
+        )
+        self.logger.debug(f"CLI initiated. Version {__version__}")
+        self.logger.debug("CLI command called: aura " + " ".join(sys.argv[1:]))
+        self.logger.debug("User configuration loaded from " + self.config_path)
+
+    def load_env(self):
+        self.env["base_url"] = (
+            os.environ.get("AURA_CLI_BASE_URL")
+            or self.get_option("base_url")
+            or self.DEFAULT_BASE_URL
+        )
+        self.env["auth_url"] = (
+            os.environ.get("AURA_CLI_AUTH_URL")
+            or self.get_option("auth_url")
+            or self.DEFAULT_AUTH_URL
+        )
+        self.env["output"] = (
+            os.environ.get("AURA_CLI_OUTPUT") or self.get_option("output") or "json"
+        )
+        self.env["default_tenant"] = (
+            os.environ.get("AURA_CLI_DEFAULT_TENANT") or self.get_option("default_tenant") or None
+        )
+        self.env["config_path"] = self.config_path
+        self.env["save_logs"] = (
+            os.environ.get("AURA_CLI_SAVE_LOGS", "").lower() in {"yes", "y", "true", "1"}
+            or self.get_option("save_logs")
+            or False
+        )
+        self.env["log_file_path"] = (
+            os.environ.get("AURA_CLI_LOGS_PATH")
+            or self.get_option("log_file_path")
+            or os.path.expanduser("~/.aura/auracli.log")
+        )
+        # The verbose flag is supposed to be global but click does not allow checking
+        # all nested subcommands and options at this level. So we manually check if the
+        # flag was set at any level.
+        self.env["verbose"] = "--verbose" in sys.argv
 
     def load_config(self) -> dict:
         try:
