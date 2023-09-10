@@ -1,0 +1,42 @@
+= Developmer Guide
+
+To install the CLI for development, do the following:
+
+In the root directory run:
+----
+. venv/bin/activate
+----
+to activate the virtual environment.
+
+Next, run:
+----
+pip install --editable .
+----
+to install the dependencies. Then you can run the CLI:
+----
+aura --help
+----
+
+When finished, run:
+----
+deactivate
+----
+to deactivate the venv.
+
+For development, you will need the following Python libraries installed:
+
+* `pytest`
+* `pytest-cov`
+* `black`
+* `pylint`
+* `pre-commit`
+
+
+== Testing
+
+The CLI uses *pytest* for unit testing and a Python script for realese checks.
+
+To run the unit tests, run:
+----
+pytest tests/unit
+----

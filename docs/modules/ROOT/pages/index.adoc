@@ -1,0 +1,8 @@
+= Aura Command Line Interface
+This portal contains information on getting started with the Aura CLI
+
+The Neo4j Aura CLI is an open source command line interface for interacting with the Aura cloud platform through the public Aura API.
+
+You can sign up for Aura here: https://console.neo4j.io
+
+To find out more about about the Aura API visit the documentation: https://neo4j.com/docs/aura/platform/api/overview/
