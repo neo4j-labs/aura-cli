@@ -9,7 +9,11 @@ import requests
 from aura.config_repository import CLIConfig
 from aura.version import __version__
 from aura.logger import get_logger
-from aura.error_handler import InstanceOperationTimeoutError, NoCredentialsConfigured
+from aura.error_handler import (
+    InstanceOperationTimeoutError,
+    NoCredentialsConfigured,
+    SnapshotOperationTimeoutError,
+)
 from aura.token_repository import (
     check_existing_token,
     delete_token_file,
@@ -198,4 +202,4 @@ def make_api_call_and_wait_for_snapshot_completed(
         else:
             time.sleep(30)
 
-    raise InstanceOperationTimeoutError(snapshot_id, "Completed")
+    raise SnapshotOperationTimeoutError(snapshot_id, "Completed")

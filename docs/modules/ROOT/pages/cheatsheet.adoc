@@ -77,6 +77,10 @@ aura instances overwrite --instance-id b65d4b4f --source-instance a83d0l9 --sour
 aura instances pause --instance-id b65d4b4f
 aura instances pause --instance-name InstanceName
 aura instances resume --instance-id b65d4b4f
+
+# Wait for asynchronous operations
+aura instances pause --instance-id b65d4b4f --wait
+aura instances update --instance-id b65d4b4f --memory 8GB --wait
 ----
 
 

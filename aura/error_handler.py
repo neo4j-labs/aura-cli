@@ -6,7 +6,6 @@ from aura.logger import get_logger
 
 
 def handle_error(exception: Exception):
-    print(exception)
     """
     Handle exceptions by providing a user-friendly error message.
 
