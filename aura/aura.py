@@ -4,7 +4,7 @@ import sys
 from aura.config_repository import CLIConfig
 from aura.instances import instances
 from aura.credentials import credentials
-from aura.logger import get_logger, setup_logger
+from aura.logger import get_logger
 from aura.snapshots import snapshots
 from aura.tenants import tenants
 from aura.config import config
@@ -21,18 +21,7 @@ CLI_VERSION_MESSAGE = f"Aura CLI: version {__version__}, Aura API: version v1"
 @click.pass_context
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 def cli(ctx, verbose):
-    # The verbose flag is supposed to be global but click does not allow checking
-    # all nested subcommands and options at this level. So we manually check if the
-    # flag was set at any level.
-    is_verbose = verbose or "--verbose" in sys.argv
-
-    logger = setup_logger(is_verbose)
-    logger.debug("CLI initiated. " + CLI_VERSION_MESSAGE)
-    logger.debug("CLI command called: aura " + " ".join(sys.argv[1:]))
-
     ctx.obj = CLIConfig()
-    # Set verbosity in config object
-    ctx.obj.env["VERBOSE"] = is_verbose
 
 
 cli.add_command(credentials)

@@ -15,9 +15,6 @@ from aura.token_repository import (
     save_token,
 )
 
-DEFAULT_BASE_URL = "https://api.neo4j.io/v1"
-DEFAULT_AUTH_URL = "https://api.neo4j.io/oauth/token"
-
 
 def _get_credentials():
     logger = get_logger()
@@ -33,19 +30,15 @@ def _get_credentials():
     if not client_id or not client_secret:
         ctx = click.get_current_context()
         config = ctx.obj
-        _, current_credentials = config.current_credentials()
+        cred_name, current_credentials = config.current_credentials()
 
         if current_credentials is None:
             raise NoCredentialsConfigured()
 
         if not client_id:
-            logger.debug(
-                f"Reading API client id from configured credentials {current_credentials}."
-            )
+            logger.debug(f"Reading API client id from configured credentials {cred_name}.")
         if not client_secret:
-            logger.debug(
-                f"Reading API client secret from configured credentials {current_credentials}."
-            )
+            logger.debug(f"Reading API client secret from configured credentials {cred_name}.")
 
         client_id = client_id or current_credentials["CLIENT_ID"]
         client_secret = client_secret or current_credentials["CLIENT_SECRET"]
@@ -77,7 +70,7 @@ def _authenticate():
     ctx = click.get_current_context()
     config: CLIConfig = ctx.obj
     # Get url by priority: First by env var, then by config setting, then by default url
-    url = os.environ.get("AURA_CLI_AUTH_URL") or config.get_option("auth-url") or DEFAULT_AUTH_URL
+    url = config.env["auth_url"]
 
     logger.debug("No token found. Requesting new token from " + url)
 
@@ -128,9 +121,7 @@ def make_api_call(method: str, path: str, **kwargs):
     headers = get_headers()
 
     # Get url by priority: First by env var, then by config setting, then by default url
-    base_url = (
-        os.environ.get("AURA_CLI_BASE_URL") or config.get_option("base-url") or DEFAULT_BASE_URL
-    )
+    base_url = config.env["base_url"]
     full_url = base_url + path
 
     logger.debug(f"Initializing connection to Aura Cloud Platform API endpoint: {base_url}")

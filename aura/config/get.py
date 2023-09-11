@@ -38,11 +38,11 @@ def get_option(config: CLIConfig, name: str, verbose: bool):
 
     if value is None:
         logger.info(f"No value for {name} set")
-        if not config.env["VERBOSE"]:
+        if not config.env["verbose"]:
             print(f"No value for {name} set")
     else:
         logger.info(f'Config option {name} is set to "{value}"')
-        if not config.env["VERBOSE"]:
+        if not config.env["verbose"]:
             print(f'Config option {name} is set to "{value}"')
 
     logger.debug("CLI command completed successfully.")

@@ -23,11 +23,11 @@ def list_credentials(config: CLIConfig, verbose: bool):
 
     if not credentials:
         logger.info("No credentials have been added yet.")
-        if not config.env["VERBOSE"]:
+        if not config.env["verbose"]:
             print("No credentials have been added yet.")
     else:
         logger.info("Credentials: " + ", ".join([creds["Name"] for creds in credentials]))
-        if not config.env["VERBOSE"]:
+        if not config.env["verbose"]:
             output = []
             for creds in credentials:
                 if creds["Name"] == current_creds:

@@ -21,7 +21,7 @@ def use_credentials(config: CLIConfig, name: str, verbose: bool):
         handle_error(exception)
 
     logger.info(f"Now using credentials {name}")
-    if not config.env["VERBOSE"]:
+    if not config.env["verbose"]:
         print(f"Now using credentials {name}")
 
     logger.debug("CLI command completed successfully.")

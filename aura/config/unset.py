@@ -37,7 +37,7 @@ def unset_option(config: CLIConfig, name: str, verbose: bool):
         handle_error(exception)
 
     logger.info(f"Config option {name} unset")
-    if not config.env["VERBOSE"]:
+    if not config.env["verbose"]:
         print(f"Config option {name} unset")
 
     logger.debug("CLI command completed successfully.")
