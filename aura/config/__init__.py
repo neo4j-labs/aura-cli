@@ -8,12 +8,17 @@ HELP_TEXT = """
 Manage configurations and set default values
 
 Valid config options:\n
-    • default-tenant\n
-    • default-output
+    • default_tenant\tSet a default tenant\n
+    • output\t\tSet a default output format\n
+    • auth_url\t\tChange the auth url\n
+    • base_url\t\tChange the api base url\n
+    • save_logs\t\tFlag if CLI logs are saved to a file\n
+    • log_file_path\tPath to file where logs are saved to
 
 Example usage:\n
-aura config set default-tenant <my-tenant-id>\n
-aura config unset default-output
+aura config set default_tenant <my-tenant-id>\n
+aura config unset output\n
+aura config set save_logs true
 """
 
 
