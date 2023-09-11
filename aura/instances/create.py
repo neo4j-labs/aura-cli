@@ -1,7 +1,7 @@
 import json
 import click
 from aura.api_command import api_command
-from aura.api_repository import make_api_call
+from aura.api_repository import make_api_call, make_api_call_and_wait_for_instance_status
 from aura.config_repository import CLIConfig
 from aura.decorators import pass_config
 
@@ -17,6 +17,12 @@ from aura.decorators import pass_config
 @click.option(
     "--tenant-id", "-tid", help="The ID of the tenant where you want to create the instance"
 )
+@click.option(
+    "--wait",
+    is_flag=True,
+    default=False,
+    help="Wait until instance is created",
+)
 @pass_config
 def create_instance(
     config: CLIConfig,
@@ -27,6 +33,7 @@ def create_instance(
     type: str,
     tenant_id: str,
     cloud_provider: str,
+    wait: bool,
 ):
     """
     Create a new instance with specified options.
@@ -51,4 +58,9 @@ def create_instance(
         "cloud_provider": cloud_provider,
     }
 
-    return make_api_call("POST", path, data=json.dumps(data))
+    if wait:
+        return make_api_call_and_wait_for_instance_status(
+            "POST", path, "running", data=json.dumps(data)
+        )
+    else:
+        return make_api_call("POST", path, data=json.dumps(data))

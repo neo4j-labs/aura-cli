@@ -2,13 +2,18 @@
 import os
 import json
 import click
+import time
 from requests.auth import HTTPBasicAuth
 import requests
 
 from aura.config_repository import CLIConfig
 from aura.version import __version__
 from aura.logger import get_logger
-from aura.error_handler import NoCredentialsConfigured
+from aura.error_handler import (
+    InstanceOperationTimeoutError,
+    NoCredentialsConfigured,
+    SnapshotOperationTimeoutError,
+)
 from aura.token_repository import (
     check_existing_token,
     delete_token_file,
@@ -135,3 +140,66 @@ def make_api_call(method: str, path: str, **kwargs):
         delete_token_file()
 
     return response
+
+
+def make_api_call_and_wait_for_instance_status(
+    method: str, path: str, desired_status: str, **kwargs
+):
+    logger = get_logger()
+
+    main_response = make_api_call(method, path, **kwargs)
+    main_response.raise_for_status()
+
+    data = main_response.json()["data"]
+    instance_id = data["id"]
+    status = data["status"]
+
+    logger.debug(f"Instance has status {status}.")
+    logger.debug(f"Waiting for instance to have status {desired_status}.")
+
+    # Poll every 30 seconds, 40 times. Max total wait = 20 min
+    for _ in range(40):
+        res = make_api_call("GET", f"/instances/{instance_id}")
+        res.raise_for_status()
+        data = res.json()["data"]
+        status = data["status"]
+
+        logger.debug(f'Polling instance. Status is "{status}".')
+
+        if status == desired_status:
+            return res
+        else:
+            time.sleep(30)
+
+    raise InstanceOperationTimeoutError(instance_id, desired_status)
+
+
+def make_api_call_and_wait_for_snapshot_completed(
+    method: str, path: str, instance_id: str, **kwargs
+):
+    logger = get_logger()
+
+    main_response = make_api_call(method, path, **kwargs)
+    main_response.raise_for_status()
+
+    data = main_response.json()["data"]
+    snapshot_id = data["snapshot_id"]
+
+    logger.debug("Snapshot is creating.")
+    logger.debug('Waiting for snapshot to have status "Completed"')
+
+    # Poll every 30 seconds, 40 times. Max total wait = 20 min
+    for _ in range(40):
+        res = make_api_call("GET", f"/instances/{instance_id}/snapshots/{snapshot_id}")
+        res.raise_for_status()
+        data = res.json()["data"]
+        status = data["status"]
+
+        logger.debug(f'Polling snapshot. Status is "{status}".')
+
+        if status == "Completed":
+            return res
+        else:
+            time.sleep(30)
+
+    raise SnapshotOperationTimeoutError(snapshot_id, "Completed")

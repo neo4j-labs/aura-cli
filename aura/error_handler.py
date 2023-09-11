@@ -160,3 +160,23 @@ class UnsupportedConfigFileVersion(ClientError):
             "The version of your CLI config file is not supported. Please delete the file at:"
             f" {path}"
         )
+
+
+class InstanceOperationTimeoutError(ClientError):
+    """Exception raised when waiting for an instance status and operation times out"""
+
+    def __init__(self, instance_id, desired_status):
+        super().__init__(
+            f"Waiting for instance {instance_id} to have status {desired_status} failed. Operation"
+            " timed out."
+        )
+
+
+class SnapshotOperationTimeoutError(ClientError):
+    """Exception raised when waiting for an snapshot status and operation times out"""
+
+    def __init__(self, snapshot_id, desired_status):
+        super().__init__(
+            f"Waiting for snapshot {snapshot_id} to have status {desired_status} failed. Operation"
+            " timed out."
+        )

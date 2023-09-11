@@ -93,6 +93,7 @@ All API commands have the following 3 flags:
 - `--include, -i` : Print the API response headers
 - `--raw` : Print the raw API response body
 - `--verbose` : Print verbose output
+- `--wait` : Can be used for async operations like creating an instance. Command will wait until the operation is finished.
 
 ### Logs
 
