@@ -425,6 +425,8 @@ def test_validate_config_valid(mock_cli_config):
 def test_load_env(env_vars, mock_get_option_values, expected_env):
     with patch("aura.config_repository.os.environ", env_vars), patch.object(
         CLIConfig, "get_option", side_effect=lambda key: mock_get_option_values.get(key)
-    ), patch.object(CLIConfig, "load_config", return_value=None):
+    ), patch.object(CLIConfig, "load_config", return_value=None), patch(
+        "aura.config_repository.setup_logger", return_value=MagicMock()
+    ):
         config = CLIConfig()
         assert config.load_env() == expected_env

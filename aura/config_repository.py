@@ -32,6 +32,7 @@ class CLIConfig:
     DEFAULT_AUTH_URL = "https://api.neo4j.io/oauth/token"
 
     def __init__(self):
+        self.logger = None
         self.config_path = os.environ.get("AURA_CLI_CONFIG_PATH", None) or os.path.expanduser(
             self.DEFAULT_AURA_CONFIG_PATH
         )
@@ -91,7 +92,7 @@ class CLIConfig:
         try:
             with open(self.config_path, "r", encoding="utf-8") as configfile:
                 config = json.load(configfile)
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             config = self.write_config(self.DEFAULT_CONFIG)
             return config
 
@@ -103,7 +104,8 @@ class CLIConfig:
         return config
 
     def write_config(self, config: dict):
-        self.logger.debug("Updating user configuration at " + self.config_path)
+        if self.logger:
+            self.logger.debug("Updating user configuration at " + self.config_path)
 
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
 
@@ -125,7 +127,9 @@ class CLIConfig:
             "CLIENT_SECRET": client_secret,
         }
 
-        if use:
+        use_credentials = use or len(self.config["AUTH"]["CREDENTIALS"]) == 1
+
+        if use_credentials:
             self.config["AUTH"]["ACTIVE"] = name
             # Delete saved auth token if it exists
             delete_token_file()
