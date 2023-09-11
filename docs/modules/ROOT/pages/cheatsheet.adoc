@@ -23,6 +23,8 @@ aura config list
 # Set config options
 aura config set output table
 aura config set default_tenant <TENANT_ID>
+aura config set save_logs true
+aura config set log_file_path path/to/file.log
 
 aura config get output      # Get a config option
 aura config unset output    # Unset a config option 
@@ -101,6 +103,7 @@ aura snapshots restore --instance-id b65d4b4f --snapshot-id 29428119-f7a4-49d8-b
 ----
 # Set the output format using the --output option
 aura instances list --ouput table
+aura instances list --ouput yaml
 
 # Print verbose output using the --verbose flag
 aura instances get -id b25d4b9f --verbose
