@@ -37,23 +37,29 @@ Configured credentials will be overriden if environment variables for the Client
 
 ### Environment Variables
 
-There are 4 environment variables that can be set for use in the CLI:
+There are 8 environment variables that can be set for use in the CLI:
 
-- `AURA_CLI_AUTH_URL` - The url used for getting an auth token (default to https://api.neo4j.io/oauth/token)
+- `AURA_CLI_AUTH_URL` - The url used for getting an auth token (defaults to https://api.neo4j.io/oauth/token)
 - `AURA_CLI_BASE_URL` - The base url used for all API calls (defaults to https://api.neo4j.io/v1)
 - `AURA_CLI_CLIENT_ID` - The client id used for authentication
 - `AURA_CLI_CLIENT_SECRET` - The client secret used for authentication
+- `AURA_CLI_CONFIG_PATH` - The path to the CLI's config file. Defaults to `~/.aura/config.json`
+- `AURA_CLI_OUTPUT` - The default output format. Defaults to `json`.
+- `AURA_CLI_SAVE_LOGS` - Flag whether CLI logs are saved to a file. Defaults to `false`.
+- `AURA_CLI_LOG_FILE_PATH` - The path to the file where logs are saved. Defaults to `~/.aura/auracli.log`.
 
 Setting environment variables will override any configurations that were set with the `aura config set` command.
 
 ### Config
 
-The `aura config` commands allows to set configurations and default values. Currently there are 4 options which can be set with the `aura config set` command:
+The `aura config` commands allows to set configurations and default values. Currently there 6 options which can be set with the `aura config set` command:
 
-- `default-tenant` - the default tenant which to use for commands like `aura instances create` (where a tenant-id is required)
-- `output` - the default output format for API commands (json, text or table)
-- `auth-url` - The url used for getting an auth token (default to https://api.neo4j.io/oauth/token)
-- `base-url` - The base url used for all API calls (defaults to https://api.neo4j.io/v1)
+- `default_tenant` - the default tenant which to use for commands like `aura instances create` (where a tenant-id is required)
+- `output` - the default output format for API commands (json, text, yaml or table)
+- `auth_url` - The url used for getting an auth token (default to https://api.neo4j.io/oauth/token)
+- `base_url` - The base url used for all API calls (defaults to https://api.neo4j.io/v1)
+- `save_logs` - Whether to save CLI logs in a log file. Defaults to false. Allowed values: "true", "yes", "false", "no"
+- `log_file_path` - The path to the file where logs are saved. Defaults to `~/.aura/auracli.log`
 
 List of all config commands:
 
