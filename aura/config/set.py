@@ -13,10 +13,12 @@ HELP_TEXT = """
 Set a config option to a new value
 
 Valid config options:\n
-    • default_tenant\n
-    • output\n
-    • auth_url\n
-    • base_url
+    • default_tenant\tSet a default tenant\n
+    • output\t\tSet a default output format\n
+    • auth_url\t\tChange the auth url\n
+    • base_url\t\tChange the api base url\n
+    • save_logs\t\tFlag if CLI logs are saved to a file\n
+    • log_file_path\tPath to file where logs are saved to
 
 
 Example usage:\n
