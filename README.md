@@ -96,7 +96,8 @@ All API commands have the following 3 flags:
 
 ### Logs
 
-By default the CLI will collect logs in a `~/.aura/auracli.log` file.
+The CLI will generate logs which can be printed using the `--verbose` flag. By default these logs are not saved, but setting the `AURA_CLI_SAVE_LOGS` environment variable or the `save_logs` config option to `true` or `yes` will write the logs to a file.
+The default location of the log file is `~/.aura/auracli.log`, but this can be changed by setting the `AURA_CLI_LOG_FILE_PATH` environment variable or the `log_file_path` config option.
 
 ## Development
 
