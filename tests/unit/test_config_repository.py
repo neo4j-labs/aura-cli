@@ -1,4 +1,5 @@
 import json
+import os
 from unittest.mock import patch, mock_open, MagicMock
 from aura.error_handler import CredentialsNotFound
 import pytest
@@ -309,3 +310,121 @@ def test_validate_config_valid(mock_cli_config):
     }
 
     mock_cli_config.validate_config(valid_config)
+
+
+@pytest.mark.parametrize(
+    "env_vars, mock_get_option_values, expected_env",
+    [
+        (
+            {"AURA_CLI_BASE_URL": "https://mocked.com"},
+            {
+                "base_url": None,
+                "auth_url": None,
+                "output": None,
+                "default_tenant": None,
+                "save_logs": None,
+                "log_file_path": None,
+            },
+            {
+                "base_url": "https://mocked.com",
+                "auth_url": CLIConfig.DEFAULT_AUTH_URL,
+                "output": "json",
+                "verbose": False,
+                "save_logs": False,
+                "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
+                "default_tenant": None,
+                "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+            },
+        ),
+        (
+            {"AURA_CLI_BASE_URL": "https://mocked.com", "AURA_CLI_SAVE_LOGS": "yes"},
+            {
+                "base_url": "another-base-url",
+                "auth_url": None,
+                "output": None,
+                "default_tenant": None,
+                "save_logs": "false",
+                "log_file_path": None,
+            },
+            {
+                "base_url": "https://mocked.com",
+                "auth_url": CLIConfig.DEFAULT_AUTH_URL,
+                "output": "json",
+                "verbose": False,
+                "save_logs": True,
+                "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
+                "default_tenant": None,
+                "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+            },
+        ),
+        (
+            {"AURA_CLI_DEFAULT_TENANT": "my-tenant"},
+            {
+                "base_url": "another-base-url",
+                "auth_url": None,
+                "output": None,
+                "default_tenant": "test-123",
+                "save_logs": "false",
+                "log_file_path": None,
+            },
+            {
+                "base_url": "another-base-url",
+                "auth_url": CLIConfig.DEFAULT_AUTH_URL,
+                "output": "json",
+                "verbose": False,
+                "save_logs": False,
+                "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
+                "default_tenant": "my-tenant",
+                "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+            },
+        ),
+        (
+            {"AURA_CLI_SAVE_LOGS": "yes", "AURA_CLI_LOG_FILE_PATH": "test/path"},
+            {
+                "base_url": "another-base-url",
+                "auth_url": None,
+                "output": None,
+                "default_tenant": "test-123",
+                "save_logs": None,
+                "log_file_path": None,
+            },
+            {
+                "base_url": "another-base-url",
+                "auth_url": CLIConfig.DEFAULT_AUTH_URL,
+                "output": "json",
+                "verbose": False,
+                "save_logs": True,
+                "log_file_path": "test/path",
+                "default_tenant": "test-123",
+                "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+            },
+        ),
+        (
+            {"AURA_CLI_CONFIG_PATH": "path/config.json"},
+            {
+                "base_url": None,
+                "auth_url": None,
+                "output": "text",
+                "default_tenant": None,
+                "save_logs": "true",
+                "log_file_path": None,
+            },
+            {
+                "base_url": CLIConfig.DEFAULT_BASE_URL,
+                "auth_url": CLIConfig.DEFAULT_AUTH_URL,
+                "output": "text",
+                "verbose": False,
+                "save_logs": True,
+                "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
+                "default_tenant": None,
+                "config_path": "path/config.json",
+            },
+        ),
+    ],
+)
+def test_load_env(env_vars, mock_get_option_values, expected_env):
+    with patch("aura.config_repository.os.environ", env_vars), patch.object(
+        CLIConfig, "get_option", side_effect=lambda key: mock_get_option_values.get(key)
+    ), patch.object(CLIConfig, "load_config", return_value=None):
+        config = CLIConfig()
+        assert config.load_env() == expected_env

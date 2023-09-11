@@ -22,6 +22,7 @@ class CLIConfig:
     """
 
     DEFAULT_AURA_CONFIG_PATH = "~/.aura/config.json"
+    DEFAULT_LOG_FILE_PATH = "~/.aura/auracli.log"
     DEFAULT_CONFIG = {
         "VERSION": __version__,
         "AUTH": {"CREDENTIALS": {}, "ACTIVE": None},
@@ -45,37 +46,46 @@ class CLIConfig:
         self.logger.debug("User configuration loaded from " + self.config_path)
 
     def load_env(self):
-        self.env["base_url"] = (
+        env = {}
+        env["base_url"] = (
             os.environ.get("AURA_CLI_BASE_URL")
             or self.get_option("base_url")
             or self.DEFAULT_BASE_URL
         )
-        self.env["auth_url"] = (
+        env["auth_url"] = (
             os.environ.get("AURA_CLI_AUTH_URL")
             or self.get_option("auth_url")
             or self.DEFAULT_AUTH_URL
         )
-        self.env["output"] = (
-            os.environ.get("AURA_CLI_OUTPUT") or self.get_option("output") or "json"
-        )
-        self.env["default_tenant"] = (
+        env["output"] = os.environ.get("AURA_CLI_OUTPUT") or self.get_option("output") or "json"
+        env["default_tenant"] = (
             os.environ.get("AURA_CLI_DEFAULT_TENANT") or self.get_option("default_tenant") or None
         )
-        self.env["config_path"] = self.config_path
-        self.env["save_logs"] = (
-            os.environ.get("AURA_CLI_SAVE_LOGS", "").lower() in {"yes", "y", "true", "1"}
-            or self.get_option("save_logs")
-            or False
-        )
-        self.env["log_file_path"] = (
-            os.environ.get("AURA_CLI_LOGS_PATH")
+        env["config_path"] = self.config_path
+
+        if os.environ.get("AURA_CLI_SAVE_LOGS") is not None:
+            env["save_logs"] = os.environ.get("AURA_CLI_SAVE_LOGS", "").lower() in {
+                "yes",
+                "y",
+                "true",
+                "1",
+            }
+        elif self.get_option("save_logs") is not None:
+            env["save_logs"] = self.get_option("save_logs").lower() in {"yes", "y", "true", "1"}
+        else:
+            env["save_logs"] = False
+
+        env["log_file_path"] = (
+            os.environ.get("AURA_CLI_LOG_FILE_PATH")
             or self.get_option("log_file_path")
-            or os.path.expanduser("~/.aura/auracli.log")
+            or os.path.expanduser(self.DEFAULT_LOG_FILE_PATH)
         )
         # The verbose flag is supposed to be global but click does not allow checking
         # all nested subcommands and options at this level. So we manually check if the
         # flag was set at any level.
-        self.env["verbose"] = "--verbose" in sys.argv
+        env["verbose"] = "--verbose" in sys.argv
+
+        return env
 
     def load_config(self) -> dict:
         try:
@@ -93,7 +103,7 @@ class CLIConfig:
         return config
 
     def write_config(self, config: dict):
-        self.logger.debug("Updating user configuration at " + self.AURA_CONFIG_PATH)
+        self.logger.debug("Updating user configuration at " + self.config_path)
 
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
 

@@ -75,7 +75,7 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                     print(response_data)
                     return click.get_current_context().exit(code=0)
 
-                output_format = fixed_cmd_output or config.env["output"]
+                output_format = fixed_cmd_output or output or config.env["output"]
 
                 if data is None:
                     print("Operation successful")

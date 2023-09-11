@@ -30,19 +30,15 @@ def _get_credentials():
     if not client_id or not client_secret:
         ctx = click.get_current_context()
         config = ctx.obj
-        _, current_credentials = config.current_credentials()
+        cred_name, current_credentials = config.current_credentials()
 
         if current_credentials is None:
             raise NoCredentialsConfigured()
 
         if not client_id:
-            logger.debug(
-                f"Reading API client id from configured credentials {current_credentials}."
-            )
+            logger.debug(f"Reading API client id from configured credentials {cred_name}.")
         if not client_secret:
-            logger.debug(
-                f"Reading API client secret from configured credentials {current_credentials}."
-            )
+            logger.debug(f"Reading API client secret from configured credentials {cred_name}.")
 
         client_id = client_id or current_credentials["CLIENT_ID"]
         client_secret = client_secret or current_credentials["CLIENT_SECRET"]

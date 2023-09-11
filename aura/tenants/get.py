@@ -5,7 +5,7 @@ from aura.config_repository import CLIConfig
 from aura.decorators import pass_config
 
 
-@api_command(name="get", help_text="Get details for a tenant", fixed_cmd_output="json")
+@api_command(name="get", help_text="Get details for a tenant")
 @click.option("--tenant-id", "-id", help="The ID of the tenant")
 @pass_config
 def get_tenant(config: CLIConfig, tenant_id: str):
