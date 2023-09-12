@@ -152,7 +152,7 @@ def make_api_call_and_wait_for_instance_status(
 
     data = main_response.json()["data"]
     instance_id = data["id"]
-    status = data["status"]
+    status = data.get("status")
 
     logger.debug(f"Instance has status {status}.")
     logger.debug(f"Waiting for instance to have status {desired_status}.")
