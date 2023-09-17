@@ -1,3 +1,5 @@
+import json
+
 from aura.config_repository import CLIConfig
 import pytest
 from unittest.mock import MagicMock, patch, Mock
@@ -22,7 +24,7 @@ def api_request():
 
 # Utility function to verify the command output is printed correctly
 def printed_data(data):
-    return pprint.pformat(data) + "\n"
+    return json.dumps(data, indent=2) + "\n"
 
 
 @pytest.fixture()

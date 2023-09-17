@@ -1,4 +1,3 @@
-from pprint import pprint
 from functools import wraps
 import json
 import yaml
@@ -69,10 +68,10 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                     return click.get_current_context().exit(code=0)
 
                 if include:
-                    print(api_response.headers, "\n")
+                    print(json.dumps(dict(api_response.headers)), "\n")
 
                 if raw:
-                    print(response_data)
+                    print(json.dumps(response_data))
                     return click.get_current_context().exit(code=0)
 
                 output_format = fixed_cmd_output or output or config.env["output"]
@@ -80,7 +79,7 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
                 if data is None:
                     print("Operation successful")
                 elif output_format == "json":
-                    pprint(data)
+                    print(json.dumps(data, indent=2))
                 elif output_format == "table":
                     out = format_table_output(data)
                     print(out)
