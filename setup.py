@@ -13,7 +13,7 @@ with open("aura/version.py") as f:
 
 setup(
     name="aura-cli",
-    version=version['__version__'],
+    version=version["__version__"],
     packages=find_packages(),
     include_package_data=True,
     install_requires=requirements,
