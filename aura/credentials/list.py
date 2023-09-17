@@ -9,11 +9,12 @@ from aura.logger import get_logger
 @click.command(name="list", help="List all configured OAuth client credentials")
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @pass_config
+# pylint: disable=unused-argument
 def list_credentials(config: CLIConfig, verbose: bool):
     """
     List all configured credentials
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         credentials = config.list_credentials()

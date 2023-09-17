@@ -1,8 +1,8 @@
 """This module defines methods for making HTTP request to the Aura API"""
 import os
 import json
-import click
 import time
+import click
 from requests.auth import HTTPBasicAuth
 import requests
 
@@ -89,9 +89,9 @@ def _authenticate():
     )
     try:
         response.raise_for_status()
-    except Exception as e:
+    except Exception as exception:
         logger.warning("Authentication request was not succesful.")
-        raise e
+        raise exception
 
     logger.debug("Authentication request successful. Using new auth token.")
 
@@ -168,8 +168,8 @@ def make_api_call_and_wait_for_instance_status(
 
         if status == desired_status:
             return res
-        else:
-            time.sleep(30)
+
+        time.sleep(30)
 
     raise InstanceOperationTimeoutError(instance_id, desired_status)
 
@@ -199,7 +199,7 @@ def make_api_call_and_wait_for_snapshot_completed(
 
         if status == "Completed":
             return res
-        else:
-            time.sleep(30)
+
+        time.sleep(30)
 
     raise SnapshotOperationTimeoutError(snapshot_id, "Completed")

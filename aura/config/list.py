@@ -16,11 +16,12 @@ aura config list
 @click.command(name="list", help=HELP_TEXT)
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @pass_config
+# pylint: disable=unused-argument
 def list_options(config: CLIConfig, verbose: bool):
     """
     List all configured config options
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         values = config.list_options()
@@ -28,7 +29,7 @@ def list_options(config: CLIConfig, verbose: bool):
         handle_error(exception)
 
     if values is None or len(values) == 0:
-        logger.info(f"No config options set.")
+        logger.info("No config options set.")
         if not config.env["verbose"]:
             print("No config options set.")
     else:

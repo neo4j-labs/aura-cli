@@ -62,5 +62,5 @@ def create_instance(
         return make_api_call_and_wait_for_instance_status(
             "POST", path, "running", data=json.dumps(data)
         )
-    else:
-        return make_api_call("POST", path, data=json.dumps(data))
+
+    return make_api_call("POST", path, data=json.dumps(data))

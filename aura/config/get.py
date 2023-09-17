@@ -22,11 +22,12 @@ aura config get default-output
 @click.command(name="get", help=HELP_TEXT)
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @pass_config
+# pylint: disable=unused-argument
 def get_option(config: CLIConfig, name: str, verbose: bool):
     """
     Print a config option
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         if name not in VALID_OPTIONS:

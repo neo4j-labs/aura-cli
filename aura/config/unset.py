@@ -22,11 +22,12 @@ aura config unset default-output
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="unset", help=HELP_TEXT)
 @pass_config
+# pylint: disable=unused-argument
 def unset_option(config: CLIConfig, name: str, verbose: bool):
     """
     Delete a config value
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         if name not in VALID_OPTIONS:

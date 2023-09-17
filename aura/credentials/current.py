@@ -8,11 +8,12 @@ from aura.logger import get_logger
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="current", help="Print the currently selected credentials")
 @pass_config
+# pylint: disable=unused-argument
 def current_credentials(config: CLIConfig, verbose: bool):
     """
     Print the credentials currently in use
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         name, creds = config.current_credentials()

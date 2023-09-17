@@ -28,5 +28,5 @@ def setup_logger(is_verbose, save_logs, log_file_path):
     return logger
 
 
-def get_logger(verbose=False):
+def get_logger():
     return logging.getLogger("auracli")

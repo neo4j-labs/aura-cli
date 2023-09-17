@@ -26,5 +26,5 @@ def resume_instance(instance_id: str, name: str, wait: bool):
 
     if wait:
         return make_api_call_and_wait_for_instance_status("POST", path, "running")
-    else:
-        return make_api_call("POST", path)
+
+    return make_api_call("POST", path)

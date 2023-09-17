@@ -12,13 +12,14 @@ from aura.logger import get_logger
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="add", help="Add new OAuth client credentials")
 @pass_config
+# pylint: disable=unused-argument
 def add_credentials(
     config: CLIConfig, name: str, client_id: str, client_secret: str, use: bool, verbose: bool
 ):
     """
     Add a new set of credentials
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     if not name:
         name = click.prompt("Credentials Name")

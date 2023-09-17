@@ -38,5 +38,5 @@ def update_instance(instance_id: str, memory: str, new_name: str, name: str, wai
         return make_api_call_and_wait_for_instance_status(
             "PATCH", path, "running", data=json.dumps(data)
         )
-    else:
-        return make_api_call("PATCH", path, data=json.dumps(data))
+
+    return make_api_call("PATCH", path, data=json.dumps(data))

@@ -9,11 +9,12 @@ from aura.logger import get_logger
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="use", help="Select which OAuth client credentials to use for authentication")
 @pass_config
+# pylint: disable=unused-argument
 def use_credentials(config: CLIConfig, name: str, verbose: bool):
     """
     Use the speccified credentials
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         config.use_credentials(name)
