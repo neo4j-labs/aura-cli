@@ -1,9 +1,7 @@
 import json
-
 from aura.config_repository import CLIConfig
 import pytest
 from unittest.mock import MagicMock, patch, Mock
-import pprint
 
 
 def mock_headers():
