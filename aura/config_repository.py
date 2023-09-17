@@ -9,7 +9,7 @@ from aura.error_handler import (
     UnsupportedConfigFileVersion,
     handle_error,
 )
-from aura.logger import get_logger, setup_logger
+from aura.logger import setup_logger
 from aura.token_repository import delete_token_file
 from aura.version import __version__
 
@@ -98,8 +98,8 @@ class CLIConfig:
 
         try:
             self.validate_config(config)
-        except Exception as e:
-            handle_error(e)
+        except Exception as exception:
+            handle_error(exception)
 
         return config
 

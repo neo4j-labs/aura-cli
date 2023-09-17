@@ -1,6 +1,5 @@
 from functools import wraps
 import click
-import sys
 from aura.config_repository import CLIConfig
 from aura.instances import instances
 from aura.credentials import credentials
@@ -20,7 +19,8 @@ CLI_VERSION_MESSAGE = f"Aura CLI: version {__version__}, Aura API: version v1"
 )
 @click.pass_context
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
-def cli(ctx, verbose):
+# pylint: disable=unused-argument
+def cli(ctx, verbose: bool):
     ctx.obj = CLIConfig()
 
 

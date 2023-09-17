@@ -26,5 +26,5 @@ def create_snapshot(instance_id: str, instance_name: str, wait: bool):
 
     if wait:
         return make_api_call_and_wait_for_snapshot_completed("POST", path, instance_id)
-    else:
-        return make_api_call("POST", path)
+
+    return make_api_call("POST", path)

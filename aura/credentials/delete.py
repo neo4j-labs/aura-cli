@@ -9,11 +9,12 @@ from aura.logger import get_logger
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @click.command(name="delete", help="Delete OAuth client credentials")
 @pass_config
+# pylint: disable=unused-argument
 def delete_credentials(config: CLIConfig, name: str, verbose: bool):
     """
     Deletes the specified credentials
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         config.delete_credentials(name)

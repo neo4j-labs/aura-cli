@@ -436,6 +436,8 @@ disable=raw-checker-failed,
         too-many-branches,
         inconsistent-return-statements,
         broad-exception-caught,
+        logging-fstring-interpolation,
+        logging-not-lazy,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

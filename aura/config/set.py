@@ -9,9 +9,7 @@ from aura.error_handler import (
 )
 from aura.logger import get_logger
 
-HELP_TEXT = """
-Set a config option to a new value
-
+VALID_OPTIONS_HELP_TEXT = """
 Valid config options:\n
     • default_tenant\tSet a default tenant\n
     • output\t\tSet a default output format\n
@@ -19,6 +17,12 @@ Valid config options:\n
     • base_url\t\tChange the api base url\n
     • save_logs\t\tFlag if CLI logs are saved to a file\n
     • log_file_path\tPath to file where logs are saved to
+"""
+
+HELP_TEXT = f"""
+Set a config option to a new value
+
+{VALID_OPTIONS_HELP_TEXT}
 
 
 Example usage:\n
@@ -32,11 +36,12 @@ aura config set output table
 @click.argument("value")
 @click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
 @pass_config
+# pylint: disable=unused-argument
 def set_option(config: CLIConfig, name: str, value: str, verbose: bool):
     """
     Set a config option to specified value
     """
-    logger = get_logger("auracli")
+    logger = get_logger()
 
     try:
         if name not in VALID_OPTIONS:

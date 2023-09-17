@@ -41,6 +41,7 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
             help="Print verbose output",
         )
         @wraps(func)
+        # pylint: disable=unused-argument
         def wrapper(output: str, include: bool, raw: bool, verbose: bool, *args, **kwargs):
             ctx = click.get_current_context()
             config: CLIConfig = ctx.obj
