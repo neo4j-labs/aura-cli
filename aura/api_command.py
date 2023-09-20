@@ -79,15 +79,15 @@ def api_command(name: str, help_text: str, fixed_cmd_output: str = None):
 
                 if data is None:
                     print("Operation successful")
-                elif output_format == "json":
+                elif output_format.lower() == "json":
                     print(json.dumps(data, indent=2))
-                elif output_format == "table":
+                elif output_format.lower() == "table":
                     out = format_table_output(data)
                     print(out)
-                elif output_format == "text":
+                elif output_format.lower() == "text":
                     out = format_text_output(data)
                     print(out)
-                elif output_format == "yaml":
+                elif output_format.lower() == "yaml":
                     print(yaml.dump(data))
                 else:
                     raise UnsupportedOutputFormat(output_format)
