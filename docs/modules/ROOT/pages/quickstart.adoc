@@ -75,7 +75,7 @@ aura instances get --name DevInstance
 ----
 
 ----
-aura instances create --name DevInstance --region europe-west1 --type professional-db --tenant-id my-tenant-123
+aura instances create --name DevInstance --cloud-provider gcp --region europe-west1 --type professional-db --tenant-id my-tenant-123
 ----
 
 ----
