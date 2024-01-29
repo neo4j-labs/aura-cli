@@ -1,4 +1,4 @@
-= Developmer Guide
+= Developer Guide
 
 To install the CLI for development, do the following:
 
@@ -10,7 +10,7 @@ to activate the virtual environment.
 
 Next, run:
 ----
-pip install --editable .
+pip install --editable
 ----
 to install the dependencies. Then you can run the CLI:
 ----
@@ -21,7 +21,7 @@ When finished, run:
 ----
 deactivate
 ----
-to deactivate the venv.
+to deactivate the Python virtual environment
 
 For development, you will need the following Python libraries installed:
 
@@ -34,7 +34,7 @@ For development, you will need the following Python libraries installed:
 
 == Testing
 
-The CLI uses *pytest* for unit testing and a Python script for realese checks.
+The CLI uses *pytest* for unit testing and a Python script for release checks.
 
 To run the unit tests, run:
 ----
