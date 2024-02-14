@@ -10,7 +10,7 @@ to activate the virtual environment.
 
 Next, run:
 ----
-pip install --editable
+pip install --editable .
 ----
 to install the dependencies. Then you can run the CLI:
 ----
