@@ -7,7 +7,6 @@ from aura.logger import get_logger
 from aura.snapshots import snapshots
 from aura.tenants import tenants
 from aura.config import config
-from aura.dataapis import dataapis
 from aura.version import __version__
 
 CLI_VERSION_MESSAGE = f"Aura CLI: version {__version__}, Aura API: version v1"
@@ -30,7 +29,6 @@ cli.add_command(instances)
 cli.add_command(snapshots)
 cli.add_command(tenants)
 cli.add_command(config)
-cli.add_command(dataapis)
 
 
 def log_usage_errors(func):
