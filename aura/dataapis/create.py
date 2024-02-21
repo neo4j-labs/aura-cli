@@ -1,7 +1,7 @@
 import json
 import click
 from aura.api_command import api_command
-from aura.api_repository import make_api_call,
+from aura.api_repository import make_api_call
 from aura.config_repository import CLIConfig
 from aura.decorators import pass_config
 

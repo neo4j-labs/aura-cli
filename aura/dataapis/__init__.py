@@ -10,11 +10,11 @@ def dataapis():
     pass
 
 
-dataconnectors.add_command(create_dataapi)
-dataconnectors.add_command(list_dataapis)
-dataconnectors.add_command(update_dataapi)
-dataconnectors.add_command(get_dataapi)
-dataconnectors.add_command(update_dataapi_graphql_td)
-dataconnectors.add_command(delete_dataapi)
+dataapis.add_command(create_dataapi)
+dataapis.add_command(list_dataapis)
+dataapis.add_command(update_dataapi)
+dataapis.add_command(get_dataapi)
+dataapis.add_command(update_dataapi_graphql_td)
+dataapis.add_command(delete_dataapi)
 
 
