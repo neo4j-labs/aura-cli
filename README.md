@@ -102,13 +102,15 @@ The default location of the log file is `~/.aura/auracli.log`, but this can be c
 
 ## Development
 
-To installing the CLI for developement, do the following:
+To install the CLI and its dependencies for development, do the following:
 
-In the root directory run `. venv/bin/activate` to active the virtual environment.
+In the root of the repository, run `python3 -m venv .venv` to create a virtual environment.
 
-Next, run `pip install --editable .` to install the dependencies. Then you can run the cli `aura --help`.
+Next, run `. .venv/bin/activate` to activate the virtual environment.
 
-When finished, run `deactivate` to deactivate the venv.
+Next, run `pip install --editable .` to install the dependencies. Then you can run the CLI using `aura --help`.
+
+When finished, run `deactivate` to deactivate the virtual environment.
 
 To run the unit tests, run `pytest tests/unit`.
 
