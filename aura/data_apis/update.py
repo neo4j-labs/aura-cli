@@ -55,6 +55,8 @@ def update_data_api(
     Makes "PATCH /instances/:instanceId/data-apis/:dataApiId" and/or "PATCH /instances/:instanceId/data-apis/:dataApiId/graphql" API request depending on the input.
     """
 
+    result = {}
+
     data = {}
     aura_instance = {}
 
@@ -89,10 +91,13 @@ def update_data_api(
         path = f"/instances/{instance_id}/data-apis/{data_api_id}/graphql"
 
         if wait:
-            result = make_api_call_and_wait_for_data_api_status(
+            type_definitions_result = make_api_call_and_wait_for_data_api_status(
                 "PATCH", path, "ready", data=json.dumps(data)
             )
 
-        result = make_api_call("PATCH", path, data=json.dumps(data))
+        type_definitions_result = make_api_call("PATCH", path, data=json.dumps(data))
+
+        if not result:
+            result = type_definitions_result
 
     return result
