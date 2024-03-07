@@ -1,12 +1,12 @@
 import json
 import click
-import base64
 from aura.api_command import api_command
 from aura.api_repository import (
     make_api_call,
     make_api_call_and_wait_for_data_api_status,
 )
-from graphql import parse, GraphQLError
+from graphql import GraphQLError
+from aura.data_apis.util.type_definitions import read_and_encode_type_definitions
 
 from aura.error_handler import handle_error
 
@@ -50,14 +50,7 @@ def create_data_api(
     path = f"/instances/{instance_id}/data-apis"
 
     try:
-        type_definitions_file = open(type_definitions)
-    except FileNotFoundError:
-        print("Could not open provided type definitions as file, trying as GraphQL SDL")
-    else:
-        type_definitions = type_definitions_file.read()
-
-    try:
-        parse(type_definitions)
+        type_definitions = read_and_encode_type_definitions(type_definitions)
     except GraphQLError as e:
         handle_error(e)
 
@@ -65,11 +58,7 @@ def create_data_api(
         "name": name,
         "type": type,
         "aura_instance": {"username": instance_username, "password": instance_password},
-        "data_api": {
-            "graphql": {
-                "type_definitions": base64.b64encode(type_definitions.encode()).decode()
-            }
-        },
+        "data_api": {"graphql": {"type_definitions": type_definitions}},
     }
 
     if jwks_url is not None:
@@ -77,7 +66,7 @@ def create_data_api(
 
     if wait:
         return make_api_call_and_wait_for_data_api_status(
-            "POST", path, "running", data=json.dumps(data)
+            "POST", path, "ready", data=json.dumps(data)
         )
 
     return make_api_call("POST", path, data=json.dumps(data))
