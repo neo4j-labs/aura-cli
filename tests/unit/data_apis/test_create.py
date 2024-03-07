@@ -145,132 +145,136 @@ def test_create_data_api_with_invalid_type_definitions(
 def test_create_data_api_with_valid_type_definitions_file(
     api_request, mock_data_api_config
 ):
-    runner = CliRunner()
-
-    api_request.return_value = mock_response()
-
     type_definitions_file = "type_definitions.graphql"
 
-    name = "data-api"
-    instance_username = "neo4j"
-    instance_password = "password"
-    type_definitions = """type Movie {
-        title: String! @unique
-    }
-    """
+    try:
+        runner = CliRunner()
 
-    f = open(type_definitions_file, "w")
-    f.write(type_definitions)
-    f.close()
+        api_request.return_value = mock_response()
 
-    result = runner.invoke(
-        create_data_api,
-        [
-            "--instance-id",
-            "123",
-            "--instance-username",
-            instance_username,
-            "--instance-password",
-            instance_password,
-            "--name",
-            name,
-            "--type-definitions",
-            type_definitions_file,
-        ],
-        obj=mock_data_api_config,
-    )
-
-    assert result.exit_code == 0
-    assert result.output == printed_data(
-        {
-            "id": "321",
-            "name": "GraphQLDataConnector",
-            "type": "graphql",
-            "status": "creating",
-            "aura_instance": {"id": "123"},
-            "url": "https://321.b03bbb8d00271ccdcf4c289748fe43e2.graphql.neo4j-dev.io/graphql",
+        name = "data-api"
+        instance_username = "neo4j"
+        instance_password = "password"
+        type_definitions = """type Movie {
+            title: String! @unique
         }
-    )
+        """
 
-    api_request.assert_called_once_with(
-        "POST",
-        "https://graphql-api-staging.neo4j.io/v1/instances/123/data-apis",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer dummy-token",
-        },
-        timeout=10,
-        data=json.dumps(
+        f = open(type_definitions_file, "w")
+        f.write(type_definitions)
+        f.close()
+
+        result = runner.invoke(
+            create_data_api,
+            [
+                "--instance-id",
+                "123",
+                "--instance-username",
+                instance_username,
+                "--instance-password",
+                instance_password,
+                "--name",
+                name,
+                "--type-definitions",
+                type_definitions_file,
+            ],
+            obj=mock_data_api_config,
+        )
+
+        assert result.exit_code == 0
+        assert result.output == printed_data(
             {
-                "name": name,
+                "id": "321",
+                "name": "GraphQLDataConnector",
                 "type": "graphql",
-                "aura_instance": {
-                    "username": instance_username,
-                    "password": instance_password,
-                },
-                "data_api": {
-                    "graphql": {
-                        "type_definitions": base64.b64encode(
-                            type_definitions.encode()
-                        ).decode()
-                    }
-                },
+                "status": "creating",
+                "aura_instance": {"id": "123"},
+                "url": "https://321.b03bbb8d00271ccdcf4c289748fe43e2.graphql.neo4j-dev.io/graphql",
             }
-        ),
-    )
+        )
 
-    os.remove(type_definitions_file)
+        api_request.assert_called_once_with(
+            "POST",
+            "https://graphql-api-staging.neo4j.io/v1/instances/123/data-apis",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer dummy-token",
+            },
+            timeout=10,
+            data=json.dumps(
+                {
+                    "name": name,
+                    "type": "graphql",
+                    "aura_instance": {
+                        "username": instance_username,
+                        "password": instance_password,
+                    },
+                    "data_api": {
+                        "graphql": {
+                            "type_definitions": base64.b64encode(
+                                type_definitions.encode()
+                            ).decode()
+                        }
+                    },
+                }
+            ),
+        )
+    finally:
+        if os.path.exists(type_definitions_file):
+            os.remove(type_definitions_file)
 
 
 def test_create_data_api_with_invalid_type_definitions_file(
     api_request, mock_data_api_config
 ):
-    runner = CliRunner()
-
-    api_request.return_value = mock_response()
-
     type_definitions_file = "type_definitions.graphql"
 
-    name = "data-api"
-    instance_username = "neo4j"
-    instance_password = "password"
-    type_definitions = """notatype Movie {
-        title: String! @unique
-    }
-    """
+    try:
+        runner = CliRunner()
 
-    f = open(type_definitions_file, "w")
-    f.write(type_definitions)
-    f.close()
+        api_request.return_value = mock_response()
 
-    result = runner.invoke(
-        create_data_api,
-        [
-            "--instance-id",
-            "123",
-            "--instance-username",
-            instance_username,
-            "--instance-password",
-            instance_password,
-            "--name",
-            name,
-            "--type-definitions",
-            type_definitions_file,
-        ],
-        obj=mock_data_api_config,
-    )
+        name = "data-api"
+        instance_username = "neo4j"
+        instance_password = "password"
+        type_definitions = """notatype Movie {
+            title: String! @unique
+        }
+        """
 
-    print(result.output)
+        f = open(type_definitions_file, "w")
+        f.write(type_definitions)
+        f.close()
 
-    assert result.exit_code == 1
-    assert (
-        result.output
-        == """Error: Could not parse as GraphQL\nError: An unexpected error occurred\n"""
-    )
+        result = runner.invoke(
+            create_data_api,
+            [
+                "--instance-id",
+                "123",
+                "--instance-username",
+                instance_username,
+                "--instance-password",
+                instance_password,
+                "--name",
+                name,
+                "--type-definitions",
+                type_definitions_file,
+            ],
+            obj=mock_data_api_config,
+        )
 
-    api_request.assert_not_called()
+        print(result.output)
 
-    os.remove(type_definitions_file)
+        assert result.exit_code == 1
+        assert (
+            result.output
+            == """Error: Could not parse as GraphQL\nError: An unexpected error occurred\n"""
+        )
+
+        api_request.assert_not_called()
+    finally:
+        if os.path.exists(type_definitions_file):
+            os.remove(type_definitions_file)
 
 
 def test_create_data_api_with_jwks_url(api_request, mock_data_api_config):

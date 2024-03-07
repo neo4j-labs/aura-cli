@@ -3,6 +3,7 @@ from .list import list_data_apis
 from .get import get_data_api
 from .delete import delete_data_api
 from .create import create_data_api
+from .update import update_data_api
 
 
 @click.group(help="Manage instance data APIs")
@@ -14,3 +15,4 @@ data_apis.add_command(list_data_apis)
 data_apis.add_command(get_data_api)
 data_apis.add_command(delete_data_api)
 data_apis.add_command(create_data_api)
+data_apis.add_command(update_data_api)
