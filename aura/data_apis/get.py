@@ -3,9 +3,15 @@ from aura.api_command import api_command
 from aura.api_repository import make_api_call
 
 
-@api_command(name="get", help_text="Get details for a specific data API")
-@click.option("--instance-id", help="The instance ID", required=True)
-@click.option("--data-api-id", help="The data API ID", required=True)
+@api_command(name="get", help_text="Get the details of the given data API")
+@click.option(
+    "--instance-id",
+    help="The ID of the instance associated with the data API.",
+    required=True,
+)
+@click.option(
+    "--data-api-id", help="The ID of the data API to get the details of.", required=True
+)
 def get_data_api(instance_id: str, data_api_id: str):
     """
     Get details of a data API.

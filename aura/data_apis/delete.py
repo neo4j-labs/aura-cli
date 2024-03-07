@@ -9,9 +9,17 @@ def abort_if_false(ctx, param, value):
         ctx.abort()
 
 
-@api_command(name="delete", help_text="Delete a data API for the given instance")
-@click.option("--instance-id", help="The instance ID", required=True)
-@click.option("--data-api-id", help="The instance ID", required=True)
+@api_command(
+    name="delete", help_text="Delete the given data API for the given instance"
+)
+@click.option(
+    "--instance-id",
+    help="The ID of the instance associated with the data API.",
+    required=True,
+)
+@click.option(
+    "--data-api-id", help="The ID of the data API to be deleted.", required=True
+)
 @click.option(
     "--yes",
     is_flag=True,

@@ -3,8 +3,10 @@ from aura.api_command import api_command
 from aura.api_repository import make_api_call
 
 
-@api_command(name="list", help_text="List all data APIs for an instance")
-@click.option("--instance-id", help="The instance ID", required=True)
+@api_command(name="list", help_text="List all data APIs for a given instance")
+@click.option(
+    "--instance-id", help="The ID of the instance to list data APIs for.", required=True
+)
 def list_data_apis(instance_id: str):
     """
     List data APIs of an instance.

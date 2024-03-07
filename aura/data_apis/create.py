@@ -12,34 +12,52 @@ from aura.error_handler import handle_error
 
 
 # pylint: disable=redefined-builtin
-@api_command(name="create", help_text="Create a new instance")
-@click.option("--instance-id", help="The instance ID", required=True)
-@click.option("--instance-username", help="The instance username", required=True)
-@click.password_option("--instance-password")
-@click.option("--name", help="The data API name", required=True)
+@api_command(name="create", help_text="Create a new data API for the given instance")
+@click.option(
+    "--instance-id",
+    help="The ID of the instance for which the data API will be created.",
+    required=True,
+)
+@click.option(
+    "--instance-username",
+    help="The username which the data API will use to connect to the instance.",
+    required=True,
+)
+@click.password_option(
+    "--instance-password",
+    help="The password which the data API will use to connect to the instance.",
+)
+@click.option("--name", help="A friendly name to give to the data API", required=True)
 @click.option(
     "--type",
     default="graphql",
-    help="The data API type",
+    help="The type of data API to be created.",
     type=click.Choice(["graphql"]),
+)
+@click.option(
+    "--type-definitions",
+    prompt=True,
+    help="The type definitions to use if creating a GraphQL data API. This can be either a path to a file containing type definitions, or type definitions directly into the prompt.",
+)
+@click.option(
+    "--jwks-url",
+    help="An optional JWKS URL to be used for authorization features of the data API.",
 )
 @click.option(
     "--wait",
     is_flag=True,
     default=False,
-    help="Wait until instance is created",
+    help="Wait until the data API is ready for use?",
 )
-@click.option("--type-definitions", prompt=True)
-@click.option("--jwks-url")
 def create_data_api(
     instance_id: str,
     instance_username: str,
     instance_password: str,
     name: str,
     type: str,
-    wait: bool,
     type_definitions: str,
     jwks_url: str,
+    wait: bool,
 ):
     """
     Create a new data API with specified options.

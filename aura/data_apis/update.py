@@ -12,18 +12,33 @@ from aura.error_handler import handle_error
 
 
 # pylint: disable=redefined-builtin
-@api_command(name="update", help_text="Update a data API")
-@click.option("--instance-id", help="The instance ID", required=True)
-@click.option("--data-api-id", help="The data API ID", required=True)
-@click.option("--instance-username", help="The instance username")
-@click.option("--instance-password")
-@click.option("--name", help="The data API name")
-@click.option("--type-definitions")
+@api_command(name="update", help_text="Update a data API for the given instance")
+@click.option(
+    "--instance-id",
+    help="The ID of the instance associated with the data API.",
+    required=True,
+)
+@click.option(
+    "--data-api-id", help="The ID of the data API to be updated.", required=True
+)
+@click.option(
+    "--instance-username",
+    help="Update the username which the data API will use to connect to the instance.",
+)
+@click.option(
+    "--instance-password",
+    help="Update the password which the data API will use to connect to the instance.",
+)
+@click.option("--name", help="Update the friendly name for the data API.")
+@click.option(
+    "--type-definitions",
+    help="Update the type definitions to use if this is a GraphQL data API. This can be either a path to a file containing type definitions, or type definitions directly into the prompt.",
+)
 @click.option(
     "--wait",
     is_flag=True,
     default=False,
-    help="Wait until instance is created",
+    help="Wait until the data API is ready for use?",
 )
 def update_data_api(
     instance_id: str,
