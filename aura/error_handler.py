@@ -1,4 +1,6 @@
 """This module defines the error_handler function and a set of custom exceptions"""
+
+from graphql import GraphQLError
 from requests.exceptions import HTTPError, Timeout, ConnectionError as ConnError
 import click
 
@@ -30,7 +32,9 @@ def handle_error(exception: Exception):
             elif "errors" in error_data:
                 error_message = "\n".join([e["message"] for e in error_data["errors"]])
         except ValueError:
-            error_message = f"Unknown error (status code {exception.response.status_code})"
+            error_message = (
+                f"Unknown error (status code {exception.response.status_code})"
+            )
 
     elif isinstance(exception, ClientError):
         error_message = exception.message
@@ -38,6 +42,8 @@ def handle_error(exception: Exception):
         error_message = "Request timed out"
     elif isinstance(exception, ConnError):
         error_message = "Connection error"
+    elif isinstance(exception, GraphQLError):
+        error_message = "Could not parse as GraphQL"
     else:
         error_message = "An unexpected error occurred"
 
@@ -72,7 +78,9 @@ class InstanceIDAndNameBothProvided(ClientError):
     """Exception raised when providing both instance ID and name in a command"""
 
     def __init__(self):
-        super().__init__("Only one of the options instance-id and instance-name should be provided")
+        super().__init__(
+            "Only one of the options instance-id and instance-name should be provided"
+        )
 
 
 class InstanceIDorNameMissing(ClientError):
