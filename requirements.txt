@@ -1,4 +1,4 @@
 click>=8.1.0,<8.2.0
 requests>=2.0.0,<3.0.0
 PyYAML
-graphql-core==3.2.3
+graphql-core>=3.1.0
