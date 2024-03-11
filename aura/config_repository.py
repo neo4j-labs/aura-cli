@@ -18,7 +18,7 @@ class CLIConfig:
     """
     Class which handles configurations of the CLI.
     The CLI's configuration is saved locally as a json file.
-    This class handles loading, validatinf and updating this config.
+    This class handles loading, validating and updating this config.
     """
 
     DEFAULT_AURA_CONFIG_PATH = "~/.aura/config.json"
@@ -33,9 +33,9 @@ class CLIConfig:
 
     def __init__(self):
         self.logger = None
-        self.config_path = os.environ.get("AURA_CLI_CONFIG_PATH", None) or os.path.expanduser(
-            self.DEFAULT_AURA_CONFIG_PATH
-        )
+        self.config_path = os.environ.get(
+            "AURA_CLI_CONFIG_PATH", None
+        ) or os.path.expanduser(self.DEFAULT_AURA_CONFIG_PATH)
         self.config = self.load_config()
         self.env = self.load_env()
 
@@ -58,9 +58,13 @@ class CLIConfig:
             or self.get_option("auth_url")
             or self.DEFAULT_AUTH_URL
         )
-        env["output"] = os.environ.get("AURA_CLI_OUTPUT") or self.get_option("output") or "json"
+        env["output"] = (
+            os.environ.get("AURA_CLI_OUTPUT") or self.get_option("output") or "json"
+        )
         env["default_tenant"] = (
-            os.environ.get("AURA_CLI_DEFAULT_TENANT") or self.get_option("default_tenant") or None
+            os.environ.get("AURA_CLI_DEFAULT_TENANT")
+            or self.get_option("default_tenant")
+            or None
         )
         env["config_path"] = self.config_path
 
@@ -72,7 +76,12 @@ class CLIConfig:
                 "1",
             }
         elif self.get_option("save_logs") is not None:
-            env["save_logs"] = self.get_option("save_logs").lower() in {"yes", "y", "true", "1"}
+            env["save_logs"] = self.get_option("save_logs").lower() in {
+                "yes",
+                "y",
+                "true",
+                "1",
+            }
         else:
             env["save_logs"] = False
 
@@ -85,6 +94,23 @@ class CLIConfig:
         # all nested subcommands and options at this level. So we manually check if the
         # flag was set at any level.
         env["verbose"] = "--verbose" in sys.argv
+
+        if os.environ.get("DATA_APIS") is not None:
+            env["data_apis"] = os.environ.get("DATA_APIS", "").lower() in {
+                "yes",
+                "y",
+                "true",
+                "1",
+            }
+        elif self.get_option("data_apis") is not None:
+            env["data_apis"] = self.get_option("data_apis").lower() in {
+                "yes",
+                "y",
+                "true",
+                "1",
+            }
+        else:
+            env["data_apis"] = False
 
         return env
 
@@ -116,7 +142,10 @@ class CLIConfig:
 
     def list_credentials(self):
         credentials = self.config["AUTH"].get("CREDENTIALS")
-        return [{"Name": c, "ClientId": credentials[c]["CLIENT_ID"]} for c in credentials.keys()]
+        return [
+            {"Name": c, "ClientId": credentials[c]["CLIENT_ID"]}
+            for c in credentials.keys()
+        ]
 
     def add_credentials(self, name: str, client_id: str, client_secret: str, use: bool):
         if self.config["AUTH"]["CREDENTIALS"].get(name, None) is not None:
@@ -193,11 +222,15 @@ class CLIConfig:
             if "CLIENT_ID" not in cred or not isinstance(cred["CLIENT_ID"], str):
                 raise InvalidConfigFile()
 
-            if "CLIENT_SECRET" not in cred or not isinstance(cred["CLIENT_SECRET"], str):
+            if "CLIENT_SECRET" not in cred or not isinstance(
+                cred["CLIENT_SECRET"], str
+            ):
                 raise InvalidConfigFile()
 
         active = auth.get("ACTIVE")
-        if active is not None and (not isinstance(active, str) or active not in credentials):
+        if active is not None and (
+            not isinstance(active, str) or active not in credentials
+        ):
             raise InvalidConfigFile()
 
         # Validate Defaults section

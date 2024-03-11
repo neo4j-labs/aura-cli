@@ -52,6 +52,7 @@ def mock_data_api_config():
         "base_url": "https://graphql-api-staging.neo4j.io/v1",
         "save_logs": False,
         "log_file_path": None,
+        "data_apis": True,
     }
     mock_config.get_option.return_value = None
     yield mock_config
