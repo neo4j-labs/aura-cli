@@ -7,9 +7,12 @@ from aura.logger import get_logger
 from aura.snapshots import snapshots
 from aura.tenants import tenants
 from aura.config import config
+from aura.data_apis import data_apis
 from aura.version import __version__
 
 CLI_VERSION_MESSAGE = f"Aura CLI: version {__version__}, Aura API: version v1"
+
+cli_config = CLIConfig()
 
 
 @click.group()
@@ -18,10 +21,12 @@ CLI_VERSION_MESSAGE = f"Aura CLI: version {__version__}, Aura API: version v1"
     package_name="aura-cli",
 )
 @click.pass_context
-@click.option("--verbose", "-v", is_flag=True, default=False, help="Print verbose output")
+@click.option(
+    "--verbose", "-v", is_flag=True, default=False, help="Print verbose output"
+)
 # pylint: disable=unused-argument
 def cli(ctx, verbose: bool):
-    ctx.obj = CLIConfig()
+    ctx.obj = cli_config
 
 
 cli.add_command(credentials)
@@ -29,6 +34,8 @@ cli.add_command(instances)
 cli.add_command(snapshots)
 cli.add_command(tenants)
 cli.add_command(config)
+if cli_config.env["data_apis"]:
+    cli.add_command(data_apis)
 
 
 def log_usage_errors(func):

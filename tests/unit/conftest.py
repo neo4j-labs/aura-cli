@@ -42,6 +42,23 @@ def mock_config():
 
 
 @pytest.fixture()
+def mock_data_api_config():
+    mock_config = MagicMock(spec=CLIConfig)
+    mock_config.env = {
+        "verbose": False,
+        "output": "json",
+        "default_tenant": None,
+        "auth_url": "https://api-staging.neo4j.io/oauth/token",
+        "base_url": "https://graphql-api-staging.neo4j.io/v1",
+        "save_logs": False,
+        "log_file_path": None,
+        "data_apis": True,
+    }
+    mock_config.get_option.return_value = None
+    yield mock_config
+
+
+@pytest.fixture()
 def mock_version():
     with patch("aura.api_repository.__version__", new="1.0.0") as mocked_version:
         yield mocked_version

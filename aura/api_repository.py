@@ -1,4 +1,5 @@
 """This module defines methods for making HTTP request to the Aura API"""
+
 import os
 import json
 import time
@@ -28,9 +29,13 @@ def _get_credentials():
     client_secret = os.environ.get("AURA_CLI_CLIENT_SECRET")
 
     if client_id:
-        logger.debug("Reading API client id from environment variable AURA_CLI_CLIENT_ID.")
+        logger.debug(
+            "Reading API client id from environment variable AURA_CLI_CLIENT_ID."
+        )
     if client_secret:
-        logger.debug("Reading API client secret from environment variable AURA_CLI_CLIENT_SECRET.")
+        logger.debug(
+            "Reading API client secret from environment variable AURA_CLI_CLIENT_SECRET."
+        )
 
     if not client_id or not client_secret:
         ctx = click.get_current_context()
@@ -41,9 +46,13 @@ def _get_credentials():
             raise NoCredentialsConfigured()
 
         if not client_id:
-            logger.debug(f"Reading API client id from configured credentials {cred_name}.")
+            logger.debug(
+                f"Reading API client id from configured credentials {cred_name}."
+            )
         if not client_secret:
-            logger.debug(f"Reading API client secret from configured credentials {cred_name}.")
+            logger.debug(
+                f"Reading API client secret from configured credentials {cred_name}."
+            )
 
         client_id = client_id or current_credentials["CLIENT_ID"]
         client_secret = client_secret or current_credentials["CLIENT_SECRET"]
@@ -129,8 +138,12 @@ def make_api_call(method: str, path: str, **kwargs):
     base_url = config.env["base_url"]
     full_url = base_url + path
 
-    logger.debug(f"Initializing connection to Aura Cloud Platform API endpoint: {base_url}")
-    data_string = " with data: " + json.dumps(kwargs["data"]) if "data" in kwargs else ""
+    logger.debug(
+        f"Initializing connection to Aura Cloud Platform API endpoint: {base_url}"
+    )
+    data_string = (
+        " with data: " + json.dumps(kwargs["data"]) if "data" in kwargs else ""
+    )
     logger.debug(f"Sending {method} request to {full_url}{data_string}")
 
     response = requests.request(method, full_url, headers=headers, timeout=10, **kwargs)
@@ -203,3 +216,36 @@ def make_api_call_and_wait_for_snapshot_completed(
         time.sleep(30)
 
     raise SnapshotOperationTimeoutError(snapshot_id, "Completed")
+
+
+def make_api_call_and_wait_for_data_api_status(
+    method: str, path: str, desired_status: str, **kwargs
+):
+    logger = get_logger()
+
+    main_response = make_api_call(method, path, **kwargs)
+    main_response.raise_for_status()
+
+    data = main_response.json()["data"]
+    data_api_id = data["id"]
+    instance_id = data["aura_instance"]["id"]
+    status = data.get("status")
+
+    logger.debug(f"Data API has status {status}.")
+    logger.debug(f"Waiting for data API to have status {desired_status}.")
+
+    # Poll every 30 seconds, 40 times. Max total wait = 20 min
+    for _ in range(40):
+        res = make_api_call("GET", f"/instances/{instance_id}/data-apis/{data_api_id}")
+        res.raise_for_status()
+        data = res.json()["data"]
+        status = data["status"]
+
+        logger.debug(f'Polling instance. Status is "{status}".')
+
+        if status == desired_status:
+            return res
+
+        time.sleep(30)
+
+    raise InstanceOperationTimeoutError(instance_id, desired_status)

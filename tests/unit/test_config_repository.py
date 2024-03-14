@@ -29,7 +29,9 @@ def mock_cli_config():
 def test_initialization_load_default_config():
     with patch("os.path.expanduser") as mock_expanduser, patch(
         "builtins.open", mock_open()
-    ) as mock_file, patch.object(CLIConfig, "write_config") as mock_write_config, patch.object(
+    ) as mock_file, patch.object(
+        CLIConfig, "write_config"
+    ) as mock_write_config, patch.object(
         CLIConfig, "load_env", return_value=mock_env
     ), patch(
         "aura.config_repository.setup_logger", return_value=MagicMock()
@@ -49,7 +51,10 @@ def test_load_valid_config():
         "VERSION": "1.0.0",
         "AUTH": {
             "CREDENTIALS": {
-                "example": {"CLIENT_ID": "example_id", "CLIENT_SECRET": "example_secret"}
+                "example": {
+                    "CLIENT_ID": "example_id",
+                    "CLIENT_SECRET": "example_secret",
+                }
             },
             "ACTIVE": "example",
         },
@@ -75,7 +80,9 @@ def test_add_credentials(mock_cli_config):
         "OPTIONS": {},
     }
 
-    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
+    with patch.object(
+        CLIConfig, "write_config", return_value=None
+    ) as mock_write_config, patch(
         "aura.config_repository.delete_token_file"
     ) as mock_delete_token:
         mock_cli_config.config = initial_config
@@ -86,7 +93,10 @@ def test_add_credentials(mock_cli_config):
             "VERSION": "1.0.0",
             "AUTH": {
                 "CREDENTIALS": {
-                    "test_name": {"CLIENT_ID": "test_id", "CLIENT_SECRET": "test_secret"}
+                    "test_name": {
+                        "CLIENT_ID": "test_id",
+                        "CLIENT_SECRET": "test_secret",
+                    }
                 },
                 "ACTIVE": "test_name",
             },
@@ -102,8 +112,14 @@ def test_list_credentials(mock_cli_config):
         "VERSION": "1.0",
         "AUTH": {
             "CREDENTIALS": {
-                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
-                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+                "example1": {
+                    "CLIENT_ID": "example_id_1",
+                    "CLIENT_SECRET": "example_secret_1",
+                },
+                "example2": {
+                    "CLIENT_ID": "example_id_2",
+                    "CLIENT_SECRET": "example_secret_2",
+                },
             },
             "ACTIVE": "example1",
         },
@@ -123,8 +139,14 @@ def test_current_credentials(mock_cli_config):
         "VERSION": "1.0",
         "AUTH": {
             "CREDENTIALS": {
-                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
-                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+                "example1": {
+                    "CLIENT_ID": "example_id_1",
+                    "CLIENT_SECRET": "example_secret_1",
+                },
+                "example2": {
+                    "CLIENT_ID": "example_id_2",
+                    "CLIENT_SECRET": "example_secret_2",
+                },
             },
             "ACTIVE": "example1",
         },
@@ -133,7 +155,10 @@ def test_current_credentials(mock_cli_config):
 
     name, credentials = mock_cli_config.current_credentials()
     assert name == "example1"
-    assert credentials == {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"}
+    assert credentials == {
+        "CLIENT_ID": "example_id_1",
+        "CLIENT_SECRET": "example_secret_1",
+    }
 
 
 def test_current_credentials_none(mock_cli_config):
@@ -156,15 +181,23 @@ def test_delete_credentials(mock_cli_config):
         "VERSION": "1.0",
         "AUTH": {
             "CREDENTIALS": {
-                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
-                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+                "example1": {
+                    "CLIENT_ID": "example_id_1",
+                    "CLIENT_SECRET": "example_secret_1",
+                },
+                "example2": {
+                    "CLIENT_ID": "example_id_2",
+                    "CLIENT_SECRET": "example_secret_2",
+                },
             },
             "ACTIVE": "example1",
         },
         "OPTIONS": {},
     }
 
-    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
+    with patch.object(
+        CLIConfig, "write_config", return_value=None
+    ) as mock_write_config, patch(
         "aura.config_repository.delete_token_file"
     ) as mock_delete_token:
         mock_cli_config.delete_credentials("example1")
@@ -173,7 +206,10 @@ def test_delete_credentials(mock_cli_config):
             "VERSION": "1.0",
             "AUTH": {
                 "CREDENTIALS": {
-                    "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"}
+                    "example2": {
+                        "CLIENT_ID": "example_id_2",
+                        "CLIENT_SECRET": "example_secret_2",
+                    }
                 },
                 "ACTIVE": None,
             },
@@ -203,15 +239,23 @@ def test_use_credentials(mock_cli_config):
         "VERSION": "1.0",
         "AUTH": {
             "CREDENTIALS": {
-                "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
-                "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+                "example1": {
+                    "CLIENT_ID": "example_id_1",
+                    "CLIENT_SECRET": "example_secret_1",
+                },
+                "example2": {
+                    "CLIENT_ID": "example_id_2",
+                    "CLIENT_SECRET": "example_secret_2",
+                },
             },
             "ACTIVE": "example1",
         },
         "OPTIONS": {},
     }
 
-    with patch.object(CLIConfig, "write_config", return_value=None) as mock_write_config, patch(
+    with patch.object(
+        CLIConfig, "write_config", return_value=None
+    ) as mock_write_config, patch(
         "aura.config_repository.delete_token_file"
     ) as mock_delete_token:
         mock_cli_config.use_credentials("example2")
@@ -220,8 +264,14 @@ def test_use_credentials(mock_cli_config):
             "VERSION": "1.0",
             "AUTH": {
                 "CREDENTIALS": {
-                    "example1": {"CLIENT_ID": "example_id_1", "CLIENT_SECRET": "example_secret_1"},
-                    "example2": {"CLIENT_ID": "example_id_2", "CLIENT_SECRET": "example_secret_2"},
+                    "example1": {
+                        "CLIENT_ID": "example_id_1",
+                        "CLIENT_SECRET": "example_secret_1",
+                    },
+                    "example2": {
+                        "CLIENT_ID": "example_id_2",
+                        "CLIENT_SECRET": "example_secret_2",
+                    },
                 },
                 "ACTIVE": "example2",
             },
@@ -302,7 +352,10 @@ def test_validate_config_valid(mock_cli_config):
         "VERSION": "1.0.0",
         "AUTH": {
             "CREDENTIALS": {
-                "user1": {"CLIENT_ID": "client_id_1", "CLIENT_SECRET": "client_secret_1"}
+                "user1": {
+                    "CLIENT_ID": "client_id_1",
+                    "CLIENT_SECRET": "client_secret_1",
+                }
             },
             "ACTIVE": "user1",
         },
@@ -334,6 +387,7 @@ def test_validate_config_valid(mock_cli_config):
                 "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
                 "default_tenant": None,
                 "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+                "data_apis": False,
             },
         ),
         (
@@ -355,6 +409,7 @@ def test_validate_config_valid(mock_cli_config):
                 "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
                 "default_tenant": None,
                 "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+                "data_apis": False,
             },
         ),
         (
@@ -376,6 +431,7 @@ def test_validate_config_valid(mock_cli_config):
                 "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
                 "default_tenant": "my-tenant",
                 "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+                "data_apis": False,
             },
         ),
         (
@@ -397,6 +453,7 @@ def test_validate_config_valid(mock_cli_config):
                 "log_file_path": "test/path",
                 "default_tenant": "test-123",
                 "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+                "data_apis": False,
             },
         ),
         (
@@ -418,6 +475,29 @@ def test_validate_config_valid(mock_cli_config):
                 "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
                 "default_tenant": None,
                 "config_path": "path/config.json",
+                "data_apis": False,
+            },
+        ),
+        (
+            {"DATA_APIS": "true"},
+            {
+                "base_url": None,
+                "auth_url": None,
+                "output": "text",
+                "default_tenant": None,
+                "save_logs": "true",
+                "log_file_path": None,
+            },
+            {
+                "base_url": CLIConfig.DEFAULT_BASE_URL,
+                "auth_url": CLIConfig.DEFAULT_AUTH_URL,
+                "output": "text",
+                "verbose": False,
+                "save_logs": True,
+                "log_file_path": os.path.expanduser(CLIConfig.DEFAULT_LOG_FILE_PATH),
+                "default_tenant": None,
+                "config_path": os.path.expanduser(CLIConfig.DEFAULT_AURA_CONFIG_PATH),
+                "data_apis": True,
             },
         ),
     ],
