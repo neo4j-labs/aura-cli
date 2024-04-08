@@ -7,6 +7,7 @@ from .delete import delete_instance
 from .pause import pause_instance
 from .resume import resume_instance
 from .overwrite import overwrite_instance
+from .metrics_integration import get_instance_metrics_integration_details
 
 
 @click.group(help="Manage your Aura instances")
@@ -22,3 +23,4 @@ instances.add_command(delete_instance)
 instances.add_command(pause_instance)
 instances.add_command(resume_instance)
 instances.add_command(overwrite_instance)
+instances.add_command(get_instance_metrics_integration_details)
