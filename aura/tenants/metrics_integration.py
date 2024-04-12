@@ -6,12 +6,14 @@ from aura.config_repository import CLIConfig
 from aura.decorators import pass_config
 
 
-@api_command(name="get-metrics-integration", help_text="Get metrics integration details for a tenant")
+@api_command(
+    name="get-metrics-integration", help_text="Get metrics integration endpoint for a tenant"
+)
 @click.option("--tenant-id", "-id", help="The ID of the tenant")
 @pass_config
 def get_tenant_metrics_integration_details(config: CLIConfig, tenant_id: str):
     """
-    Get metrics integration details of a tenant.
+    Get metrics integration endpoint of a tenant.
 
     Makes "GET /tenants/:tenantId/metrics-integration" API request.
     """

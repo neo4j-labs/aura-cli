@@ -59,9 +59,6 @@ aura instances list --tenant-id <YOUR_TENANT_ID>
 aura instances get --instance-id b65d4b4f
 aura instances get --instance-name Production
 
-# Get details of instance metrics integration
-aura instances get-metrics-integration --instance-id <YOUR_INSTANCE_ID>
-
 # Create a new instance
 aura instances create --name NewInstance --type enterprise-db --cloud-provider gcp --region europe-west1 --memory 4GB --tenant-id <YOUR_TENANT_ID>
 aura instances create --name NewInstance --type enterprise-ds --cloud-provider gcp --region europe-west1 --memory 8GB --tenant-id <YOUR_TENANT_ID>
