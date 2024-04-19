@@ -78,7 +78,7 @@ def test_create_data_api_with_valid_type_definitions(api_request, mock_data_api_
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
         data=json.dumps(
             {
                 "name": name,
@@ -200,7 +200,7 @@ def test_create_data_api_with_valid_type_definitions_file(
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer dummy-token",
             },
-            timeout=10,
+            timeout=30,
             data=json.dumps(
                 {
                     "name": name,
@@ -332,7 +332,7 @@ def test_create_data_api_with_jwks_url(api_request, mock_data_api_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
         data=json.dumps(
             {
                 "name": name,

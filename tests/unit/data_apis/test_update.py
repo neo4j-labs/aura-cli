@@ -71,7 +71,7 @@ def test_update_data_api(api_request, mock_data_api_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
         data=json.dumps(
             {
                 "name": name,
@@ -129,7 +129,7 @@ def test_update_data_api_type_definitions(api_request, mock_data_api_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
         data=json.dumps(
             {"type_definitions": base64.b64encode(type_definitions.encode()).decode()}
         ),
@@ -192,7 +192,7 @@ def test_update_data_api_two_calls(api_request, mock_data_api_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
         data=json.dumps(
             {
                 "name": name,
@@ -211,7 +211,7 @@ def test_update_data_api_two_calls(api_request, mock_data_api_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
         data=json.dumps(
             {"type_definitions": base64.b64encode(type_definitions.encode()).decode()}
         ),
@@ -280,7 +280,7 @@ def test_update_data_api_two_calls_with_type_definitions_file(
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer dummy-token",
             },
-            timeout=10,
+            timeout=30,
             data=json.dumps(
                 {
                     "name": name,
@@ -299,7 +299,7 @@ def test_update_data_api_two_calls_with_type_definitions_file(
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer dummy-token",
             },
-            timeout=10,
+            timeout=30,
             data=json.dumps(
                 {
                     "type_definitions": base64.b64encode(

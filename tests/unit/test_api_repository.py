@@ -12,6 +12,13 @@ def mock_context(mock_config):
     with patch("click.get_current_context", return_value=mock_context):
         yield
 
+@pytest.fixture
+def mock_data_api_context(mock_data_api_config):
+    mock_context = MagicMock()
+    mock_context.obj = mock_data_api_config
+    with patch("click.get_current_context", return_value=mock_context):
+        yield
+
 
 def test_get_headers(mock_version):
     with patch("aura.api_repository._authenticate", return_value="mock_token"):
@@ -39,6 +46,23 @@ def test_make_api_call(api_request, get_headers, mock_context):
             "Authorization": "Bearer dummy-token",
         },
         timeout=10,
+    )
+
+def test_make_data_api_call(api_request, get_headers, mock_data_api_context):
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    api_request.return_value = mock_response
+
+    make_api_call("GET", "/instances")
+
+    api_request.assert_called_once_with(
+        "GET",
+        "https://graphql-api-staging.neo4j.io/v1/instances",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer dummy-token",
+        },
+        timeout=30,
     )
 
 
