@@ -40,6 +40,9 @@ aura tenants list
 
 # Get details about a tenant
 aura tenants get --tenant-id <YOUR_TENANT_ID>
+
+# Get details about tenant metrics integration
+aura tenants get-metrics-integration --tenant-id <YOUR_TENANT_ID>
 ----
 
 
