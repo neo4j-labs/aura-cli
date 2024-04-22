@@ -56,5 +56,5 @@ def test_list_data_apis(api_request, mock_data_api_config):
             "Content-Type": "application/json",
             "Authorization": f"Bearer dummy-token",
         },
-        timeout=10,
+        timeout=30,
     )

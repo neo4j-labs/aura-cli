@@ -145,8 +145,12 @@ def make_api_call(method: str, path: str, **kwargs):
         " with data: " + json.dumps(kwargs["data"]) if "data" in kwargs else ""
     )
     logger.debug(f"Sending {method} request to {full_url}{data_string}")
+    
+    timeout = 10
+    if config.env.get("data_apis", False):
+        timeout = 30
 
-    response = requests.request(method, full_url, headers=headers, timeout=10, **kwargs)
+    response = requests.request(method, full_url, headers=headers, timeout=timeout, **kwargs)
     # If authentication failed, delete the token file to avoid using same token again
     if response.status_code in [401, 403]:
         logger.warning("API authentication failed.")
