@@ -237,7 +237,7 @@ def make_api_call_and_wait_for_data_api_status(
     instance_id = data["aura_instance"]["id"]
     status = data.get("status")
 
-    if method == "POST":
+    if "api_key" in data:
         api_key = data["api_key"]
         print(f'Data API with ID "{data_api_id}" has been created.')
         print(
