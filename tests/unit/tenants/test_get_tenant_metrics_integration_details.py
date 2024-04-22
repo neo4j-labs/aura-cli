@@ -2,7 +2,7 @@ import pytest
 from click.testing import CliRunner
 from unittest.mock import Mock
 
-from aura.tenants.metrics_integration import get_tenant_metrics_integration_details
+from aura.tenants.get_metrics_integration import get_tenant_metrics_integration_details
 from tests.unit.conftest import printed_data
 
 
