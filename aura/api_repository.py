@@ -145,12 +145,14 @@ def make_api_call(method: str, path: str, **kwargs):
         " with data: " + json.dumps(kwargs["data"]) if "data" in kwargs else ""
     )
     logger.debug(f"Sending {method} request to {full_url}{data_string}")
-    
+
     timeout = 10
     if config.env.get("data_apis", False):
         timeout = 30
 
-    response = requests.request(method, full_url, headers=headers, timeout=timeout, **kwargs)
+    response = requests.request(
+        method, full_url, headers=headers, timeout=timeout, **kwargs
+    )
     # If authentication failed, delete the token file to avoid using same token again
     if response.status_code in [401, 403]:
         logger.warning("API authentication failed.")
@@ -234,6 +236,14 @@ def make_api_call_and_wait_for_data_api_status(
     data_api_id = data["id"]
     instance_id = data["aura_instance"]["id"]
     status = data.get("status")
+
+    if method == "POST":
+        api_key = data["api_key"]
+        print(f'Data API with ID "{data_api_id}" has been created.')
+        print(
+            f'The API key is "{api_key}". Please securely save this and use it to authenticate with the Data API once it is ready.'
+        )
+        print("Beginning polling for ready state of the Data API.")
 
     logger.debug(f"Data API has status {status}.")
     logger.debug(f"Waiting for data API to have status {desired_status}.")
