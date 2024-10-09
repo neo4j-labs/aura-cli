@@ -22,7 +22,7 @@ aura config list
 
 # Set config options
 aura config set output table
-aura config set default_tenant <TENANT_ID>
+aura config set default_tenant <PROJECT_ID>
 aura config set save_logs true
 aura config set log_file_path path/to/file.log
 
@@ -32,17 +32,17 @@ aura config unset output    # Unset a config option
 ----
 
 
-== Tenants
+== Projects
 
 ----
-# List tenants you are a member of
+# List projects you are a member of
 aura tenants list
 
-# Get details about a tenant
-aura tenants get --tenant-id <YOUR_TENANT_ID>
+# Get details about a project
+aura tenants get --tenant-id <YOUR_PROJECT_ID>
 
-# Get details about tenant metrics integration
-aura tenants get-metrics-integration --tenant-id <YOUR_TENANT_ID>
+# Get details about project metrics integration
+aura tenants get-metrics-integration --tenant-id <YOUR_PROJECT_ID>
 ----
 
 
@@ -52,17 +52,17 @@ aura tenants get-metrics-integration --tenant-id <YOUR_TENANT_ID>
 # List all instances
 aura instances list
 
-# List all instances belonging to a tenant
-aura instances list --tenant-id <YOUR_TENANT_ID>
+# List all instances belonging to a project
+aura instances list --tenant-id <YOUR_PROJECT_ID>
 
 # Get details of an instance
 aura instances get --instance-id b65d4b4f
 aura instances get --instance-name Production
 
 # Create a new instance
-aura instances create --name NewInstance --type enterprise-db --cloud-provider gcp --region europe-west1 --memory 4GB --tenant-id <YOUR_TENANT_ID>
-aura instances create --name NewInstance --type enterprise-ds --cloud-provider gcp --region europe-west1 --memory 8GB --tenant-id <YOUR_TENANT_ID>
-aura instances create --name Instance03 --type professional-db --cloud-provider aws --region us-east-2 --memory 16GB --tenant-id <YOUR_TENANT_ID>
+aura instances create --name NewInstance --type enterprise-db --cloud-provider gcp --region europe-west1 --memory 4GB --tenant-id <YOUR_PROJECT_ID>
+aura instances create --name NewInstance --type enterprise-ds --cloud-provider gcp --region europe-west1 --memory 8GB --tenant-id <YOUR_PROJECT_ID>
+aura instances create --name Instance03 --type professional-db --cloud-provider aws --region us-east-2 --memory 16GB --tenant-id <YOUR_PROJECT_ID>
 
 # Update an instance
 aura instances update --instance-id b65d4b4f --new-name NewName
@@ -116,7 +116,7 @@ aura instances list --ouput yaml
 aura instances get -id b25d4b9f --verbose
 
 # Print the response headers using the --include flag
-aura tenants list --include
+aura YOUR_PROJECT_IDs list --include
 
 # Show raw API output using the --raw flag
 aura snapshots list --instance-id b25d4b9f --raw
