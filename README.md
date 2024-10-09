@@ -54,7 +54,7 @@ Setting environment variables will override any configurations that were set wit
 
 The `aura config` commands allows to set configurations and default values. Currently there 6 options which can be set with the `aura config set` command:
 
-- `default_tenant` - the default tenant which to use for commands like `aura instances create` (where a tenant-id is required)
+- `default_tenant` - the default project which to use for commands like `aura instances create` (where a tenant-id is required)
 - `output` - the default output format for API commands (json, text, yaml or table)
 - `auth_url` - The url used for getting an auth token (default to https://api.neo4j.io/oauth/token)
 - `base_url` - The base url used for all API calls (defaults to https://api.neo4j.io/v1)
