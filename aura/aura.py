@@ -26,6 +26,12 @@ cli_config = CLIConfig()
 )
 # pylint: disable=unused-argument
 def cli(ctx, verbose: bool):
+    """The Python based aura cli is now deprecated. 
+
+    \b
+    Please migrate to the new Go based aura CLI that
+    is downloaded from here:-
+    https://github.com/neo4j/aura-cli/releases"""
     ctx.obj = cli_config
 
 
