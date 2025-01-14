@@ -95,23 +95,6 @@ class CLIConfig:
         # flag was set at any level.
         env["verbose"] = "--verbose" in sys.argv
 
-        if os.environ.get("DATA_APIS") is not None:
-            env["data_apis"] = os.environ.get("DATA_APIS", "").lower() in {
-                "yes",
-                "y",
-                "true",
-                "1",
-            }
-        elif self.get_option("data_apis") is not None:
-            env["data_apis"] = self.get_option("data_apis").lower() in {
-                "yes",
-                "y",
-                "true",
-                "1",
-            }
-        else:
-            env["data_apis"] = False
-
         return env
 
     def load_config(self) -> dict:

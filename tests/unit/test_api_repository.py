@@ -12,13 +12,6 @@ def mock_context(mock_config):
     with patch("click.get_current_context", return_value=mock_context):
         yield
 
-@pytest.fixture
-def mock_data_api_context(mock_data_api_config):
-    mock_context = MagicMock()
-    mock_context.obj = mock_data_api_config
-    with patch("click.get_current_context", return_value=mock_context):
-        yield
-
 
 def test_get_headers(mock_version):
     with patch("aura.api_repository._authenticate", return_value="mock_token"):
