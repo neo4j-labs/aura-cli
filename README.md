@@ -1,8 +1,13 @@
-## Aura Command Line Interface
+___
+# Please use the new [Aura CLI](https://github.com/neo4j/aura-cli)
 
+**This project has graduated from Neo4j Labs.  Please use the new Aura CLI that is available here: [Aura Command Line Interface](https://github.com/neo4j/aura-cli). This repository is now read-only and the code can still be installed using pip.  Users are advised to move to the new [Aura CLI ](https://github.com/neo4j/aura-cli) where all future development will be focused.**
 ___
-**This project has graduated from Neo4j Labs in the form of a [Go-based Aura Command Line Interface](https://github.com/neo4j/aura-cli). Although this repository will remain available and the code installable using pip, users are advised to move to the new CLI, as that is where all future development will be focused.**
-___
+
+
+## Aura Command Line Interface 
+
+
 
 The Neo4j Aura CLI is an open source command line interface for interacting with the Aura cloud platform through the public Aura API.
 
