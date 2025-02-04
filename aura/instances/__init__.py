@@ -1,4 +1,6 @@
 import click
+
+from aura.instances.sizing import size_instance
 from .create import create_instance
 from .get import get_instance
 from .list import list_instances
@@ -15,6 +17,7 @@ def instances():
 
 
 instances.add_command(create_instance)
+instances.add_command(size_instance)
 instances.add_command(get_instance)
 instances.add_command(list_instances)
 instances.add_command(update_instance)
